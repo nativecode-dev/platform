@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>NativeCode</Authors>
+    <Company>NativeCode</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>C:\Users\mpham\.nuget\packages\jetbrains.annotations\11.1.0\lib\netstandard1.0\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

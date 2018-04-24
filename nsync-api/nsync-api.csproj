@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <RootNamespace>NativeCode.Sync</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>NativeCode</Authors>
+    <Company>NativeCode</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NativeCode.Core\NativeCode.Core.csproj" />
+    <ProjectReference Include="..\NativeCode.Data\NativeCode.Data.csproj" />
+    <ProjectReference Include="..\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj" />
+    <ProjectReference Include="..\NativeCode.Sync.Models\NativeCode.Sync.Models.csproj" />
+  </ItemGroup>
+
+</Project>

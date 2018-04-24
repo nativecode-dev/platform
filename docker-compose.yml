@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  nsync-api:
+    image: nsyncapi
+    build:
+      context: .
+      dockerfile: nsync-api/Dockerfile

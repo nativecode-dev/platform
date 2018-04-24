@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>NativeCode</Authors>
+    <Company>NativeCode</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NativeCode.Core\NativeCode.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>C:\Users\mpham\.nuget\packages\jetbrains.annotations\11.1.0\lib\netstandard1.0\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
