@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nsync", "nativecode-sync\nsync.csproj", "{60B6DBC9-50DB-45D0-8EEC-78589A37AE0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nsync", "nsync\nsync.csproj", "{60B6DBC9-50DB-45D0-8EEC-78589A37AE0B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Posteio", "NativeCode.Posteio\NativeCode.Posteio.csproj", "{00ABA1B5-73CD-41D2-AC79-F8CFE59E7D1C}"
 EndProject
