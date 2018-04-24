@@ -9,15 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Posteio", "Nativ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core", "NativeCode.Core\NativeCode.Core.csproj", "{1C9C3191-AEFE-47F0-9ED4-6EEFB1CE1374}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nsync-api", "nsync-api\nsync-api.csproj", "{E354A9F7-059E-4990-B622-DE083DEDADFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nsync-api", "nsync-api\nsync-api.csproj", "{E354A9F7-059E-4990-B622-DE083DEDADFD}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BC3D0756-A828-4B88-9EBC-57CC7D8B7521}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeCode.Sync.Models", "NativeCode.Sync.Models\NativeCode.Sync.Models.csproj", "{193B0CE2-2BD3-454A-980E-7E1AB01F92B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Sync.Models", "NativeCode.Sync.Models\NativeCode.Sync.Models.csproj", "{193B0CE2-2BD3-454A-980E-7E1AB01F92B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeCode.Sync.Data", "NativeCode.Sync.Data\NativeCode.Sync.Data.csproj", "{970DE7B8-1A7E-4DDE-9285-389E504CCF7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Sync.Data", "NativeCode.Sync.Data\NativeCode.Sync.Data.csproj", "{970DE7B8-1A7E-4DDE-9285-389E504CCF7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeCode.Data", "NativeCode.Data\NativeCode.Data.csproj", "{6955597C-7097-4486-A9CE-D60F8A844782}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Data", "NativeCode.Data\NativeCode.Data.csproj", "{6955597C-7097-4486-A9CE-D60F8A844782}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
