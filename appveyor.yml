@@ -27,12 +27,6 @@ build:
   project: platform.sln
   parallel: true
   verbosity: minimal
-deploy:
-- provider: GitHub
-  auth_token:
-    secure: 5i5NzsaSnYmLif/aAc8fip2bgmTcnQpvIYM0v8I1LxeVY/xSm6bsJ0jDIXr8WC8T
-  on:
-    branch: master
 notifications:
 - provider: Slack
   incoming_webhook:
