@@ -18,12 +18,8 @@ artifacts:
   name: Nuget
 deploy:
 - provider: NuGet
-  server:
-    secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/w8RiWvPwIff5Y6+xfscJyg==
   api_key:
-    secure: vJwPR3fw+0DjrFWr4zrSuaY92JwqoeEFuG8zzdKJj934jtcbwSNuNMb5P+UsozH4
-  symbol_server:
-    secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/w8RiWvPwIff5Y6+xfscJyg==
+    secure: 2Unfnx9w0iEdkGRWgUrvOk05WGZ3vG2Qh3I6NMjxqATHQIIDDnOn9f5BatJcByhg
   artifact: NuGet
   on:
     branch: develop
