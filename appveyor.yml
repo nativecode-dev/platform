@@ -1,5 +1,6 @@
 version: '1.0.0.{build}'
-image: Visual Studio 2017
+image:
+  - Visual Studio 2017
 branches:
   only:
   - master
@@ -9,6 +10,6 @@ before_build:
   - cmd: dotnet --version
   - cmd: dotnet restore ./platform.sln --verbosity m
 build_script:
-  - cmd: dotnet publish ./platform.sln
+  - cmd: dotnet build ./platform.sln
 clone_depth: 1
 deploy: off
