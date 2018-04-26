@@ -18,7 +18,8 @@ environment:
     secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/0H8elG1o1oOwLqU67xFwig==
 before_build:
 - pwsh: >-
-    nuget restore
+    nuget restore platform.sln
+
     dotnet sln platform.sln remove docker-compose.dcproj
 build:
   project: platform.sln
