@@ -1,7 +1,7 @@
-version: 1.0.{build}
+version: 1.1.{build}-dev
 branches:
   only:
-  - master
+  - develop
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
@@ -26,10 +26,17 @@ deploy:
     secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/w8RiWvPwIff5Y6+xfscJyg==
   artifact: NuGet
   on:
-    branch: master
+    branch: develop
 environment:
   NUGET_REPOSITORY:
     secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/0H8elG1o1oOwLqU67xFwig==
+notifications:
+- provider: Slack
+  incoming_webhook:
+    secure: 4bD6kBqaVktFpC2f34dcaPaDAiYgYJfYD4NP8uCw99GSfqptJMkBMaxP+I22QCEBGQ3/HZa37Y6sW2hDY2M0XMoE7YvOwhN81XLAARJmFAI=
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
 before_build:
 - pwsh: >-
     dotnet sln platform.sln remove docker-compose.dcproj
@@ -41,10 +48,3 @@ build:
   project: platform.sln
   parallel: true
   verbosity: minimal
-notifications:
-- provider: Slack
-  incoming_webhook:
-    secure: 4bD6kBqaVktFpC2f34dcaPaDAiYgYJfYD4NP8uCw99GSfqptJMkBMaxP+I22QCEBGQ3/HZa37Y6sW2hDY2M0XMoE7YvOwhN81XLAARJmFAI=
-  on_build_success: true
-  on_build_failure: true
-  on_build_status_changed: true
