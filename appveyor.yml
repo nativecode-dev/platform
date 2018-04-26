@@ -21,7 +21,7 @@ before_build:
 build:
   project: platform.sln
   parallel: true
-  verbosity: detailed
+  verbosity: normal
 deploy:
 - provider: GitHub
   auth_token:
