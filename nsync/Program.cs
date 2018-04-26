@@ -1,6 +1,7 @@
 namespace NativeCode.Sync
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
     using System.Linq;
@@ -10,7 +11,10 @@ namespace NativeCode.Sync
 
     using DigitalOcean.API;
 
+    using NativeCode.Core.Extensions;
     using NativeCode.Posteio;
+
+    using Nito.AsyncEx;
 
     using Console = Colorful.Console;
 
@@ -24,8 +28,15 @@ namespace NativeCode.Sync
 
         private static readonly string MailServerUserName = Environment.GetEnvironmentVariable("MAILSERVER_USERNAME");
 
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
+            AsyncContext.Run(() => Run(args));
+        }
+
+        private static async Task Run(IEnumerable<string> args)
+        {
+            args.ForEach(arg => Trace.WriteLine(arg, "program_argument"));
+
             Trace.Listeners.Add(new ConsoleTraceListener());
 
             var digitalocean = new DigitalOceanClient(DigitalOceanApiKey);

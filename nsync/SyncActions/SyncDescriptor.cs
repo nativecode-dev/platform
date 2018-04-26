@@ -41,7 +41,7 @@ namespace NativeCode.Sync.SyncActions
 
         protected abstract Task<object> DescriptorValue(string key, string name);
 
-        protected async Task<T> GetCache<T>(string key, T defaultValue = default)
+        protected async Task<T> GetCache<T>(string key, T defaultValue = default(T))
         {
             var cached = await this.cache.GetAsync(CreateKey<T>(key));
 
