@@ -61,3 +61,9 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# Files to ignore merges. We don't want these files overwritten because they
+# are typically configuration files specific to a branch.
+###############################################################################
+appveyor.yml    merge=ours
