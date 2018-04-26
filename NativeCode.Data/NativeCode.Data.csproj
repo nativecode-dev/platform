@@ -8,17 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.2" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NativeCode.Core\NativeCode.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="JetBrains.Annotations">
-      <HintPath>C:\Users\mpham\.nuget\packages\jetbrains.annotations\11.1.0\lib\netstandard1.0\JetBrains.Annotations.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

@@ -8,12 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations">
-      <HintPath>C:\Users\mpham\.nuget\packages\jetbrains.annotations\11.1.0\lib\netstandard1.0\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Annotations">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.ComponentModel.Annotations.dll</HintPath>
-    </Reference>
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 
 </Project>

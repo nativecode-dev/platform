@@ -7,4 +7,9 @@
     <Company>NativeCode</Company>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+  </ItemGroup>
+
 </Project>
