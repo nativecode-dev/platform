@@ -6,6 +6,8 @@
     <RootNamespace>NativeCode.Sync</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageVersion></PackageVersion>
+    <Authors>NativeCode</Authors>
+    <Company>NativeCode</Company>
   </PropertyGroup>
 
   <ItemGroup>
