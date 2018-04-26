@@ -1,15 +1,37 @@
-version: '1.0.0.{build}'
-image:
-  - Visual Studio 2017
+version: 1.0.0.{build}
 branches:
   only:
   - master
-init:
-  - cmd: git config --global core.autocrlf true
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+environment:
+  NUGET_REPOSITORY:
+    secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/0H8elG1o1oOwLqU67xFwig==
 before_build:
-  - cmd: dotnet --version
-  - cmd: dotnet restore ./platform.sln --verbosity d
-build_script:
-  - cmd: dotnet build ./platform.sln
-clone_depth: 1
-deploy: off
+- pwsh: dotnet sln MySolution.sln remove docker-compose.dcproj
+build:
+  project: platform.sln
+  parallel: true
+  verbosity: detailed
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: 5i5NzsaSnYmLif/aAc8fip2bgmTcnQpvIYM0v8I1LxeVY/xSm6bsJ0jDIXr8WC8T
+  on:
+    branch: master
+notifications:
+- provider: Slack
+  incoming_webhook:
+    secure: 4bD6kBqaVktFpC2f34dcaPaDAiYgYJfYD4NP8uCw99GSfqptJMkBMaxP+I22QCEBGQ3/HZa37Y6sW2hDY2M0XMoE7YvOwhN81XLAARJmFAI=
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
