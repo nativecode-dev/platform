@@ -22,7 +22,7 @@ before_build:
 
     nuget restore platform.sln
 
-    dotnet restore platform.sln
+    dotnet restore platform.sln --verbosity quiet
 build:
   project: platform.sln
   parallel: true
