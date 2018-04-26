@@ -6,7 +6,7 @@
     <RootNamespace>NativeCode.Sync</RootNamespace>
     <Authors>NativeCode</Authors>
     <Company>NativeCode</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
