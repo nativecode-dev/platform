@@ -4,9 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <RootNamespace>NativeCode.Sync</RootNamespace>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Authors>NativeCode</Authors>
-    <Company>NativeCode</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
