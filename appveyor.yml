@@ -16,6 +16,10 @@ dotnet_csproj:
 artifacts:
 - path: '**\bin\${Configuration}\*.nupkg'
   name: Nuget
+cache:
+  - packages -> **\packages.config
+  - '%LocalAppData%\NuGet\Cache'
+  - '%LocalAppData%\NuGet\v3-cache'
 deploy:
 - provider: NuGet
   server:

@@ -1,15 +1,27 @@
 namespace NativeCode.Core
 {
+    using System.Globalization;
     using System.IO;
     using System.Text;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     public class JsonObjectSerializer : IObjectSerializer
     {
+        private readonly JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            Culture = CultureInfo.CurrentCulture,
+            DateFormatHandling = DateFormatHandling.IsoDateFormat,
+            DateParseHandling = DateParseHandling.DateTimeOffset,
+            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+            NullValueHandling = NullValueHandling.Ignore
+        };
+
         public T Deserialize<T>(string value)
         {
-            return JsonConvert.DeserializeObject<T>(value);
+            return JsonConvert.DeserializeObject<T>(value, this.settings);
         }
 
         public T DeserializeBytes<T>(byte[] value)
@@ -20,7 +32,7 @@ namespace NativeCode.Core
 
         public T DeserializeStream<T>(Stream stream)
         {
-            var serializer = new JsonSerializer();
+            var serializer = JsonSerializer.Create(this.settings);
 
             using (var sr = new StreamReader(stream))
             using (var jsonTextReader = new JsonTextReader(sr))
@@ -31,7 +43,7 @@ namespace NativeCode.Core
 
         public string Serialize<T>(T value)
         {
-            return JsonConvert.SerializeObject(value);
+            return JsonConvert.SerializeObject(value, this.settings);
         }
 
         public byte[] SerializeBytes<T>(T value)
@@ -42,7 +54,8 @@ namespace NativeCode.Core
 
         public void SerializeStream<T>(Stream stream, T value)
         {
-            var serializer = new JsonSerializer();
+            var serializer = JsonSerializer.Create(this.settings);
+
             using (var writer = new StreamWriter(stream))
             {
                 serializer.Serialize(writer, value);

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\platform\NativeCode.Clients.Radarr\NativeCode.Clients.Radarr.csproj" />
+    <ProjectReference Include="..\platform\NativeCode.Clients.Sonarr\NativeCode.Clients.Sonarr.csproj" />
+    <ProjectReference Include="..\platform\NativeCode.Clients\NativeCode.Clients.csproj" />
+    <ProjectReference Include="..\platform\NativeCode.Core\NativeCode.Core.csproj" />
+    <ProjectReference Include="..\platform\NativeCode.Data\NativeCode.Data.csproj" />
+    <ProjectReference Include="..\platform\NativeCode.Posteio\NativeCode.Posteio.csproj" />
+    <ProjectReference Include="..\platform\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj" />
+    <ProjectReference Include="..\platform\NativeCode.Sync.Models\NativeCode.Sync.Models.csproj" />
+  </ItemGroup>
+
+</Project>
