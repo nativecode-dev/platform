@@ -26,7 +26,7 @@ namespace NativeCode.Clients
                 CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable),
                 CookieContainer = new CookieContainer(),
                 Encoding = Encoding.UTF8,
-                FollowRedirects = true
+                FollowRedirects = true,
             };
 
             this.Serializer = serializer;

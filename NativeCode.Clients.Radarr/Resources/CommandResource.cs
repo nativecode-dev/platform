@@ -3,8 +3,8 @@ namespace NativeCode.Clients.Radarr.Resources
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using NativeCode.Clients.Radarr.Requests.Commands;
     using NativeCode.Clients.Radarr.Responses;
-    using NativeCode.Clients.Radarr.Responses.Commands;
     using NativeCode.Core;
 
     using RestSharp;
@@ -21,10 +21,10 @@ namespace NativeCode.Clients.Radarr.Resources
             return this.GetCollection<Command>("command");
         }
 
-        public Task Execute<TOptions>(CommandKind command, TOptions options)
+        public Task<Command> Run<TOptions>(TOptions options)
             where TOptions : CommandOptions
         {
-            return this.Post($"command/{command}", options);
+            return this.PostResponse<TOptions, Command>("command", options);
         }
 
         public Task<Command> Get(int request)

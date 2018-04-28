@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Clients.Radarr.Responses.Commands
+namespace NativeCode.Clients.Radarr.Requests.Commands
 {
     public enum ImportModeKind
     {

@@ -4,29 +4,13 @@ namespace NativeCode.Tests.Clients.Radarr
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.Extensions.DependencyInjection;
-
     using NativeCode.Clients.Radarr;
-    using NativeCode.Clients.Radarr.Extensions;
     using NativeCode.Clients.Radarr.Requests;
-    using NativeCode.Core;
 
     using Xunit;
 
-    public class WhenUsingSonarr : WhenTestingDependencies
+    public class WhenUsingSonarr : WhenTestingRadarr
     {
-        private const string ServerAddress = "http://radarr.in.nativecode.com";
-
-        private static readonly string ApiKey = Environment.GetEnvironmentVariable("APIKEY_RADARR");
-
-        public WhenUsingSonarr()
-        {
-            var serializer = new JsonObjectSerializer();
-            this.Client = new RadarrClient(serializer, new Uri(ServerAddress)).SetApiKey(ApiKey);
-        }
-
-        protected RadarrClient Client { get; }
-
         [Fact]
         public void ShouldCreateClientWithCorrectUrl()
         {
@@ -36,6 +20,17 @@ namespace NativeCode.Tests.Clients.Radarr
 
             // Assert
             Assert.Equal("http://radarr.in.nativecode.com/api/", sut.BaseAddress.ToString());
+        }
+
+        [Fact]
+        public async Task ShouldGetCommands()
+        {
+            // Arrange
+            // Act
+            var commands = await this.Client.Commands.All();
+
+            // Assert
+            Assert.NotNull(commands);
         }
 
         [Fact]
@@ -85,27 +80,6 @@ namespace NativeCode.Tests.Clients.Radarr
 
             // Assert
             Assert.Equal(7, movies.Count());
-        }
-
-        [Fact]
-        public async Task ShouldGetCommands()
-        {
-            // Arrange
-            // Act
-            var commands = await this.Client.Commands.All();
-
-            // Assert
-            Assert.NotNull(commands);
-        }
-
-
-        protected override IServiceCollection RegisterServices(IServiceCollection services)
-        {
-            return services.AddRadarrClient();
-        }
-
-        protected override void ReleaseManaged()
-        {
         }
     }
 }

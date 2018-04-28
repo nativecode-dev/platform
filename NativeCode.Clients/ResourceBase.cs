@@ -7,6 +7,7 @@ namespace NativeCode.Clients
     using NativeCode.Core;
 
     using RestSharp;
+    using RestSharp.Serializers;
 
     public abstract class ResourceBase : IResource
     {
@@ -20,99 +21,119 @@ namespace NativeCode.Clients
 
         protected IObjectSerializer Serializer { get; }
 
+        protected virtual IRestRequest CreateRequest(string path, Method method)
+        {
+            return new RestRequest(path, method)
+            {
+                JsonSerializer = new RestSerializer(this.Serializer)
+            };
+        }
+
+        protected virtual IRestRequest CreateRequest<T>(string path, Method method, T body)
+        {
+            return this.CreateRequest(path, method).AddJsonBody(body);
+        }
+
+        protected virtual T CreateResponse<T>(IRestResponse response)
+        {
+            if (response.IsSuccessful)
+            {
+                return this.Serializer.Deserialize<T>(response.Content);
+            }
+
+            if (response.ErrorException != null)
+            {
+                throw response.ErrorException;
+            }
+
+            throw new InvalidOperationException(response.ErrorMessage);
+        }
+
         protected virtual async Task<bool> Delete(string path)
         {
-            var req = new RestRequest(path, Method.DELETE);
-            var response = await this.Client.ExecuteTaskAsync(req);
+            var request = this.CreateRequest(path, Method.DELETE);
+            var response = await this.Client.ExecuteTaskAsync(request);
 
             return response.IsSuccessful;
         }
 
         protected virtual async Task<IEnumerable<TResponse>> GetCollection<TResponse>(string path)
         {
-            var req = new RestRequest(path, Method.GET);
-            var response = await this.Client.ExecuteTaskAsync(req);
+            var request = this.CreateRequest(path, Method.GET);
+            var response = await this.Client.ExecuteGetTaskAsync(request);
 
-            if (response.IsSuccessful)
-            {
-                return this.Serializer.Deserialize<IEnumerable<TResponse>>(response.Content);
-            }
-
-            throw new InvalidOperationException();
+            return this.CreateResponse<IEnumerable<TResponse>>(response);
         }
 
         protected virtual async Task<IResourcePage<TResponse>> GetCollectionPage<TResponse>(string path)
         {
-            var req = new RestRequest(path, Method.GET);
-            var response = await this.Client.ExecuteTaskAsync(req);
+            var request = this.CreateRequest(path, Method.GET);
+            var response = await this.Client.ExecuteGetTaskAsync(request);
 
-            if (response.IsSuccessful)
-            {
-                return this.Serializer.Deserialize<IResourcePage<TResponse>>(response.Content);
-            }
-
-            throw new InvalidOperationException();
+            return this.CreateResponse<IResourcePage<TResponse>>(response);
         }
 
         protected virtual async Task<TResponse> GetSingle<TResponse>(string path)
         {
-            var req = new RestRequest(path, Method.GET);
-            var response = await this.Client.ExecuteTaskAsync(req);
+            var request = this.CreateRequest(path, Method.GET);
+            var response = await this.Client.ExecuteGetTaskAsync(request);
 
-            if (response.IsSuccessful)
-            {
-                return this.Serializer.Deserialize<TResponse>(response.Content);
-            }
-
-            throw new InvalidOperationException();
+            return this.CreateResponse<TResponse>(response);
         }
 
-        protected virtual async Task<bool> Post<TCreateRequest>(string path, TCreateRequest request)
+        protected virtual async Task<bool> Post<TRequest>(string path, TRequest value)
         {
-            var req = new RestRequest(path, Method.POST);
-            req.AddJsonBody(request);
+            var request = this.CreateRequest(path, Method.POST, value);
+            var response = await this.Client.ExecutePostTaskAsync(request);
 
-            var response = await this.Client.ExecuteTaskAsync(req);
             return response.IsSuccessful;
         }
 
-        protected virtual async Task<TResponse> PostResponse<TCreateRequest, TResponse>(string path, TCreateRequest request)
+        protected virtual async Task<TResponse> PostResponse<TRequest, TResponse>(string path, TRequest value)
         {
-            var req = new RestRequest(path, Method.POST);
-            req.AddJsonBody(request);
+            var request = this.CreateRequest(path, Method.POST, value);
+            var response = await this.Client.ExecutePostTaskAsync(request);
 
-            var response = await this.Client.ExecuteTaskAsync(req);
-
-            if (response.IsSuccessful)
-            {
-                return this.Serializer.Deserialize<TResponse>(response.Content);
-            }
-
-            throw new InvalidOperationException();
+            return this.CreateResponse<TResponse>(response);
         }
 
-        protected virtual async Task<bool> Put<TUpdateRequest>(string path, TUpdateRequest request)
+        protected virtual async Task<bool> Put<TRequest>(string path, TRequest value)
         {
-            var req = new RestRequest(path, Method.PUT);
-            req.AddJsonBody(request);
+            var request = this.CreateRequest(path, Method.PUT, value);
+            var response = await this.Client.ExecuteTaskAsync(request);
 
-            var response = await this.Client.ExecuteTaskAsync(req);
             return response.IsSuccessful;
         }
 
-        protected virtual async Task<TResponse> PutResponse<TUpdateRequest, TResponse>(string path, TUpdateRequest request)
+        protected virtual async Task<TResponse> PutResponse<TRequest, TResponse>(string path, TRequest value)
         {
-            var req = new RestRequest(path, Method.PUT);
-            req.AddJsonBody(request);
+            var request = this.CreateRequest(path, Method.PUT, value);
+            var response = await this.Client.ExecuteTaskAsync(request);
 
-            var response = await this.Client.ExecuteTaskAsync(req);
+            return this.CreateResponse<TResponse>(response);
+        }
 
-            if (response.IsSuccessful)
+        public class RestSerializer : ISerializer
+        {
+            private readonly IObjectSerializer serializer;
+
+            public RestSerializer(IObjectSerializer serializer)
             {
-                return this.Serializer.Deserialize<TResponse>(response.Content);
+                this.serializer = serializer;
             }
 
-            throw new InvalidOperationException();
+            public string ContentType { get; set; } = "application/json";
+
+            public string DateFormat { get; set; }
+
+            public string Namespace { get; set; }
+
+            public string RootElement { get; set; }
+
+            public string Serialize(object obj)
+            {
+                return this.serializer.Serialize(obj);
+            }
         }
     }
 }
