@@ -52,3 +52,5 @@ build:
   project: platform.sln
   parallel: true
   verbosity: minimal
+test_script:
+- pwsh: '%xunit20%\xunit.console NativeCode.Tests -appveyor'
