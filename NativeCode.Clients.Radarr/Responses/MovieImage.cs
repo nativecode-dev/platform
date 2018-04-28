@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Clients.Radarr.Models
+namespace NativeCode.Clients.Radarr.Responses
 {
     public class MovieImage
     {

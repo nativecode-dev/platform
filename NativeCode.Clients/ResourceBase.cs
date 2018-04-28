@@ -8,7 +8,7 @@ namespace NativeCode.Clients
 
     using RestSharp;
 
-    public abstract class ResourceBase<TRequest, TResponse> : IResource<TRequest, TResponse>
+    public abstract class ResourceBase : IResource
     {
         protected ResourceBase(IRestClient client, IObjectSerializer serializer)
         {
@@ -20,22 +20,6 @@ namespace NativeCode.Clients
 
         protected IObjectSerializer Serializer { get; }
 
-        public abstract Task<bool> Add(TRequest request);
-
-        public abstract Task<bool> Add(IEnumerable<TRequest> requests);
-
-        public abstract Task<IEnumerable<TResponse>> All();
-
-        public abstract Task<IResourcePage<TResponse>> Page(int size, int start = 1);
-
-        public abstract Task<IEnumerable<TResponse>> Query(TRequest request);
-
-        public abstract Task<IResourcePage<TResponse>> QueryPage(TRequest request, int size, int start = 1);
-
-        public abstract Task<bool> Remove(TRequest request);
-
-        public abstract Task<bool> Remove(IEnumerable<TRequest> requests);
-
         protected virtual async Task<bool> Delete(string path)
         {
             var req = new RestRequest(path, Method.DELETE);
@@ -44,20 +28,7 @@ namespace NativeCode.Clients
             return response.IsSuccessful;
         }
 
-        protected virtual async Task<TResponse> Get(string path)
-        {
-            var req = new RestRequest(path, Method.GET);
-            var response = await this.Client.ExecuteTaskAsync(req);
-
-            if (response.IsSuccessful)
-            {
-                return this.Serializer.Deserialize<TResponse>(response.Content);
-            }
-
-            throw new InvalidOperationException();
-        }
-
-        protected virtual async Task<IEnumerable<TResponse>> GetCollection(string path)
+        protected virtual async Task<IEnumerable<TResponse>> GetCollection<TResponse>(string path)
         {
             var req = new RestRequest(path, Method.GET);
             var response = await this.Client.ExecuteTaskAsync(req);
@@ -70,7 +41,7 @@ namespace NativeCode.Clients
             throw new InvalidOperationException();
         }
 
-        protected virtual async Task<IResourcePage<TResponse>> GetCollectionPage(string path)
+        protected virtual async Task<IResourcePage<TResponse>> GetCollectionPage<TResponse>(string path)
         {
             var req = new RestRequest(path, Method.GET);
             var response = await this.Client.ExecuteTaskAsync(req);
@@ -83,7 +54,20 @@ namespace NativeCode.Clients
             throw new InvalidOperationException();
         }
 
-        protected virtual async Task<bool> Post(string path, TRequest request)
+        protected virtual async Task<TResponse> GetSingle<TResponse>(string path)
+        {
+            var req = new RestRequest(path, Method.GET);
+            var response = await this.Client.ExecuteTaskAsync(req);
+
+            if (response.IsSuccessful)
+            {
+                return this.Serializer.Deserialize<TResponse>(response.Content);
+            }
+
+            throw new InvalidOperationException();
+        }
+
+        protected virtual async Task<bool> Post<TCreateRequest>(string path, TCreateRequest request)
         {
             var req = new RestRequest(path, Method.POST);
             req.AddJsonBody(request);
@@ -92,7 +76,7 @@ namespace NativeCode.Clients
             return response.IsSuccessful;
         }
 
-        protected virtual async Task<TResponse> PostResponse(string path, TRequest request)
+        protected virtual async Task<TResponse> PostResponse<TCreateRequest, TResponse>(string path, TCreateRequest request)
         {
             var req = new RestRequest(path, Method.POST);
             req.AddJsonBody(request);
@@ -107,7 +91,7 @@ namespace NativeCode.Clients
             throw new InvalidOperationException();
         }
 
-        protected virtual async Task<bool> Put(string path, TRequest request)
+        protected virtual async Task<bool> Put<TUpdateRequest>(string path, TUpdateRequest request)
         {
             var req = new RestRequest(path, Method.PUT);
             req.AddJsonBody(request);
@@ -116,7 +100,7 @@ namespace NativeCode.Clients
             return response.IsSuccessful;
         }
 
-        protected virtual async Task<TResponse> PutResponse(string path, TRequest request)
+        protected virtual async Task<TResponse> PutResponse<TUpdateRequest, TResponse>(string path, TUpdateRequest request)
         {
             var req = new RestRequest(path, Method.PUT);
             req.AddJsonBody(request);

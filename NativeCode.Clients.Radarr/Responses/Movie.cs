@@ -1,4 +1,4 @@
-namespace NativeCode.Clients.Radarr.Models
+namespace NativeCode.Clients.Radarr.Responses
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace NativeCode.Clients.Radarr.Models
     {
         public DateTimeOffset Added { get; set; }
 
-        public IEnumerable<string> AlternativeTitles { get; set; }
+        public IEnumerable<AlternativeTitle> AlternativeTitles { get; set; }
 
         public string CleanTitle { get; set; }
 
@@ -39,11 +39,11 @@ namespace NativeCode.Clients.Radarr.Models
 
         public int QualityProfileId { get; set; }
 
-        public IEnumerable<MovieRating> Ratings { get; set; }
+        public MovieRating Ratings { get; set; }
 
         public int Runtime { get; set; }
 
-        public int SizeOnDisk { get; set; }
+        public long SizeOnDisk { get; set; }
 
         public string SortTitle { get; set; }
 
