@@ -53,4 +53,4 @@ build:
   parallel: true
   verbosity: minimal
 test_script:
-- pwsh: '%xunit20%\xunit.console NativeCode.Tests -appveyor'
+- pwsh: 'vstest.console /logger:Appveyor NativeCode.Tests'
