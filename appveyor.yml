@@ -54,4 +54,4 @@ build:
   verbosity: minimal
 test_script:
 - pwsh: >-
-    vstest.console /logger:Appveyor **\${Configuration}\**\NativeCode.Tests.dll
+    vstest.console /logger:Appveyor NativeCode.Tests\bin\${Configuration}\netcoreapp2.0\NativeCode.Tests.dll
