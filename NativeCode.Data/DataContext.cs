@@ -13,19 +13,31 @@ namespace NativeCode.Data
     {
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            this.EnsureGuidKeys();
+            this.SetDateModified();
+            this.SetKeys();
 
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
-            this.EnsureGuidKeys();
+            this.SetDateModified();
+            this.SetKeys();
 
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
-        protected virtual void EnsureGuidKeys()
+        protected virtual void SetDateModified()
+        {
+            var entities = this.ChangeTracker.Entries().Select(e => e.Entity).Cast<Entity>().Where(e => e.DateModified.HasValue == false);
+
+            foreach (var entity in entities)
+            {
+                entity.DateModified = DateTimeOffset.UtcNow;
+            }
+        }
+
+        protected virtual void SetKeys()
         {
             var requiresNewGuid = this.ChangeTracker.Entries().Select(e => e.Entity).OfType<Entity<Guid>>().Where(e => e.Key == Guid.Empty);
 

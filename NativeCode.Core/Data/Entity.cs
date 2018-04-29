@@ -1,6 +1,7 @@
 namespace NativeCode.Core.Data
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
 
     public abstract class Entity : IEntity
     {
@@ -18,6 +19,7 @@ namespace NativeCode.Core.Data
     public abstract class Entity<T> : Entity, IEntity<T>
         where T : struct
     {
+        [Key]
         public T Key
         {
             get

@@ -2,9 +2,11 @@ namespace NativeCode.Clients
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
 
     using NativeCode.Core;
+    using NativeCode.Core.Extensions;
 
     using RestSharp;
     using RestSharp.Serializers;
@@ -38,6 +40,14 @@ namespace NativeCode.Clients
         {
             if (response.IsSuccessful)
             {
+                var fileguid = $"{response.Request.Method}.{response.Request.Resource.Replace("/", "-")}".GetGuid();
+                var filename = $"D:\\{fileguid}.json";
+
+                if (File.Exists(filename) == false)
+                {
+                    File.WriteAllText(filename, response.Content);
+                }
+
                 return this.Serializer.Deserialize<T>(response.Content);
             }
 

@@ -1,4 +1,4 @@
-namespace NativeCode.Clients.Radarr.Requests
+namespace NativeCode.Clients.Sonarr.Requests
 {
     using System;
     using System.ComponentModel.DataAnnotations;
