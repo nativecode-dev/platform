@@ -53,4 +53,4 @@ build:
   parallel: true
   verbosity: minimal
 test_script:
-- pwsh: 'dotnet test NativeCode.Tests\NativeCode.Tests.csproj'
+- pwsh: 'dotnet test tests\NativeCode.Tests.csproj'
