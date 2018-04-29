@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NativeCode.Clients.Radarr\NativeCode.Clients.Radarr.csproj" />
-    <ProjectReference Include="..\NativeCode.Clients.Sonarr\NativeCode.Clients.Sonarr.csproj" />
-    <ProjectReference Include="..\NativeCode.Clients\NativeCode.Clients.csproj" />
+    <ProjectReference Include="..\Libraries\NativeCode.Clients.Radarr\NativeCode.Clients.Radarr.csproj" />
+    <ProjectReference Include="..\Libraries\NativeCode.Clients.Sonarr\NativeCode.Clients.Sonarr.csproj" />
+    <ProjectReference Include="..\Libraries\NativeCode.Clients\NativeCode.Clients.csproj" />
   </ItemGroup>
 
 </Project>

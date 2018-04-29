@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NativeCode.Core\NativeCode.Core.csproj" />
-    <ProjectReference Include="..\NativeCode.Data\NativeCode.Data.csproj" />
-    <ProjectReference Include="..\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj" />
-    <ProjectReference Include="..\NativeCode.Sync.Models\NativeCode.Sync.Models.csproj" />
+    <ProjectReference Include="..\Libraries\NativeCode.Core\NativeCode.Core.csproj" />
+    <ProjectReference Include="..\Libraries\NativeCode.Data\NativeCode.Data.csproj" />
+    <ProjectReference Include="..\Libraries\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj" />
+    <ProjectReference Include="..\Libraries\NativeCode.Sync.Models\NativeCode.Sync.Models.csproj" />
   </ItemGroup>
 
 </Project>
