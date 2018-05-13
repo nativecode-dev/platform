@@ -6,7 +6,7 @@ prod: &prod
   <<: *hub
   tags: [ "latest", "1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}" ]
   when:
-    branch: master
+    branch: [ develop, master ]
 
 slack: &slack
   image: plugins/slack
@@ -20,7 +20,7 @@ pipeline:
   release: &release
     <<: *prod
     context: nsync-api
-    dockerfile: nsync-api/dockerfile
+    dockerfile: nsync-api/Dockerfile
     repo: nativecode/nsync-api
 
   notification: &notification
