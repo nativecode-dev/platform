@@ -35,7 +35,7 @@ pipeline:
 
   release: &release
     <<: *deploy
-    docker_image: "nsync-api:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    docker_image: "nativecode/nsync-api:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
     service: "services-nsync/nsync-api"
     when:
       branch: develop
