@@ -8,6 +8,17 @@ prod: &prod
   when:
     branch: [ develop, master ]
 
+deploy: &deploy
+  image: peloton/drone-rancher
+  confirm: true
+  secrets:
+    - source: rancher_access_key
+      target: plugin_access_key
+    - source: rancher_secret_key
+      target: plugin_secret_key
+  timeout: 120
+  url: https://master.nativecode.com
+
 slack: &slack
   image: plugins/slack
   channel: builds
@@ -17,10 +28,17 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
-  release: &release
+  build: &build
     <<: *prod
     dockerfile: nsync-api/Dockerfile
     repo: nativecode/nsync-api
+
+  release: &release
+    <<: *deploy
+    docker_image: "nsync-api:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "services-nsync/nsync-api"
+    when:
+      branch: develop
 
   notification: &notification
     <<: *slack
