@@ -1,0 +1,29 @@
+namespace NativeCode.Clients
+{
+    using NativeCode.Core;
+
+    using RestSharp.Serializers;
+
+    public class RestSerializer : ISerializer
+    {
+        private readonly IObjectSerializer serializer;
+
+        public RestSerializer(IObjectSerializer serializer)
+        {
+            this.serializer = serializer;
+        }
+
+        public string ContentType { get; set; } = "application/json";
+
+        public string DateFormat { get; set; }
+
+        public string Namespace { get; set; }
+
+        public string RootElement { get; set; }
+
+        public string Serialize(object obj)
+        {
+            return this.serializer.Serialize(obj);
+        }
+    }
+}

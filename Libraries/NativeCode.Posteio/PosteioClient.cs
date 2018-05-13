@@ -31,7 +31,7 @@ namespace NativeCode.Posteio
                 CookieContainer = new CookieContainer(),
                 Encoding = Encoding.UTF8,
                 FollowRedirects = true,
-                UserAgent = PosteioAgent
+                UserAgent = PosteioAgent,
             };
 
             this.Domains = new DomainResource(client);

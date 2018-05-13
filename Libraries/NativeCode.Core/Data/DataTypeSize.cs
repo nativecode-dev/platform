@@ -12,6 +12,8 @@ namespace NativeCode.Core.Data
 
         public const int PostalCode = 32;
 
+        public const int TopLevelDomain = 10;
+
         public const int Url = 2048;
 
         public static class Identifier

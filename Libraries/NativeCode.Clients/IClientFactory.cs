@@ -3,8 +3,8 @@ namespace NativeCode.Clients
     using System;
 
     public interface IClientFactory<out T>
-        where T : IClient
+        where T : ICommonClient
     {
-        T CreateClient(Uri baseUrl);
+        T CreateClient(Uri address);
     }
 }

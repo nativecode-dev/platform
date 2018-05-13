@@ -1,6 +1,7 @@
 namespace NativeCode.Core.Extensions
 {
     using System;
+    using System.Collections.Generic;
 
     using JetBrains.Annotations;
 
@@ -23,6 +24,28 @@ namespace NativeCode.Core.Extensions
             builder.AddQueryParam(name, value);
 
             return builder.Uri;
+        }
+
+        public static IDictionary<string, string> ParseQueryParams(this Uri uri)
+        {
+            var results = new Dictionary<string, string>();
+
+            if (string.IsNullOrWhiteSpace(uri.Query))
+            {
+                return results;
+            }
+
+            var query = uri.Query.Split('?');
+            var querystr = query[query.Length - 1];
+            var parts = querystr.Split('&');
+
+            foreach (var part in parts)
+            {
+                var kvp = part.Split('=');
+                results.Add(kvp[0], kvp.Length > 1 ? kvp[1] : null);
+            }
+
+            return results;
         }
     }
 }

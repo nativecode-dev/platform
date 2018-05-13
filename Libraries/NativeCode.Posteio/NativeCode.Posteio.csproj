@@ -16,4 +16,8 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NativeCode.Clients\NativeCode.Clients.csproj" />
+  </ItemGroup>
+
 </Project>

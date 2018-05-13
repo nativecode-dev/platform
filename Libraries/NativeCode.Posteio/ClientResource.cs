@@ -3,6 +3,8 @@ namespace NativeCode.Posteio
     using System;
     using System.Threading.Tasks;
 
+    using NativeCode.Clients;
+    using NativeCode.Core;
     using NativeCode.Posteio.Responses;
 
     using RestSharp;
@@ -18,7 +20,12 @@ namespace NativeCode.Posteio
 
         protected virtual async Task<bool> CreateResource(string path, TResourceCreate resource)
         {
-            var request = new RestRequest(path, Method.POST);
+            var request = new RestRequest(path, Method.POST)
+            {
+                JsonSerializer = new RestSerializer(new JsonObjectSerializer()),
+                RequestFormat = DataFormat.Json,
+            };
+            request.AddHeader("Content-Type", "application/json");
             request.AddBody(resource);
 
             var response = await this.client.ExecuteTaskAsync(request);
@@ -27,14 +34,27 @@ namespace NativeCode.Posteio
 
         protected virtual async Task<bool> DeleteResource(string path)
         {
-            var request = new RestRequest(path, Method.DELETE);
+            var request = new RestRequest(path, Method.DELETE)
+            {
+                JsonSerializer = new RestSerializer(new JsonObjectSerializer()),
+                RequestFormat = DataFormat.Json,
+            };
+            request.AddHeader("Content-Type", "application/json");
+
             var response = await this.client.ExecuteTaskAsync(request);
+
             return response.IsSuccessful;
         }
 
         protected virtual async Task<TResource> GetResource(string path)
         {
-            var request = new RestRequest(path, Method.GET);
+            var request = new RestRequest(path, Method.GET)
+            {
+                JsonSerializer = new RestSerializer(new JsonObjectSerializer()),
+                RequestFormat = DataFormat.Json,
+            };
+            request.AddHeader("Content-Type", "application/json");
+
             var response = await this.client.ExecuteTaskAsync<TResource>(request);
 
             if (response.IsSuccessful)
@@ -47,14 +67,27 @@ namespace NativeCode.Posteio
 
         protected virtual async Task<bool> PutResource(string path, TResource resource)
         {
-            var request = new RestRequest(path, Method.PUT);
+            var request = new RestRequest(path, Method.PUT)
+            {
+                JsonSerializer = new RestSerializer(new JsonObjectSerializer()),
+                RequestFormat = DataFormat.Json,
+            };
+            request.AddHeader("Content-Type", "application/json");
+
             var response = await this.client.ExecuteTaskAsync(request);
+
             return response.IsSuccessful;
         }
 
         protected virtual async Task<ResponsePage<TResource>> QueryResource(string path)
         {
-            var request = new RestRequest(path, Method.GET);
+            var request = new RestRequest(path, Method.GET)
+            {
+                JsonSerializer = new RestSerializer(new JsonObjectSerializer()),
+                RequestFormat = DataFormat.Json,
+            };
+            request.AddHeader("Content-Type", "application/json");
+
             var response = await this.client.ExecuteTaskAsync<ResponsePage<TResource>>(request);
 
             if (response.IsSuccessful)
@@ -67,14 +100,27 @@ namespace NativeCode.Posteio
 
         protected virtual async Task<bool> UpdateResource(string path, TResourceUpdate resource)
         {
-            var request = new RestRequest(path, Method.PATCH);
+            var request = new RestRequest(path, Method.PATCH)
+            {
+                JsonSerializer = new RestSerializer(new JsonObjectSerializer()),
+                RequestFormat = DataFormat.Json,
+            };
+            request.AddHeader("Content-Type", "application/json");
+
             var response = await this.client.ExecuteTaskAsync(request);
+
             return response.IsSuccessful;
         }
 
         protected virtual async Task<TResource> UpdateResourceReturns(string path, TResourceUpdate resource)
         {
-            var request = new RestRequest(path, Method.PATCH);
+            var request = new RestRequest(path, Method.PATCH)
+            {
+                JsonSerializer = new RestSerializer(new JsonObjectSerializer()),
+                RequestFormat = DataFormat.Json,
+            };
+            request.AddHeader("Content-Type", "application/json");
+
             var response = await this.client.ExecuteTaskAsync<TResource>(request);
 
             if (response.IsSuccessful)

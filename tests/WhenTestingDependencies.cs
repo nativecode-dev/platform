@@ -4,6 +4,8 @@ namespace NativeCode.Tests
 
     using Microsoft.Extensions.DependencyInjection;
 
+    using NativeCode.Core;
+
     public abstract class WhenTestingDependencies : WhenTesting
     {
         protected WhenTestingDependencies()
@@ -15,7 +17,7 @@ namespace NativeCode.Tests
 
         protected IServiceProvider Init(IServiceCollection services)
         {
-            return this.RegisterServices(services).BuildServiceProvider();
+            return this.RegisterServices(services).AddTransient<IObjectSerializer, JsonObjectSerializer>().BuildServiceProvider();
         }
 
         protected abstract IServiceCollection RegisterServices(IServiceCollection services);

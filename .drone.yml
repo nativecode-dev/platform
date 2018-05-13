@@ -1,0 +1,29 @@
+hub: &hub
+  image: plugins/docker
+  secrets: [ docker_username, docker_password ]
+
+prod: &prod
+  <<: *hub
+  tags: [ "latest", "1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}" ]
+  when:
+    branch: master
+
+slack: &slack
+  image: plugins/slack
+  channel: builds
+  username: drone
+  secrets:
+    - source: webhook_slack_builds
+      target: plugin_webhook
+
+pipeline:
+  release: &release
+    <<: *prod
+    context: nsync-api
+    dockerfile: nsync-api/dockerfile
+    repo: nativecode/nsync-api
+
+  notification: &notification
+    <<: *slack
+    when:
+      status: [ success, failure ]

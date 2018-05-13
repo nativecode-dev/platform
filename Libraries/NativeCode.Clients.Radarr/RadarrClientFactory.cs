@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Clients.Radarr
+namespace NativeCode.Clients.Radarr
 {
     using System;
 
@@ -13,9 +13,9 @@
 
         protected IObjectSerializer Serializer { get; }
 
-        public RadarrClient CreateClient(Uri baseUrl)
+        public RadarrClient CreateClient(Uri address)
         {
-            return new RadarrClient(this.Serializer, baseUrl);
+            return new RadarrClient(this.Serializer, address);
         }
     }
 }

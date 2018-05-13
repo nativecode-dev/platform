@@ -1,18 +1,20 @@
 namespace NativeCode.Clients
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.IO;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using NativeCode.Core;
     using NativeCode.Core.Extensions;
 
     using RestSharp;
-    using RestSharp.Serializers;
 
     public abstract class ResourceBase : IResource
     {
+        private readonly ConcurrentDictionary<string, string> cache = new ConcurrentDictionary<string, string>();
+
         protected ResourceBase(IRestClient client, IObjectSerializer serializer)
         {
             this.Client = client;
@@ -40,14 +42,6 @@ namespace NativeCode.Clients
         {
             if (response.IsSuccessful)
             {
-                var fileguid = $"{response.Request.Method}.{response.Request.Resource.Replace("/", "-")}".GetGuid();
-                var filename = $"D:\\{fileguid}.json";
-
-                if (File.Exists(filename) == false)
-                {
-                    File.WriteAllText(filename, response.Content);
-                }
-
                 return this.Serializer.Deserialize<T>(response.Content);
             }
 
@@ -59,91 +53,85 @@ namespace NativeCode.Clients
             throw new InvalidOperationException(response.ErrorMessage);
         }
 
-        protected virtual async Task<bool> Delete(string path)
+        protected virtual Task<bool> Delete(string path)
         {
             var request = this.CreateRequest(path, Method.DELETE);
-            var response = await this.Client.ExecuteTaskAsync(request);
-
-            return response.IsSuccessful;
+            return this.Execute(request);
         }
 
-        protected virtual async Task<IEnumerable<TResponse>> GetCollection<TResponse>(string path)
+        protected virtual async Task<bool> Execute(IRestRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var request = this.CreateRequest(path, Method.GET);
-            var response = await this.Client.ExecuteGetTaskAsync(request);
+            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid().ToString();
 
-            return this.CreateResponse<IEnumerable<TResponse>>(response);
-        }
-
-        protected virtual async Task<IResourcePage<TResponse>> GetCollectionPage<TResponse>(string path)
-        {
-            var request = this.CreateRequest(path, Method.GET);
-            var response = await this.Client.ExecuteGetTaskAsync(request);
-
-            return this.CreateResponse<IResourcePage<TResponse>>(response);
-        }
-
-        protected virtual async Task<TResponse> GetSingle<TResponse>(string path)
-        {
-            var request = this.CreateRequest(path, Method.GET);
-            var response = await this.Client.ExecuteGetTaskAsync(request);
-
-            return this.CreateResponse<TResponse>(response);
-        }
-
-        protected virtual async Task<bool> Post<TRequest>(string path, TRequest value)
-        {
-            var request = this.CreateRequest(path, Method.POST, value);
-            var response = await this.Client.ExecutePostTaskAsync(request);
-
-            return response.IsSuccessful;
-        }
-
-        protected virtual async Task<TResponse> PostResponse<TRequest, TResponse>(string path, TRequest value)
-        {
-            var request = this.CreateRequest(path, Method.POST, value);
-            var response = await this.Client.ExecutePostTaskAsync(request);
-
-            return this.CreateResponse<TResponse>(response);
-        }
-
-        protected virtual async Task<bool> Put<TRequest>(string path, TRequest value)
-        {
-            var request = this.CreateRequest(path, Method.PUT, value);
-            var response = await this.Client.ExecuteTaskAsync(request);
-
-            return response.IsSuccessful;
-        }
-
-        protected virtual async Task<TResponse> PutResponse<TRequest, TResponse>(string path, TRequest value)
-        {
-            var request = this.CreateRequest(path, Method.PUT, value);
-            var response = await this.Client.ExecuteTaskAsync(request);
-
-            return this.CreateResponse<TResponse>(response);
-        }
-
-        public class RestSerializer : ISerializer
-        {
-            private readonly IObjectSerializer serializer;
-
-            public RestSerializer(IObjectSerializer serializer)
+            if (this.cache.ContainsKey(key))
             {
-                this.serializer = serializer;
+                return this.Serializer.Deserialize<bool>(this.cache[key]);
             }
 
-            public string ContentType { get; set; } = "application/json";
+            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken);
+            var content = this.Serializer.Serialize(response.IsSuccessful);
 
-            public string DateFormat { get; set; }
+            this.cache.AddOrUpdate(key, k => content, (k, v) => content);
 
-            public string Namespace { get; set; }
+            return response.IsSuccessful;
+        }
 
-            public string RootElement { get; set; }
+        protected virtual Task<IEnumerable<TResponse>> GetCollection<TResponse>(string path)
+        {
+            var request = this.CreateRequest(path, Method.GET);
+            return this.Returns<IEnumerable<TResponse>>(request);
+        }
 
-            public string Serialize(object obj)
+        protected virtual Task<IResourcePage<TResponse>> GetCollectionPage<TResponse>(string path)
+        {
+            var request = this.CreateRequest(path, Method.GET);
+            return this.Returns<IResourcePage<TResponse>>(request);
+        }
+
+        protected virtual Task<TResponse> GetSingle<TResponse>(string path)
+        {
+            var request = this.CreateRequest(path, Method.GET);
+            return this.Returns<TResponse>(request);
+        }
+
+        protected virtual Task<bool> Post<TRequest>(string path, TRequest value)
+        {
+            var request = this.CreateRequest(path, Method.POST, value);
+            return this.Execute(request);
+        }
+
+        protected virtual Task<TResponse> PostResponse<TRequest, TResponse>(string path, TRequest value)
+        {
+            var request = this.CreateRequest(path, Method.POST, value);
+            return this.Returns<TResponse>(request);
+        }
+
+        protected virtual Task<bool> Put<TRequest>(string path, TRequest value)
+        {
+            var request = this.CreateRequest(path, Method.PUT, value);
+            return this.Execute(request);
+        }
+
+        protected virtual Task<TResponse> PutResponse<TRequest, TResponse>(string path, TRequest value)
+        {
+            var request = this.CreateRequest(path, Method.PUT, value);
+            return this.Returns<TResponse>(request);
+        }
+
+        protected virtual async Task<T> Returns<T>(IRestRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid().ToString();
+
+            if (this.cache.ContainsKey(key))
             {
-                return this.serializer.Serialize(obj);
+                return this.Serializer.Deserialize<T>(this.cache[key]);
             }
+
+            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken);
+
+            this.cache.AddOrUpdate(key, k => response.Content, (k, v) => response.Content);
+
+            return this.CreateResponse<T>(response);
         }
     }
 }

@@ -4,9 +4,9 @@ namespace NativeCode.Tests.Clients.Radarr
 
     using Microsoft.Extensions.DependencyInjection;
 
+    using NativeCode.Clients;
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Radarr.Extensions;
-    using NativeCode.Core;
 
     public abstract class WhenTestingRadarr : WhenTestingDependencies
     {
@@ -16,8 +16,8 @@ namespace NativeCode.Tests.Clients.Radarr
 
         protected WhenTestingRadarr()
         {
-            var serializer = new JsonObjectSerializer();
-            this.Client = new RadarrClient(serializer, new Uri(ServerAddress)).SetApiKey(ApiKey);
+            var factory = this.Provider.GetService<IClientFactory<RadarrClient>>();
+            this.Client = factory.CreateClient(new Uri(ServerAddress)).SetApiKey(ApiKey);
         }
 
         protected RadarrClient Client { get; }

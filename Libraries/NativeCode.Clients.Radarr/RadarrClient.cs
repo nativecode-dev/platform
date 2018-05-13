@@ -7,7 +7,7 @@ namespace NativeCode.Clients.Radarr
 
     using RestSharp;
 
-    public class RadarrClient : CommonRestClient
+    public class RadarrClient : CommonClient
     {
         public RadarrClient(IObjectSerializer serializer, Uri baseUrl)
             : base(serializer, ValidateUri(baseUrl))

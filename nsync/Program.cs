@@ -7,12 +7,11 @@ namespace NativeCode.Sync
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Colorful;
-
     using DigitalOcean.API;
 
     using NativeCode.Core.Extensions;
     using NativeCode.Posteio;
+    using NativeCode.Posteio.Requests;
 
     using Nito.AsyncEx;
 
@@ -35,9 +34,7 @@ namespace NativeCode.Sync
 
         private static async Task Run(IEnumerable<string> args)
         {
-            args.ForEach(arg => Trace.WriteLine(arg, "program_argument"));
-
-            Trace.Listeners.Add(new ConsoleTraceListener());
+            args.ForEach(arg => Console.WriteLine(arg, "program_argument", Color.DimGray));
 
             var digitalocean = new DigitalOceanClient(DigitalOceanApiKey);
             var posteio = new PosteioClient(MailServerHostName, MailServerUserName, MailServerPassword);
@@ -49,44 +46,47 @@ namespace NativeCode.Sync
             {
                 try
                 {
-                    var mxdomain = mxdomains.Results.Single(md => md.Name == nsdomain.Name);
+                    var mxdomain = mxdomains.Results.SingleOrDefault(md => md.Name == nsdomain.Name);
 
-                    Trace.WriteLine(mxdomain.Forward ? $"-> {mxdomain.ForwardDomain}" : $"[{mxdomain.Home}]", nsdomain.Name);
-
-                    var mailboxes = await posteio.Mailboxes.Query($"@{mxdomain.Name}");
-
-                    foreach (var mailbox in mailboxes.Results)
+                    if (mxdomain != null)
                     {
-                        Trace.WriteLine(mailbox.Address, mxdomain.Name);
+                        Console.WriteLine(mxdomain.Forward ? $"-> {mxdomain.ForwardDomain}" : $"[{mxdomain.Home}]", nsdomain.Name);
+
+                        var mailboxes = await posteio.Mailboxes.Query($"@{mxdomain.Name}");
+
+                        foreach (var mailbox in mailboxes.Results)
+                        {
+                            Console.WriteLine(mailbox.Address, mxdomain.Name, Color.CadetBlue);
+                        }
+
+                        continue;
                     }
+
+                    var domain = new CreateDomain
+                    {
+                        DomainBin = false,
+                        DomainBinAddress = string.Empty,
+                        DomainName = nsdomain.Name,
+                        Forward = true,
+                        ForwardDomain = "nativecode.com",
+                    };
+
+                    if (await posteio.Domains.Create(domain) == false)
+                    {
+                        Console.WriteLine($"Failed to create domain: {domain.DomainName}.", Color.DarkRed);
+                        continue;
+                    }
+
+                    Console.WriteLine($"Created new forwarding domain: {domain.DomainName}.", Color.DarkGreen);
                 }
                 catch (Exception ex)
                 {
-                    Trace.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message, Color.Red);
                 }
             }
 
             Console.WriteLine("Press any key to continue...", Color.DarkOliveGreen);
             Console.ReadKey(true);
-        }
-
-        public class ConsoleTraceListener : TraceListener
-        {
-            public override void Write(string message)
-            {
-                Console.Write(message);
-            }
-
-            public override void WriteLine(string message)
-            {
-                var style = new StyleSheet(Color.White);
-                // Domains used as categories in traces.
-                style.AddStyle("^([a-z,-]+.[a-z]+):", Color.Cyan);
-                // Anything that looks like an email.
-                style.AddStyle("([\\w,.,-]+@[a-z,-]+.[a-z]+)", Color.DarkCyan);
-
-                Console.WriteLineStyled(message, style);
-            }
         }
     }
 }

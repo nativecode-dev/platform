@@ -6,7 +6,7 @@ namespace NativeCode.Clients.Sonarr
 
     using RestSharp;
 
-    public class SonarrClient : CommonRestClient
+    public class SonarrClient : CommonClient
     {
         public SonarrClient(IObjectSerializer serializer, Uri baseAddress)
             : base(serializer, ValidateUri(baseAddress))

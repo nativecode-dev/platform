@@ -13,9 +13,9 @@ namespace NativeCode.Clients.Sonarr
 
         protected IObjectSerializer Serializer { get; }
 
-        public SonarrClient CreateClient(Uri baseUrl)
+        public SonarrClient CreateClient(Uri address)
         {
-            return new SonarrClient(this.Serializer, baseUrl);
+            return new SonarrClient(this.Serializer, address);
         }
     }
 }
