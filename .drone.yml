@@ -19,7 +19,6 @@ slack: &slack
 pipeline:
   release: &release
     <<: *prod
-    context: nsync-api
     dockerfile: nsync-api/Dockerfile
     repo: nativecode/nsync-api
 
