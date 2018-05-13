@@ -38,7 +38,8 @@ pipeline:
     docker_image: "nativecode/nsync-api:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
     service: "services-nsync/nsync-api"
     when:
-      branch: develop
+      event: tag
+      branch: master
 
   notification: &notification
     <<: *slack
