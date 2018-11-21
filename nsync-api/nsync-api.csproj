@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Libraries\NativeCode.Configuration\NativeCode.Configuration.csproj" />
     <ProjectReference Include="..\Libraries\NativeCode.Core\NativeCode.Core.csproj" />
     <ProjectReference Include="..\Libraries\NativeCode.Data\NativeCode.Data.csproj" />
     <ProjectReference Include="..\Libraries\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj" />
