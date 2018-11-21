@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core", "Librarie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nsync-api", "nsync-api\nsync-api.csproj", "{E354A9F7-059E-4990-B622-DE083DEDADFD}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BC3D0756-A828-4B88-9EBC-57CC7D8B7521}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Sync.Models", "Libraries\NativeCode.Sync.Models\NativeCode.Sync.Models.csproj", "{193B0CE2-2BD3-454A-980E-7E1AB01F92B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Sync.Data", "Libraries\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj", "{970DE7B8-1A7E-4DDE-9285-389E504CCF7F}"
@@ -74,10 +72,6 @@ Global
 		{E354A9F7-059E-4990-B622-DE083DEDADFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E354A9F7-059E-4990-B622-DE083DEDADFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E354A9F7-059E-4990-B622-DE083DEDADFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC3D0756-A828-4B88-9EBC-57CC7D8B7521}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC3D0756-A828-4B88-9EBC-57CC7D8B7521}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC3D0756-A828-4B88-9EBC-57CC7D8B7521}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC3D0756-A828-4B88-9EBC-57CC7D8B7521}.Release|Any CPU.Build.0 = Release|Any CPU
 		{193B0CE2-2BD3-454A-980E-7E1AB01F92B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{193B0CE2-2BD3-454A-980E-7E1AB01F92B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{193B0CE2-2BD3-454A-980E-7E1AB01F92B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
