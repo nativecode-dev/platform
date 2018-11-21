@@ -23,11 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\NativeCode.Configuration\NativeCode.Configuration.csproj" />
-    <ProjectReference Include="..\Libraries\NativeCode.Core\NativeCode.Core.csproj" />
-    <ProjectReference Include="..\Libraries\NativeCode.Data\NativeCode.Data.csproj" />
-    <ProjectReference Include="..\Libraries\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj" />
-    <ProjectReference Include="..\Libraries\NativeCode.Sync.Models\NativeCode.Sync.Models.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Configuration\NativeCode.Configuration.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Data\NativeCode.Data.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Media.Data\NativeCode.Media.Data.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Sync.Data\NativeCode.Sync.Data.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Sync.Models\NativeCode.Sync.Models.csproj" />
   </ItemGroup>
 
 </Project>
