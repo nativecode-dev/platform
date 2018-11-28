@@ -5,10 +5,8 @@ namespace NativeCode.Clients
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using NativeCode.Core;
-    using NativeCode.Core.Extensions;
-
+    using Core.Extensions;
+    using Core.Serialization;
     using RestSharp;
 
     public abstract class ResourceBase : IResource
@@ -35,7 +33,8 @@ namespace NativeCode.Clients
 
         protected virtual IRestRequest CreateRequest<T>(string path, Method method, T body)
         {
-            return this.CreateRequest(path, method).AddJsonBody(body);
+            return this.CreateRequest(path, method)
+                .AddJsonBody(body);
         }
 
         protected virtual T CreateResponse<T>(IRestResponse response)
@@ -59,9 +58,11 @@ namespace NativeCode.Clients
             return this.Execute(request);
         }
 
-        protected virtual async Task<bool> Execute(IRestRequest request, CancellationToken cancellationToken = new CancellationToken())
+        protected virtual async Task<bool> Execute(IRestRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
         {
-            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid().ToString();
+            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid()
+                .ToString();
 
             if (this.cache.ContainsKey(key))
             {
@@ -118,9 +119,11 @@ namespace NativeCode.Clients
             return this.Returns<TResponse>(request);
         }
 
-        protected virtual async Task<T> Returns<T>(IRestRequest request, CancellationToken cancellationToken = new CancellationToken())
+        protected virtual async Task<T> Returns<T>(IRestRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
         {
-            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid().ToString();
+            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid()
+                .ToString();
 
             if (this.cache.ContainsKey(key))
             {

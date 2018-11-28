@@ -1,9 +1,7 @@
 namespace NativeCode.Tests.Clients.Radarr
 {
     using System;
-
     using Microsoft.Extensions.DependencyInjection;
-
     using NativeCode.Clients;
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Radarr.Extensions;
@@ -17,7 +15,8 @@ namespace NativeCode.Tests.Clients.Radarr
         protected WhenTestingRadarr()
         {
             var factory = this.Provider.GetService<IClientFactory<RadarrClient>>();
-            this.Client = factory.CreateClient(new Uri(ServerAddress)).SetApiKey(ApiKey);
+            this.Client = factory.CreateClient(new Uri(ServerAddress))
+                .SetApiKey(ApiKey);
         }
 
         protected RadarrClient Client { get; }

@@ -1,10 +1,8 @@
 namespace NativeCode.Clients.Radarr.Resources
 {
     using System.Threading.Tasks;
-
-    using NativeCode.Clients.Radarr.Responses;
-    using NativeCode.Core;
-
+    using Core.Serialization;
+    using Responses;
     using RestSharp;
 
     public class SystemResource : ResourceBase, IResourceLookup<SystemStatus>

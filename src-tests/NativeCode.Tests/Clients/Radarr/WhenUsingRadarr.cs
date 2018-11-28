@@ -3,10 +3,8 @@ namespace NativeCode.Tests.Clients.Radarr
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Radarr.Requests;
-
     using Xunit;
 
     public class WhenUsingSonarr : WhenTestingRadarr

@@ -1,6 +1,7 @@
 namespace NativeCode.Core.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
+    using Serialization;
 
     public static class ServiceCollectionExtensions
     {

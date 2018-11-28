@@ -6,5 +6,7 @@ namespace NativeCode.Clients
         where T : ICommonClient
     {
         T CreateClient(Uri address);
+
+        T CreateClient(Uri address, string apikey);
     }
 }

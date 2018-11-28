@@ -1,6 +1,6 @@
 namespace NativeCode.Tests
 {
-    using NativeCode.Core;
+    using NativeCode.Core.Reliability;
 
     public abstract class WhenTesting : Disposable
     {

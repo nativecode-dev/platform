@@ -3,12 +3,10 @@ namespace NativeCode.Clients.Radarr.Resources
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using NativeCode.Clients.Radarr.Requests;
-    using NativeCode.Clients.Radarr.Responses;
-    using NativeCode.Core;
-    using NativeCode.Core.Extensions;
-
+    using Core.Extensions;
+    using Core.Serialization;
+    using Requests;
+    using Responses;
     using RestSharp;
 
     public class CalendarResource : ResourceBase, IResourceQuery<QueryCalendar, Movie>

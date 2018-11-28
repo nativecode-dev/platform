@@ -1,7 +1,6 @@
 namespace NativeCode.Clients
 {
-    using NativeCode.Core;
-
+    using Core.Serialization;
     using RestSharp.Serializers;
 
     public class RestSerializer : ISerializer
@@ -13,13 +12,13 @@ namespace NativeCode.Clients
             this.serializer = serializer;
         }
 
-        public string ContentType { get; set; } = "application/json";
-
         public string DateFormat { get; set; }
 
         public string Namespace { get; set; }
 
         public string RootElement { get; set; }
+
+        public string ContentType { get; set; } = "application/json";
 
         public string Serialize(object obj)
         {

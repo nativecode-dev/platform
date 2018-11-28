@@ -18,7 +18,8 @@ namespace NativeCode.Core.Syncing
         public IReadOnlyCollection<SyncBuilderChange<TSource, TTarget>> Diff()
         {
             var changes = new List<SyncBuilderChange<TSource, TTarget>>();
-            this.Add(changes).Remove(changes);
+            this.Add(changes)
+                .Remove(changes);
 
             return changes;
         }

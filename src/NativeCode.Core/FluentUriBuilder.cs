@@ -1,8 +1,7 @@
 namespace NativeCode.Core
 {
     using System;
-
-    using NativeCode.Core.Extensions;
+    using Extensions;
 
     public class FluentUriBuilder : UriBuilder
     {

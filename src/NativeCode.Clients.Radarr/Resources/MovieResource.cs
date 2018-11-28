@@ -3,10 +3,9 @@ namespace NativeCode.Clients.Radarr.Resources
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using NativeCode.Clients.Radarr.Responses;
-    using NativeCode.Core;
-
+    using Core.Serialization;
+    using Requests;
+    using Responses;
     using RestSharp;
 
     public class MovieResource : ResourceBase, IResourceLookup<int, Movie>
@@ -29,6 +28,11 @@ namespace NativeCode.Clients.Radarr.Resources
         public Task<IResourcePage<Movie>> Page(int size, int start = 1)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task PushRelease(ReleaseInfo release)
+        {
+            await this.Post("release/push", release);
         }
     }
 }

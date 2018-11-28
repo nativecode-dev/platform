@@ -1,8 +1,7 @@
 namespace NativeCode.Clients.Radarr
 {
     using System;
-
-    using NativeCode.Core;
+    using Core.Serialization;
 
     public class RadarrClientFactory : IClientFactory<RadarrClient>
     {
@@ -16,6 +15,14 @@ namespace NativeCode.Clients.Radarr
         public RadarrClient CreateClient(Uri address)
         {
             return new RadarrClient(this.Serializer, address);
+        }
+
+        public RadarrClient CreateClient(Uri address, string apikey)
+        {
+            var client = this.CreateClient(address);
+            client.SetApiKey(apikey);
+
+            return client;
         }
     }
 }
