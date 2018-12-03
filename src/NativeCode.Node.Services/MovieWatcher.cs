@@ -33,7 +33,7 @@ namespace NativeCode.Node.Services
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
                 }
-                else if (string.IsNullOrWhiteSpace(message.Name))
+                else if (string.IsNullOrWhiteSpace(message.Name) == false)
                 {
                     this.Queue.Requeue(message.DeliveryTag);
                 }
