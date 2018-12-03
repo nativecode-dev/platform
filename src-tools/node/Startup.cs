@@ -8,6 +8,7 @@ namespace node
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json.Converters;
+    using NSwag;
     using Options;
 
     public class Startup : IStartup
@@ -53,7 +54,14 @@ namespace node
             app.UseHttpsRedirection();
             app.UseForwardedHeaders();
             app.UseMvc();
-            app.UseSwagger();
+            app.UseSwagger(config =>
+            {
+                config.PostProcess = (settings, c) =>
+                {
+                    settings.Schemes.Clear();
+                    settings.Schemes.Add(SwaggerSchema.Https);
+                };
+            });
             app.UseSwaggerUi3();
         }
 
@@ -61,13 +69,6 @@ namespace node
         {
             var section = this.Configuration.GetSection(typeof(T).Name);
             services.Configure<T>(section);
-        }
-
-        private static RewriteOptions CreateRewriteRules()
-        {
-            return new RewriteOptions()
-                .AddRedirect("^$", "swagger")
-                .AddRedirectToHttps();
         }
     }
 }
