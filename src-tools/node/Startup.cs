@@ -52,7 +52,6 @@ namespace node
 
             app.UseHttpsRedirection();
             app.UseForwardedHeaders();
-            app.UseRewriter(CreateRewriteRules());
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUi3();
