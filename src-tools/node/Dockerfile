@@ -39,5 +39,5 @@ RUN set -ex \
 FROM RUNTIME
 WORKDIR /app
 COPY --from=BUILD /build/.artifacts/published/node /app
-RUN ls -lahR /app
+RUN apk update && apk add libc6-compat && ls -lahR /app
 ENTRYPOINT ["dotnet", "node.dll"]
