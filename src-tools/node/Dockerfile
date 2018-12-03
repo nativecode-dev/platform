@@ -3,6 +3,9 @@
 # -----------------------------------------------------------------------------
 FROM microsoft/dotnet:2.1.5-aspnetcore-runtime-alpine AS RUNTIME
 WORKDIR /app
+RUN set -ex \
+    && apk add --update --no-cache libc6-compat \
+    ;
 
 # -----------------------------------------------------------------------------
 # STAGE: Build
