@@ -82,8 +82,8 @@ namespace NativeCode.Node.Services
         {
             var registration = new IrcUserRegistrationInfo
             {
-                NickName = this.Options.NickName,
-                RealName = this.Options.RealName,
+                NickName = this.Options.UserName,
+                RealName = this.Options.UserName,
                 UserName = this.Options.UserName,
             };
 
