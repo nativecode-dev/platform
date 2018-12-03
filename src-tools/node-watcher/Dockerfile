@@ -39,4 +39,5 @@ RUN set -ex \
 FROM RUNTIME
 WORKDIR /app
 COPY --from=BUILD /build/.artifacts/published/node-watcher /app
+RUN ls -lahR /app
 ENTRYPOINT ["dotnet", "node-watcher.dll"]
