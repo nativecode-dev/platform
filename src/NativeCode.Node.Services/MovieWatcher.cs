@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Node.Services
+namespace NativeCode.Node.Services
 {
     using System;
     using System.Threading.Tasks;
@@ -24,7 +24,8 @@
 
         protected override async Task Process(MovieRelease message)
         {
-            await this.Client.Movies.PushRelease(this.Mapper.Map<ReleaseInfo>(message));
+            this.Logger.LogTrace($"Pushing release: {message.Link}");
+            await this.Client.Movies.PushRelease(this.Mapper.Map<MovieReleaseInfo>(message));
         }
     }
 }

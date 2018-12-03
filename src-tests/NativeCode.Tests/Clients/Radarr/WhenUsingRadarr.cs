@@ -17,7 +17,7 @@ namespace NativeCode.Tests.Clients.Radarr
             var sut = new RadarrClient(null, new Uri(ServerAddress));
 
             // Assert
-            Assert.Equal("http://radarr.in.nativecode.com/api/", sut.BaseAddress.ToString());
+            Assert.Equal("http://in.nativecode.com:7878/api/", sut.BaseAddress.ToString());
         }
 
         [Fact]

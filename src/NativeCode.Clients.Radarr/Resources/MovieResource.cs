@@ -30,7 +30,7 @@ namespace NativeCode.Clients.Radarr.Resources
             throw new NotImplementedException();
         }
 
-        public async Task PushRelease(ReleaseInfo release)
+        public async Task PushRelease(MovieReleaseInfo release)
         {
             await this.Post("release/push", release);
         }

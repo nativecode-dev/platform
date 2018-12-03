@@ -8,7 +8,7 @@ namespace NativeCode.Tests.Clients.Sonarr
 
     public class WhenUsingSonarr : WhenTestingDependencies
     {
-        private const string ServerAddress = "http://sonarr.in.nativecode.com";
+        private const string ServerAddress = "http://in.nativecode.com:8989";
 
         private static readonly string ApiKey = Environment.GetEnvironmentVariable("APIKEY_SONARR");
 

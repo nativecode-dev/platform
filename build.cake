@@ -42,9 +42,9 @@ Action<NpxSettings> requiredSemanticVersionPackages = settings => settings
 //////////////////////////////////////////////////////////////////////
 
 const string SOLUTION = "**/*.sln";
-const string SOLUTION_APPS = "src-tools/**.csproj";
-const string SOLUTION_NUGET = "src/**.csproj";
-const string SOLUTION_TESTS = "src-tests/**.csproj";
+const string SOLUTION_APPS = "src-tools/**/*.csproj";
+const string SOLUTION_NUGET = "src/**/*.csproj";
+const string SOLUTION_TESTS = "src-tests/**/*.csproj";
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN

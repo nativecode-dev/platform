@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Node.Services
+namespace NativeCode.Node.Services
 {
     using System;
     using System.Threading;
@@ -39,7 +39,7 @@
 
         public virtual void OnNext(T value)
         {
-            AsyncContext.Run(() => this.Process(value));
+            this.Process(value).GetAwaiter().GetResult();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

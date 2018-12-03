@@ -1,4 +1,4 @@
-﻿namespace node_processor
+namespace node_processor
 {
     using System;
     using AutoMapper;
@@ -10,11 +10,13 @@
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Radarr.Requests;
     using NativeCode.Clients.Sonarr;
+    using NativeCode.Clients.Sonarr.Requests;
     using NativeCode.Core.Configuration;
     using NativeCode.Core.Messaging.Extensions;
     using NativeCode.Core.Serialization;
     using NativeCode.Node.Messages;
     using NativeCode.Node.Services;
+    using Protocol = NativeCode.Clients.Radarr.Requests.Protocol;
 
     internal class Program
     {
@@ -55,18 +57,18 @@
                 {
                     services.AddAutoMapper(config =>
                     {
-                        config.CreateMap<MovieRelease, ReleaseInfo>()
+                        config.CreateMap<MovieRelease, MovieReleaseInfo>()
                             .ForMember(dest => dest.DownloadUrl, opt => opt.MapFrom(src => src.Link))
                             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Name))
                             .ForMember(dest => dest.Protocol, opt => opt.MapFrom(src => Protocol.Torrent))
-                            .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => DateTime.Now.ToLongDateString()))
+                            .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => DateTime.UtcNow.ToString("o")))
                             .ReverseMap();
 
-                        config.CreateMap<SeriesRelease, ReleaseInfo>()
+                        config.CreateMap<SeriesRelease, SeriesReleaseInfo>()
                             .ForMember(dest => dest.DownloadUrl, opt => opt.MapFrom(src => src.Link))
                             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Name))
                             .ForMember(dest => dest.Protocol, opt => opt.MapFrom(src => Protocol.Torrent))
-                            .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => DateTime.Now.ToLongDateString()))
+                            .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => DateTime.UtcNow.ToString("o")))
                             .ReverseMap();
                     });
 

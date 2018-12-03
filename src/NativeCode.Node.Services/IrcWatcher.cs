@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Node.Services
+namespace NativeCode.Node.Services
 {
     using System;
     using System.Collections.Generic;
@@ -22,6 +22,7 @@
         private static readonly IEnumerable<string> MovieCategories = new List<string>
         {
             "Blu-Ray",
+            "DVD",
             "Movies",
         };
 
