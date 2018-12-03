@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # STAGE: Runtime
 # -----------------------------------------------------------------------------
-FROM microsoft/dotnet:2.1.5-aspnetcore-runtime-alpine AS RUNTIME
+FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine AS RUNTIME
 WORKDIR /app
 RUN set -ex \
     && apk add --update --no-cache libc6-compat \
@@ -39,5 +39,5 @@ RUN set -ex \
 FROM RUNTIME
 WORKDIR /app
 COPY --from=BUILD /build/.artifacts/published/node-processor /app
-RUN apk update && apk add libc6-compat && ls -lahR /app
+RUN apk update && apk add libc6-compat && chmod +x /app/runtimes -R && ls -lahR /app
 ENTRYPOINT ["dotnet", "node-processor.dll"]
