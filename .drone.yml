@@ -28,6 +28,11 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
+  node: &node
+    <<: *prod
+    dockerfile: src-tools/node/Dockerfile
+    repo: nativecode/node
+
   processor: &processor
     <<: *prod
     dockerfile: src-tools/node-processor/Dockerfile
@@ -37,6 +42,13 @@ pipeline:
     <<: *prod
     dockerfile: src-tools/node-watcher/Dockerfile
     repo: nativecode/node-watcher
+
+  release-node: &release-node
+    <<: *deploy
+    docker_image: "nativecode/node:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "platform/node"
+    when:
+      branch: master
 
   release-processor: &release-processor
     <<: *deploy
