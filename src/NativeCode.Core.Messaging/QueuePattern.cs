@@ -22,6 +22,10 @@ namespace NativeCode.Core.Messaging
 
         public string Route { get; protected set; }
 
+        public abstract void Acknowledge(ulong deliveryTag);
+
+        public abstract void Requeue(ulong deliveryTag);
+
         public abstract IObservable<T> AsObservable();
 
         public abstract Task Publish(T message);

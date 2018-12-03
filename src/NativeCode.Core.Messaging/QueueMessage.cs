@@ -12,5 +12,6 @@ namespace NativeCode.Core.Messaging
         public string SourceMachine { get; } = Environment.MachineName;
 
         public IList<string> TargetMachines { get; } = new List<string>();
+        public ulong DeliveryTag { get; set; }
     }
 }

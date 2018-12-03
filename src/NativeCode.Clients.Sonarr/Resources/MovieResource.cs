@@ -30,9 +30,9 @@ namespace NativeCode.Clients.Sonarr.Resources
             throw new NotImplementedException();
         }
 
-        public async Task PushRelease(SeriesReleaseInfo release)
+        public Task<bool> PushRelease(SeriesReleaseInfo release)
         {
-            await this.Post("release/push", release);
+            return this.Post("release/push", release);
         }
     }
 }

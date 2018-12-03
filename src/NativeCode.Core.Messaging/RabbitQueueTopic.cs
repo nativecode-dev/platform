@@ -41,6 +41,16 @@ namespace NativeCode.Core.Messaging
 
         protected string ExchangeName => this.GetExchangeName();
 
+        public override void Acknowledge(ulong deliveryTag)
+        {
+            this.channel.BasicAck(deliveryTag, false);
+        }
+
+        public override void Requeue(ulong deliveryTag)
+        {
+            this.channel.BasicNack(deliveryTag, false, true);
+        }
+
         public override IObservable<T> AsObservable()
         {
             return this.CreateObservable();
@@ -102,8 +112,12 @@ namespace NativeCode.Core.Messaging
                 try
                 {
                     var envelope = this.Serializer.Deserialize<RequestEnvelope<T>>(args.Body);
-                    this.subject.OnNext(envelope.Message);
-                    this.channel.BasicAck(args.DeliveryTag, false);
+
+                    if (envelope.Message != null)
+                    {
+                        envelope.Message.DeliveryTag = args.DeliveryTag;
+                        this.subject.OnNext(envelope.Message);
+                    }
                 }
                 catch (QueueDeserializationException qde)
                 {

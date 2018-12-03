@@ -24,8 +24,25 @@ namespace NativeCode.Node.Services
 
         protected override async Task Process(SeriesRelease message)
         {
-            this.Logger.LogTrace($"Pushing release: {message.Link}");
-            await this.Client.Series.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
+            try
+            {
+                this.Logger.LogInformation($"Pushing release: {message.Name} {message.Link}");
+                var success = await this.Client.Series.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
+
+                if (success)
+                {
+                    this.Queue.Acknowledge(message.DeliveryTag);
+                }
+                else
+                {
+                    this.Queue.Requeue(message.DeliveryTag);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Queue.Requeue(message.DeliveryTag);
+                this.Logger.LogError(ex, ex.Message);
+            }
         }
     }
 }
