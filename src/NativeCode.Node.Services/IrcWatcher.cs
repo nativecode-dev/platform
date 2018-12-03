@@ -22,15 +22,15 @@ namespace NativeCode.Node.Services
         private static readonly IEnumerable<string> MovieCategories = new List<string>
         {
             "Blu-Ray",
-            "DVD",
+            "Movie Boxsets",
             "Movies",
         };
 
         private static readonly IEnumerable<string> ShowCategories = new List<string>
         {
-            "HD-Boxsets",
+            "HD Boxsets",
+            "TV Boxsets",
             "TV-HD",
-            "TV-SD",
         };
 
         private static readonly Regex AnnouncePattern =
@@ -124,8 +124,8 @@ namespace NativeCode.Node.Services
                 var value = match.Groups[2]
                     .Value.Trim();
 
-                var action = this.propertyMap[property];
-                action(value, release);
+                var map = this.propertyMap[property];
+                map(value, release);
             }
 
             if (MovieCategories.Contains(release.Category))
@@ -137,7 +137,7 @@ namespace NativeCode.Node.Services
                 this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
             }
 
-            this.Logger.LogInformation(JsonConvert.SerializeObject(release));
+            this.Logger.LogInformation($"Announced: {release.Name} [{release.Category}] {release.Link}");
         }
 
         private static string Strip(string original)
