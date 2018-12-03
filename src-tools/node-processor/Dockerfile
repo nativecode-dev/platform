@@ -1,16 +1,13 @@
 # -----------------------------------------------------------------------------
 # STAGE: Runtime
 # -----------------------------------------------------------------------------
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine AS RUNTIME
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS RUNTIME
 WORKDIR /app
-RUN set -ex \
-    && apk add --update --no-cache libc6-compat \
-    ;
 
 # -----------------------------------------------------------------------------
 # STAGE: Build
 # -----------------------------------------------------------------------------
-FROM microsoft/dotnet:2.1-sdk-alpine AS BUILD
+FROM microsoft/dotnet:2.1-sdk AS BUILD
 # Build Arguments
 ENV CAKE_VERSION "0.30.0"
 WORKDIR /build
@@ -26,7 +23,8 @@ COPY src/ /build/src
 COPY src-tools/ /build/src-tools
 COPY src-tests/ /build/src-tests
 RUN set -ex \
-    && apk add --update --no-cache nodejs nodejs-npm \
+    && curl --silent --location https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install nodejs -y \
     && mkdir tools \
     && cp templates/tools-csproj.template tools/tools.csproj \
     && dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION \
