@@ -28,15 +28,28 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
-  build: &build
+  processor: &processor
     <<: *prod
-    dockerfile: nsync-api/Dockerfile
-    repo: nativecode/nsync-api
+    dockerfile: src-tools/node-processor/Dockerfile
+    repo: nativecode/node-processor
 
-  release: &release
+  watcher: &watcher
+    <<: *prod
+    dockerfile: src-tools/node-watcher/Dockerfile
+    repo: nativecode/node-watcher
+
+  release-processor: &release-processor
     <<: *deploy
-    docker_image: "nativecode/nsync-api:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
-    service: "services-nsync/nsync-api"
+    docker_image: "nativecode/node-processor:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "platform/node-processor"
+    when:
+      event: tag
+      branch: master
+
+  release-watcher: &release-watcher
+    <<: *deploy
+    docker_image: "nativecode/node-watcher:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "platform/node-watcher"
     when:
       event: tag
       branch: master
