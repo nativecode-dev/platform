@@ -13,22 +13,21 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 before_build:
-- pwsh: dotnet restore platform.sln
+  - pwsh: dotnet restore platform.sln
 build:
   project: platform.sln
   publish_nuget: true
   publish_nuget_symbols: true
-  include_nuget_references: true
   publish_aspnet_core: true
   publish_core_console: true
   parallel: true
   verbosity: minimal
 deploy:
-- provider: NuGet
-  server: https://packages.nativecode.com/repository/nuget-nativecode/
-  api_key:
-    secure: vJwPR3fw+0DjrFWr4zrSuaY92JwqoeEFuG8zzdKJj934jtcbwSNuNMb5P+UsozH4
-  symbol_server: https://packages.nativecode.com/repository/nuget-nativecode/
-  artifact: NuGet
-  on:
-    branch: master
+  - provider: NuGet
+    server: https://packages.nativecode.com/repository/nuget-nativecode/
+    api_key:
+      secure: vJwPR3fw+0DjrFWr4zrSuaY92JwqoeEFuG8zzdKJj934jtcbwSNuNMb5P+UsozH4
+    symbol_server: https://packages.nativecode.com/repository/nuget-nativecode/
+    artifact: NuGet
+    on:
+      branch: master
