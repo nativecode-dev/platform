@@ -128,6 +128,13 @@ namespace NativeCode.Node.Services
                 map(value, release);
             }
 
+            if (string.IsNullOrWhiteSpace(release.Name))
+            {
+                this.Logger.LogError($"Release has no parseable name: {release.Name} {stripped}");
+
+                return;
+            }
+
             if (MovieCategories.Contains(release.Category))
             {
                 this.Movies.Publish(this.Mapper.Map<MovieRelease>(release));
