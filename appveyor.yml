@@ -1,7 +1,6 @@
-version: 1.1-pre-{build}
-branches:
-  only:
-  - develop
+version: 1.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
@@ -13,44 +12,21 @@ dotnet_csproj:
   assembly_version: '{version}'
   file_version: '{version}'
   informational_version: '{version}'
-artifacts:
-- path: '**\bin\${Configuration}\*.nupkg'
-  name: Nuget
-cache:
-  - packages -> **\packages.config
-  - '%LocalAppData%\NuGet\Cache'
-  - '%LocalAppData%\NuGet\v3-cache'
-deploy:
-- provider: NuGet
-  server:
-    secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/w8RiWvPwIff5Y6+xfscJyg==
-  api_key:
-    secure: vJwPR3fw+0DjrFWr4zrSuaY92JwqoeEFuG8zzdKJj934jtcbwSNuNMb5P+UsozH4
-  symbol_server:
-    secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/w8RiWvPwIff5Y6+xfscJyg==
-  artifact: NuGet
-  on:
-    branch: develop
-environment:
-  NUGET_REPOSITORY:
-    secure: PSVSOrgGvDUVIVz5KTSop2lhx4Qgs0zr/1qH4okQR49vgF/ASgTNNT9rOojloCr/0H8elG1o1oOwLqU67xFwig==
-notifications:
-- provider: Slack
-  incoming_webhook:
-    secure: 4bD6kBqaVktFpC2f34dcaPaDAiYgYJfYD4NP8uCw99GSfqptJMkBMaxP+I22QCEBGQ3/HZa37Y6sW2hDY2M0XMoE7YvOwhN81XLAARJmFAI=
-  on_build_success: true
-  on_build_failure: true
-  on_build_status_changed: true
-before_build:
-- pwsh: >-
-    dotnet sln platform.sln remove docker-compose.dcproj
-
-    nuget restore platform.sln
-
-    dotnet restore platform.sln --verbosity quiet
 build:
   project: platform.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+  include_nuget_references: true
+  publish_aspnet_core: true
+  publish_core_console: true
   parallel: true
   verbosity: minimal
-test_script:
-- pwsh: 'dotnet test tests\NativeCode.Tests.csproj'
+deploy:
+  - provider: NuGet
+    server: https://packages.nativecode.com/repository/nuget-nativecode/
+    api_key:
+      secure: vJwPR3fw+0DjrFWr4zrSuaY92JwqoeEFuG8zzdKJj934jtcbwSNuNMb5P+UsozH4
+    symbol_server: https://packages.nativecode.com/repository/nuget-nativecode/
+    artifact: NuGet
+    on:
+      branch: master
