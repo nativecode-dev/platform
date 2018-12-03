@@ -1,4 +1,4 @@
-﻿namespace node
+namespace node
 {
     using System;
     using Microsoft.AspNetCore;
@@ -7,9 +7,9 @@
 
     public class Program
     {
-        internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Platform";
+        internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Node/Node";
 
-        internal const string Name = "platform-node";
+        internal const string Name = "node";
 
         internal const string Version = "v1";
 
