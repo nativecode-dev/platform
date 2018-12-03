@@ -1,20 +1,39 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+# -----------------------------------------------------------------------------
+# STAGE: Runtime
+# -----------------------------------------------------------------------------
+FROM microsoft/dotnet:2.1.5-aspnetcore-runtime-alpine AS RUNTIME
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
-FROM microsoft/dotnet:2.1-sdk AS build
-WORKDIR /src
-COPY ["node/node.csproj", "node/"]
-RUN dotnet restore "node/node.csproj"
-COPY . .
-WORKDIR "/src/node"
-RUN dotnet build "node.csproj" -c Release -o /app
+# -----------------------------------------------------------------------------
+# STAGE: Build
+# -----------------------------------------------------------------------------
+FROM microsoft/dotnet:2.1-sdk-alpine AS BUILD
+# Build Arguments
+ENV CAKE_VERSION "0.30.0"
+WORKDIR /build
+# Copy Files
+COPY .gitattributes /build
+COPY .gitignore /build
+COPY build.cake /build
+COPY build.ps1 /build
+COPY platform.sln /build
+# Copy Folders
+COPY templates/ /build/templates
+COPY src/ /build/src
+COPY src-tools/ /build/src-tools
+COPY src-tests/ /build/src-tests
+RUN set -ex \
+    && apk add --update --no-cache nodejs nodejs-npm \
+    && mkdir tools \
+    && cp templates/tools-csproj.template tools/tools.csproj \
+    && dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION \
+    && dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release" \
+    ;
 
-FROM build AS publish
-RUN dotnet publish "node.csproj" -c Release -o /app
-
-FROM base AS final
+# -----------------------------------------------------------------------------
+# STAGE: Final
+# -----------------------------------------------------------------------------
+FROM RUNTIME
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=BUILD /build/.artifacts/published/node /app
 ENTRYPOINT ["dotnet", "node.dll"]

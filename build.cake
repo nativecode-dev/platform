@@ -72,7 +72,7 @@ Task("Default")
     .IsDependentOn("Clean")
     .IsDependentOn("Version")
     .IsDependentOn("Build")
-    .IsDependentOn("Tests")
+    // .IsDependentOn("Tests")
     .IsDependentOn("Publish")
     .IsDependentOn("Package")
     .IsDependentOn("Release")
@@ -94,6 +94,7 @@ Task("Clean").Does(() =>
     Information("🛈 Cleaning {0}, {1}, bin, and obj folders", packagesDir, symbolsDir);
 
     CleanDirectory(packagesDir);
+    CleanDirectory(publishedDir);
     CleanDirectory(symbolsDir);
     CleanDirectories("./**/bin");
     CleanDirectories("./**/obj");
@@ -186,13 +187,14 @@ Task("Publish").Does(() =>
     foreach (var project in projects)
     {
         var projectDirectory = project.GetDirectory().FullPath;
+        var projectName = project.GetDirectory().GetDirectoryName();
 
         Information("🛈 Publishing project artifacts {0} v{1}", project.GetFilenameWithoutExtension(), releaseVersion);
 
         var assemblyVersion = $"{releaseVersion}.0";
         DotNetCorePublish(project.FullPath, new DotNetCorePublishSettings {
             Configuration = configuration,
-            OutputDirectory = publishedDir,
+            OutputDirectory = publishedDir.Path.Combine(projectName),
             NoBuild = true,
             NoRestore = true,
             Verbosity = verbosity,

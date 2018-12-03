@@ -1,9 +1,12 @@
+.artifacts
 .dockerignore
 .env
 .git
-.gitignore
 .vs
 .vscode
+
+tools
+
 docker-compose.yml
 docker-compose.*.yml
 */bin
