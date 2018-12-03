@@ -1,0 +1,60 @@
+hub: &hub
+  image: plugins/docker
+  secrets: [ docker_username, docker_password ]
+
+prod: &prod
+  <<: *hub
+  tags: [ "latest", "1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}" ]
+  when:
+    branch: [ develop, master ]
+
+deploy: &deploy
+  image: peloton/drone-rancher
+  confirm: true
+  secrets:
+    - source: rancher_access_key
+      target: plugin_access_key
+    - source: rancher_secret_key
+      target: plugin_secret_key
+  timeout: 120
+  url: https://master.nativecode.com
+
+slack: &slack
+  image: plugins/slack
+  channel: builds
+  username: drone
+  secrets:
+    - source: webhook_slack_builds
+      target: plugin_webhook
+
+pipeline:
+  processor: &processor
+    <<: *prod
+    dockerfile: src-tools/node-processor/Dockerfile
+    repo: nativecode/node-processor
+
+  watcher: &watcher
+    <<: *prod
+    dockerfile: src-tools/node-watcher/Dockerfile
+    repo: nativecode/node-watcher
+
+  release-processor: &release-processor
+    <<: *deploy
+    docker_image: "nativecode/node-processor:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "platform/node-processor"
+    when:
+      event: tag
+      branch: master
+
+  release-watcher: &release-watcher
+    <<: *deploy
+    docker_image: "nativecode/node-watcher:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "platform/node-watcher"
+    when:
+      event: tag
+      branch: master
+
+  notification: &notification
+    <<: *slack
+    when:
+      status: [ success, failure ]
