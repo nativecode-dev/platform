@@ -29,11 +29,11 @@ namespace NativeCode.Node.Services
                 this.Logger.LogInformation($"Pushing release: {message.Name} {message.Link}");
                 var success = await this.Client.Movies.PushRelease(this.Mapper.Map<MovieReleaseInfo>(message));
 
-                if (success)
+                if (success || string.IsNullOrWhiteSpace(message.Name) == false)
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
                 }
-                else if (string.IsNullOrWhiteSpace(message.Name) == false)
+                else
                 {
                     this.Queue.Requeue(message.DeliveryTag);
                 }
