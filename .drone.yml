@@ -43,7 +43,6 @@ pipeline:
     docker_image: "nativecode/node-processor:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
     service: "platform/node-processor"
     when:
-      event: tag
       branch: master
 
   release-watcher: &release-watcher
@@ -51,7 +50,6 @@ pipeline:
     docker_image: "nativecode/node-watcher:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
     service: "platform/node-watcher"
     when:
-      event: tag
       branch: master
 
   notification: &notification
