@@ -18,6 +18,7 @@ namespace node_processor
     using NativeCode.Node.Messages;
     using NativeCode.Node.Services;
     using Serilog;
+    using Serilog.Exceptions;
     using Serilog.Sinks.Elasticsearch;
     using Protocol = NativeCode.Clients.Radarr.Requests.Protocol;
 
@@ -65,6 +66,7 @@ namespace node_processor
 
                     Log.Logger = new LoggerConfiguration()
                         .Enrich.FromLogContext()
+                        .Enrich.WithExceptionDetails()
                         .WriteTo.Elasticsearch(esconfig)
                         .WriteTo.Console()
                         .WriteTo.Debug()

@@ -12,6 +12,7 @@ namespace node_watcher
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Services;
     using Serilog;
+    using Serilog.Exceptions;
     using Serilog.Sinks.Elasticsearch;
 
     internal class Program
@@ -58,6 +59,7 @@ namespace node_watcher
 
                     Log.Logger = new LoggerConfiguration()
                         .Enrich.FromLogContext()
+                        .Enrich.WithExceptionDetails()
                         .WriteTo.Elasticsearch(esconfig)
                         .WriteTo.Console()
                         .WriteTo.Debug()

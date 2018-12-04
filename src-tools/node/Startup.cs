@@ -12,6 +12,7 @@ namespace node
     using Newtonsoft.Json.Converters;
     using NSwag;
     using Serilog;
+    using Serilog.Exceptions;
     using Serilog.Sinks.Elasticsearch;
 
     public class Startup : IStartup
@@ -41,6 +42,7 @@ namespace node
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
                 .WriteTo.Elasticsearch(esconfig)
                 .WriteTo.Console()
                 .WriteTo.Debug()
