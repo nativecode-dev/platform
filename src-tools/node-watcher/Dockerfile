@@ -2,6 +2,7 @@
 # STAGE: Runtime
 # -----------------------------------------------------------------------------
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS RUNTIME
+ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
 # -----------------------------------------------------------------------------
@@ -10,6 +11,7 @@ WORKDIR /app
 FROM microsoft/dotnet:2.1-sdk AS BUILD
 # Build Arguments
 ENV CAKE_VERSION "0.30.0"
+ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /build
 # Copy Files
 COPY .gitattributes /build
