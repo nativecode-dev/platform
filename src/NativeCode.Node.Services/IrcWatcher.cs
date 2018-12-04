@@ -86,7 +86,7 @@ namespace NativeCode.Node.Services
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            var username = $"{this.Options.UserName}-{Environment.MachineName}-{Process.GetCurrentProcess().Id}";
+            var username = this.GetUserName();
 
             var registration = new IrcUserRegistrationInfo
             {
@@ -172,6 +172,20 @@ namespace NativeCode.Node.Services
             }
 
             this.Logger.LogInformation($"Announced: {release.Name} [{release.Category}] {release.Link}");
+        }
+
+        private string GetUserName()
+        {
+            var process = Process.GetCurrentProcess();
+
+            // NOTE: In a Docker container, the PID is always 1 so we don't
+            // want to use the PID in the name.
+            if (process.Id == 1)
+            {
+                return $"{this.Options.UserName}-{Environment.MachineName}";
+            }
+
+            return $"{this.Options.UserName}-{process.Id}";
         }
     }
 }
