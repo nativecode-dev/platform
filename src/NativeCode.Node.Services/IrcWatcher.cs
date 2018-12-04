@@ -35,7 +35,7 @@ namespace NativeCode.Node.Services
 
         private static readonly Regex AnnouncePattern =
             new Regex(
-                @"(New Torrent|Size|Category|Uploader|Link):\s+\((?:\s+)([\w\s\.\-\:\/\?\=\[\]\{\}<>]+)(?:\s+)\)");
+                @"(New Torrent|Size|Category|Uploader|Link):\s+\((?:\s+)([\w\s\.\-\:\/\?\=\[\]\{\}<>\+]+)(?:\s+)\)");
 
         private readonly IDictionary<string, Action<string, IrcRelease>> propertyMap;
 
