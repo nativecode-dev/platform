@@ -1,4 +1,4 @@
-﻿namespace node_watcher
+namespace node_watcher
 {
     using System;
     using System.IO;
@@ -57,7 +57,7 @@
                     services.AddDistributedRedisCache(options =>
                     {
                         options.Configuration = node.RedisHost;
-                        options.InstanceName = Program.Name;
+                        options.InstanceName = Name;
                     });
 
                     services.AddAutoMapper();

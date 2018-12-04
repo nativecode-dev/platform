@@ -1,4 +1,4 @@
-namespace NativeCode.Core.Extensions
+﻿namespace NativeCode.Core.Extensions
 {
     using System.Text;
     using Newtonsoft.Json;

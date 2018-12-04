@@ -15,7 +15,6 @@ namespace node_processor
     using NativeCode.Core.Configuration;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
-    using NativeCode.Core.Serialization;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Messages;
     using NativeCode.Node.Services;
@@ -65,7 +64,7 @@ namespace node_processor
                     services.AddDistributedRedisCache(options =>
                     {
                         options.Configuration = node.RedisHost;
-                        options.InstanceName = Program.Name;
+                        options.InstanceName = Name;
                     });
 
                     services.AddAutoMapper(config =>
