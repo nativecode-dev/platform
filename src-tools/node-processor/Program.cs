@@ -1,6 +1,7 @@
 namespace node_processor
 {
     using System;
+    using System.IO;
     using AutoMapper;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +37,7 @@ namespace node_processor
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             return new HostBuilder()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                 {
                     var env = context.HostingEnvironment.EnvironmentName;
@@ -43,6 +45,7 @@ namespace node_processor
                     var environmentConfig = $"{ConfigRoot}/{env}";
                     var machineConfig = $"{ConfigRoot}/{Environment.MachineName}";
 
+                    builder.AddJsonFile("appsettings.json", false, true);
                     builder.AddEtcdConfig(defaultConfig, environmentConfig, machineConfig);
                     builder.AddEnvironmentVariables();
                 })

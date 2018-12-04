@@ -1,6 +1,7 @@
-﻿namespace node_watcher
+namespace node_watcher
 {
     using System;
+    using System.IO;
     using AutoMapper;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             return new HostBuilder()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                 {
                     var env = context.HostingEnvironment.EnvironmentName;
@@ -35,6 +37,7 @@
                     var environmentConfig = $"{ConfigRoot}/{env}";
                     var machineConfig = $"{ConfigRoot}/{Environment.MachineName}";
 
+                    builder.AddJsonFile("appsettings.json", false, true);
                     builder.AddEtcdConfig(defaultConfig, environmentConfig, machineConfig);
                     builder.AddEnvironmentVariables();
                 })
