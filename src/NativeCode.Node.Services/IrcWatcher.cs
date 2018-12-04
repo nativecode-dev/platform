@@ -86,7 +86,7 @@ namespace NativeCode.Node.Services
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            var username = $"{this.Options.UserName}-{Process.GetCurrentProcess().Id}";
+            var username = $"{this.Options.UserName}-{Environment.MachineName}-{Process.GetCurrentProcess().Id}";
 
             var registration = new IrcUserRegistrationInfo
             {
