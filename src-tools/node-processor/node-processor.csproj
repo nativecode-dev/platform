@@ -19,6 +19,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
@@ -38,6 +40,7 @@
     <ProjectReference Include="..\..\src\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
     <ProjectReference Include="..\..\src\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
     <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
     <ProjectReference Include="..\..\src\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj" />
     <ProjectReference Include="..\..\src\NativeCode.Node.Services\NativeCode.Node.Services.csproj" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-namespace node_watcher
+﻿namespace node_watcher
 {
     using System;
     using System.IO;
@@ -8,7 +8,9 @@ namespace node_watcher
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using NativeCode.Core.Configuration;
+    using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
+    using NativeCode.Node.Core.Options;
     using NativeCode.Node.Services;
 
     internal class Program
@@ -50,6 +52,14 @@ namespace node_watcher
                 })
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddOption<NodeOptions>(context.Configuration, out var node);
+
+                    services.AddDistributedRedisCache(options =>
+                    {
+                        options.Configuration = node.RedisHost;
+                        options.InstanceName = Program.Name;
+                    });
+
                     services.AddAutoMapper();
                     services.AddRabbitServices(context.Configuration);
                     services.AddIrcWatch(context.Configuration);

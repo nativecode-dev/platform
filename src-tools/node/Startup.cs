@@ -4,12 +4,12 @@ namespace node
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Rewrite;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using NativeCode.Core.Extensions;
+    using NativeCode.Node.Core.Options;
     using Newtonsoft.Json.Converters;
     using NSwag;
-    using Options;
 
     public class Startup : IStartup
     {
@@ -25,7 +25,13 @@ namespace node
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            this.Options<NodeOptions>(services);
+            services.AddOption<NodeOptions>(this.Configuration, out var node);
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = node.RedisHost;
+                options.InstanceName = Program.Name;
+            });
 
             services.AddMvc()
                 .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
@@ -63,12 +69,6 @@ namespace node
                 };
             });
             app.UseSwaggerUi3();
-        }
-
-        private void Options<T>(IServiceCollection services) where T : class
-        {
-            var section = this.Configuration.GetSection(typeof(T).Name);
-            services.Configure<T>(section);
         }
     }
 }

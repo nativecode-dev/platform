@@ -2,18 +2,21 @@ namespace NativeCode.Node.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Core.Extensions;
     using Core.Messaging;
     using Core.Services;
     using IrcDotNet;
     using Messages;
+    using Microsoft.Extensions.Caching.Distributed;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-    using Newtonsoft.Json;
+    using Nito.AsyncEx;
 
     public class IrcWatcher : HostedService<IrcWatcherOptions>
     {
@@ -40,8 +43,9 @@ namespace NativeCode.Node.Services
         private readonly IDictionary<string, Action<string, IrcRelease>> propertyMap;
 
         public IrcWatcher(IOptions<IrcWatcherOptions> options, ILogger<IrcWatcher> logger,
-            IQueueManager queue, IMapper mapper) : base(options)
+            IQueueManager queue, IMapper mapper, IDistributedCache cache) : base(options)
         {
+            this.Cache = cache;
             this.Client = new StandardIrcClient();
             this.Client.Connected += this.ClientOnConnected;
             this.Logger = logger;
@@ -63,6 +67,8 @@ namespace NativeCode.Node.Services
             };
         }
 
+        protected IDistributedCache Cache { get; }
+
         protected StandardIrcClient Client { get; }
 
         protected ILogger<IrcWatcher> Logger { get; }
@@ -80,15 +86,17 @@ namespace NativeCode.Node.Services
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
+            var username = $"{this.Options.UserName}-{Process.GetCurrentProcess().Id}";
+
             var registration = new IrcUserRegistrationInfo
             {
-                NickName = this.Options.UserName,
-                RealName = this.Options.UserName,
-                UserName = this.Options.UserName,
+                NickName = username,
+                RealName = username,
+                UserName = username,
             };
 
             this.Client.Connect(this.Options.Host, this.Options.UseSsl, registration);
-            this.Logger.LogInformation($"Connected to {this.Options.Host}");
+            this.Logger.LogInformation($"Connected to {this.Options.Host} as {username}");
             return Task.CompletedTask;
         }
 
@@ -111,7 +119,17 @@ namespace NativeCode.Node.Services
 
         private void ChannelOnMessageReceived(object sender, IrcMessageEventArgs e)
         {
-            var stripped = Strip(e.Text);
+            AsyncContext.Run(() => this.HandleMessage(e.Text));
+        }
+
+        private static string Strip(string original)
+        {
+            return Regex.Replace(original, StripPattern, string.Empty);
+        }
+
+        private async Task HandleMessage(string message)
+        {
+            var stripped = Strip(message);
             var matches = AnnouncePattern.Matches(stripped);
 
             var release = new IrcRelease();
@@ -135,21 +153,25 @@ namespace NativeCode.Node.Services
                 return;
             }
 
+            var cached = await this.Cache.GetAsync(release.Link);
+
+            if (cached != null)
+            {
+                return;
+            }
+
+            this.Cache.Set(release.Link, release.ToJsonBytes());
+
             if (MovieCategories.Contains(release.Category))
             {
-                this.Movies.Publish(this.Mapper.Map<MovieRelease>(release));
+                await this.Movies.Publish(this.Mapper.Map<MovieRelease>(release));
             }
             else if (ShowCategories.Contains(release.Category))
             {
-                this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
+                await this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
             }
 
             this.Logger.LogInformation($"Announced: {release.Name} [{release.Category}] {release.Link}");
-        }
-
-        private static string Strip(string original)
-        {
-            return Regex.Replace(original, StripPattern, string.Empty);
         }
     }
 }

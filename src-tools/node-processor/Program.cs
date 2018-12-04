@@ -13,8 +13,10 @@ namespace node_processor
     using NativeCode.Clients.Sonarr;
     using NativeCode.Clients.Sonarr.Requests;
     using NativeCode.Core.Configuration;
+    using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
     using NativeCode.Core.Serialization;
+    using NativeCode.Node.Core.Options;
     using NativeCode.Node.Messages;
     using NativeCode.Node.Services;
     using Protocol = NativeCode.Clients.Radarr.Requests.Protocol;
@@ -58,6 +60,14 @@ namespace node_processor
                 })
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddOption<NodeOptions>(context.Configuration, out var node);
+
+                    services.AddDistributedRedisCache(options =>
+                    {
+                        options.Configuration = node.RedisHost;
+                        options.InstanceName = Program.Name;
+                    });
+
                     services.AddAutoMapper(config =>
                     {
                         config.CreateMap<MovieRelease, MovieReleaseInfo>()
@@ -76,13 +86,13 @@ namespace node_processor
                     });
 
                     services.AddRabbitServices(context.Configuration);
+                    services.AddObjectSerializer();
 
-                    services.AddTransient<IObjectSerializer, JsonObjectSerializer>();
+                    services.AddOption<MovieWatcherOptions>(context.Configuration);
+                    services.AddOption<SeriesWatcherOptions>(context.Configuration);
+
                     services.AddTransient<IClientFactory<RadarrClient>, RadarrClientFactory>();
                     services.AddTransient<IClientFactory<SonarrClient>, SonarrClientFactory>();
-
-                    services.Configure<MovieWatcherOptions>(context.Configuration.GetSection(nameof(MovieWatcherOptions)));
-                    services.Configure<SeriesWatcherOptions>(context.Configuration.GetSection(nameof(SeriesWatcherOptions)));
 
                     services.AddHostedService<MovieWatcher>();
                     services.AddHostedService<SeriesWatcher>();
