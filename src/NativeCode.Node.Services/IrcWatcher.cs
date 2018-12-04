@@ -15,7 +15,7 @@ namespace NativeCode.Node.Services
     using Microsoft.Extensions.Options;
     using Newtonsoft.Json;
 
-    public class IrcWatcher : HostedService<IrcWatchOptions>
+    public class IrcWatcher : HostedService<IrcWatcherOptions>
     {
         private const string StripPattern = @"[\x02\x1F\x0F\x16]|\x03(\d\d?(,\d\d?)?)?";
 
@@ -39,7 +39,7 @@ namespace NativeCode.Node.Services
 
         private readonly IDictionary<string, Action<string, IrcRelease>> propertyMap;
 
-        public IrcWatcher(IOptions<IrcWatchOptions> options, ILogger<IrcWatcher> logger,
+        public IrcWatcher(IOptions<IrcWatcherOptions> options, ILogger<IrcWatcher> logger,
             IQueueManager queue, IMapper mapper) : base(options)
         {
             this.Client = new StandardIrcClient();
@@ -87,15 +87,15 @@ namespace NativeCode.Node.Services
                 UserName = this.Options.UserName,
             };
 
-            this.Client.Connect(this.Options.Server, this.Options.UseSsl, registration);
-            this.Logger.LogInformation($"Connected to {this.Options.Server}");
+            this.Client.Connect(this.Options.Host, this.Options.UseSsl, registration);
+            this.Logger.LogInformation($"Connected to {this.Options.Host}");
             return Task.CompletedTask;
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             this.Client.Disconnect();
-            this.Logger.LogInformation($"Disconnected from {this.Options.Server}");
+            this.Logger.LogInformation($"Disconnected from {this.Options.Host}");
             return Task.CompletedTask;
         }
 
@@ -130,7 +130,7 @@ namespace NativeCode.Node.Services
 
             if (string.IsNullOrWhiteSpace(release.Name))
             {
-                this.Logger.LogError($"Release has no parseable name: {release.Name} {stripped}");
+                this.Logger.LogError($"Found non-parsable name: {release.Name} {stripped}");
 
                 return;
             }

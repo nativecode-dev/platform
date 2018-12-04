@@ -8,7 +8,7 @@
         public static IServiceCollection AddIrcWatch(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHostedService<IrcWatcher>();
-            services.Configure<IrcWatchOptions>(configuration.GetSection(nameof(IrcWatchOptions)));
+            services.Configure<IrcWatcherOptions>(configuration.GetSection(nameof(IrcWatcherOptions)));
             return services;
         }
     }
