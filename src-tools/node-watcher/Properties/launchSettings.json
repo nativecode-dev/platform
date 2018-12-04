@@ -3,7 +3,7 @@
     "node-watcher": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "NETCORE_ENVIRONMENT": "Development"
       }
     }
   }

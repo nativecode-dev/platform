@@ -6,7 +6,6 @@ namespace node_processor
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
     using NativeCode.Clients;
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Radarr.Requests;
@@ -18,6 +17,8 @@ namespace node_processor
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Messages;
     using NativeCode.Node.Services;
+    using Serilog;
+    using Serilog.Sinks.Elasticsearch;
     using Protocol = NativeCode.Clients.Radarr.Requests.Protocol;
 
     internal class Program
@@ -41,25 +42,34 @@ namespace node_processor
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                 {
-                    var env = context.HostingEnvironment.EnvironmentName;
+                    var env = context.HostingEnvironment.EnvironmentName = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
                     var defaultConfig = $"{ConfigRoot}/{Version}";
                     var environmentConfig = $"{ConfigRoot}/{env}";
                     var machineConfig = $"{ConfigRoot}/{Environment.MachineName}";
 
                     builder.AddJsonFile("appsettings.json", false, true);
+                    builder.AddJsonFile($"appsettings.{env}.json", true, true);
                     builder.AddEtcdConfig(defaultConfig, environmentConfig, machineConfig);
                     builder.AddEnvironmentVariables();
                 })
-                .ConfigureLogging((context, options) =>
-                {
-                    options.Services.AddLogging();
-                    options.AddConfiguration(context.Configuration.GetSection("Logging"));
-                    options.AddConsole();
-                    options.AddDebug();
-                })
+                .ConfigureLogging((context, builder) => builder.AddSerilog())
                 .ConfigureServices((context, services) =>
                 {
                     services.AddOption<NodeOptions>(context.Configuration, out var node);
+                    services.AddOption<ElasticSearchOptions>(context.Configuration, out var elasticsearch);
+
+                    var esconfig = new ElasticsearchSinkOptions(new Uri(elasticsearch.Url))
+                    {
+                        AutoRegisterTemplate = true
+                    };
+
+                    Log.Logger = new LoggerConfiguration()
+                        .Enrich.FromLogContext()
+                        .WriteTo.Elasticsearch(esconfig)
+                        .WriteTo.Console()
+                        .WriteTo.Debug()
+                        .WriteTo.Trace()
+                        .CreateLogger();
 
                     services.AddDistributedRedisCache(options =>
                     {

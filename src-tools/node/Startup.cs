@@ -6,26 +6,48 @@ namespace node
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using NativeCode.Core.Extensions;
     using NativeCode.Node.Core.Options;
     using Newtonsoft.Json.Converters;
     using NSwag;
+    using Serilog;
+    using Serilog.Sinks.Elasticsearch;
 
     public class Startup : IStartup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory logging)
         {
             this.Configuration = configuration;
             this.HostEnv = hostingEnvironment;
+            this.Logging = logging;
         }
 
         protected IConfiguration Configuration { get; }
 
         protected IHostingEnvironment HostEnv { get; }
 
+        protected ILoggerFactory Logging { get; }
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOption<NodeOptions>(this.Configuration, out var node);
+            services.AddOption<ElasticSearchOptions>(this.Configuration, out var elasticsearch);
+
+            var esconfig = new ElasticsearchSinkOptions(new Uri(elasticsearch.Url))
+            {
+                AutoRegisterTemplate = true
+            };
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Elasticsearch(esconfig)
+                .WriteTo.Console()
+                .WriteTo.Debug()
+                .WriteTo.Trace()
+                .CreateLogger();
+
+            this.Logging.AddSerilog();
 
             services.AddDistributedRedisCache(options =>
             {
@@ -51,13 +73,13 @@ namespace node
             if (this.HostEnv.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseHttpsRedirection();
             }
             else
             {
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseForwardedHeaders();
             app.UseMvc();
             app.UseSwagger(config =>

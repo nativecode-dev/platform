@@ -1,13 +1,17 @@
 namespace node
 {
     using System;
+    using System.IO;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
     using NativeCode.Core.Configuration;
 
     public class Program
     {
         internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Node/Node";
+
+        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Shared";
 
         internal const string Name = "node";
 
@@ -22,15 +26,22 @@ namespace node
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
+            return new WebHostBuilder()
+                .UseKestrel()
+                .UseIISIntegration()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                 {
                     var env = context.HostingEnvironment.EnvironmentName;
                     var defaultConfig = $"{ConfigRoot}/{Version}";
                     var environmentConfig = $"{ConfigRoot}/{env}";
                     var machineConfig = $"{ConfigRoot}/{Environment.MachineName}";
+                    var sharedConfig = $"{ConfigShared}";
 
-                    builder.AddEtcdConfig(defaultConfig, environmentConfig, machineConfig);
+                    builder.AddJsonFile("appsettings.json", false, true);
+                    builder.AddJsonFile($"appsettings.{env}.json", true, true);
+                    builder.AddEtcdConfig(sharedConfig, defaultConfig, environmentConfig, machineConfig);
+                    builder.AddEnvironmentVariables();
                 })
                 .UseStartup<Startup>();
         }
