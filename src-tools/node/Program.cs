@@ -2,7 +2,6 @@ namespace node
 {
     using System;
     using System.IO;
-    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using NativeCode.Core.Configuration;

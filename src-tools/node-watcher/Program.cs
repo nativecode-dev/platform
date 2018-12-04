@@ -19,6 +19,8 @@ namespace node_watcher
     {
         internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Node/Watcher";
 
+        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Shared";
+
         internal const string Name = "watcher";
 
         internal const string Version = "v1";
@@ -33,17 +35,17 @@ namespace node_watcher
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             return new HostBuilder()
-                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                 {
-                    var env = context.HostingEnvironment.EnvironmentName = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
+                    var env = context.HostingEnvironment.EnvironmentName;
                     var defaultConfig = $"{ConfigRoot}/{Version}";
                     var environmentConfig = $"{ConfigRoot}/{env}";
                     var machineConfig = $"{ConfigRoot}/{Environment.MachineName}";
+                    var sharedConfig = $"{ConfigShared}";
 
                     builder.AddJsonFile("appsettings.json", false, true);
                     builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                    builder.AddEtcdConfig(defaultConfig, environmentConfig, machineConfig);
+                    builder.AddEtcdConfig(sharedConfig, defaultConfig, environmentConfig, machineConfig);
                     builder.AddEnvironmentVariables();
                 })
                 .ConfigureLogging((context, builder) => builder.AddSerilog())
@@ -76,7 +78,10 @@ namespace node_watcher
                     services.AddRabbitServices(context.Configuration);
                     services.AddIrcWatch(context.Configuration);
                 })
-                .UseConsoleLifetime();
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseConsoleLifetime()
+                .UseEnvironment(Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT"))
+                .UseSerilog();
         }
     }
 }
