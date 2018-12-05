@@ -74,12 +74,12 @@ namespace NativeCode.Node.Services
                 if (success || string.IsNullOrWhiteSpace(message.Name) == false)
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
-                    this.Logger.LogInformation("Pushed: {@message}", message);
+                    this.Logger.LogInformation($"Pushed: [{message.GetType().Name}] {{@message}}", message);
                 }
                 else
                 {
                     this.Queue.Requeue(message.DeliveryTag);
-                    this.Logger.LogInformation("Requeued: {@message}", message);
+                    this.Logger.LogInformation($"Requeued: [{message.GetType().Name}] {{@message}}", message);
                 }
             }
             catch (Exception ex)

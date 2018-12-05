@@ -25,7 +25,6 @@ namespace NativeCode.Node.Services
         protected override Task<bool> PushRelease(SeriesRelease message)
         {
             return this.Client.Series.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
-            ;
         }
     }
 }
