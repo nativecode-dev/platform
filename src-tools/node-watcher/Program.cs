@@ -19,7 +19,7 @@ namespace node_watcher
     {
         internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Node/Watcher";
 
-        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Shared";
+        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Node/Shared";
 
         internal const string Name = "watcher";
 

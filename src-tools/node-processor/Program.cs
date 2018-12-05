@@ -16,7 +16,6 @@ namespace node_processor
     using NativeCode.Core.Messaging.Extensions;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Messages;
-    using NativeCode.Node.Services;
     using NativeCode.Node.Services.Watchers;
     using Serilog;
     using Serilog.Exceptions;
@@ -27,7 +26,7 @@ namespace node_processor
     {
         internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Node/Processor";
 
-        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Shared";
+        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Node/Shared";
 
         internal const string Name = "processor";
 

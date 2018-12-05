@@ -4,6 +4,6 @@ namespace NativeCode.Node.Core.Options
     {
         public string Name { get; set; }
 
-        public string RedisHost { get; set; } = "localhost";
+        public string RedisHost { get; set; } = "redis";
     }
 }

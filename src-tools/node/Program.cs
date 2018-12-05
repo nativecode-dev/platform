@@ -11,7 +11,7 @@ namespace node
     {
         internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Node/Node";
 
-        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Shared";
+        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Node/Shared";
 
         internal const string Name = "node";
 
