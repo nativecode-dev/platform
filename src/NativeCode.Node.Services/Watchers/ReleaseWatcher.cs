@@ -72,7 +72,7 @@ namespace NativeCode.Node.Services.Watchers
                 if (success || string.IsNullOrWhiteSpace(message.Name) == false)
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
-                    message.TargetMachines.Add(Environment.MachineName);
+                    message.TargetMachine = Environment.MachineName;
                     this.Logger.LogInformation($"Pushed: [{message.GetType().Name}] {{@message}}", message);
                 }
                 else

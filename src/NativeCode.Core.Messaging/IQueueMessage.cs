@@ -1,13 +1,17 @@
 namespace NativeCode.Core.Messaging
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Presents a marker for types that are used as topics.
     /// </summary>
     public interface IQueueMessage
     {
+        /// <summary>
+        /// Gets or sets the delivery tag.
+        /// </summary>
+        ulong DeliveryTag { get; set; }
+
         /// <summary>
         /// Gets a unique message identifier.
         /// </summary>
@@ -18,10 +22,16 @@ namespace NativeCode.Core.Messaging
         /// </summary>
         DateTime MessageSent { get; }
 
+        /// <summary>Gets the source machine.</summary>
+        /// <value>The source machine.</value>
         string SourceMachine { get; }
 
-        IList<string> TargetMachines { get; }
-
-        ulong DeliveryTag { get; set; }
+        /// <summary>
+        /// Gets the target machines.
+        /// </summary>
+        /// <value>
+        /// The target machines.
+        /// </value>
+        string TargetMachine { get; set; }
     }
 }
