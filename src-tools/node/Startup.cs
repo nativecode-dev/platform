@@ -43,6 +43,7 @@ namespace node
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
+                .ReadFrom.Configuration(this.Configuration)
                 .WriteTo.Elasticsearch(esconfig)
                 .WriteTo.Console()
                 .WriteTo.Debug()

@@ -5,6 +5,7 @@ namespace node
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using NativeCode.Core.Configuration;
+    using Serilog;
 
     public class Program
     {
@@ -26,9 +27,6 @@ namespace node
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return new WebHostBuilder()
-                .UseKestrel()
-                .UseIISIntegration()
-                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((context, builder) =>
                 {
                     var env = context.HostingEnvironment.EnvironmentName;
@@ -42,6 +40,9 @@ namespace node
                     builder.AddEtcdConfig(sharedConfig, defaultConfig, environmentConfig, machineConfig);
                     builder.AddEnvironmentVariables();
                 })
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseKestrel()
+                .UseSerilog()
                 .UseStartup<Startup>();
         }
     }

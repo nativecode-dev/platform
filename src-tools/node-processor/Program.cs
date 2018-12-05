@@ -69,6 +69,7 @@ namespace node_processor
                     Log.Logger = new LoggerConfiguration()
                         .Enrich.FromLogContext()
                         .Enrich.WithExceptionDetails()
+                        .ReadFrom.Configuration(context.Configuration)
                         .WriteTo.Elasticsearch(esconfig)
                         .WriteTo.Console()
                         .WriteTo.Debug()
