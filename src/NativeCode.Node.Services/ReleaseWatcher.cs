@@ -41,7 +41,7 @@ namespace NativeCode.Node.Services
         {
             AsyncContext.Run(() =>
             {
-                this.Logger.LogInformation("Pushing release: {{@value}}", value);
+                this.Logger.LogInformation("Pushing: {@value}", value);
                 this.Process(value);
             });
         }
