@@ -26,16 +26,17 @@ namespace NativeCode.Node.Services
         {
             try
             {
-                this.Logger.LogInformation($"Pushing release: {message.Name} {message.Link}");
                 var success = await this.Client.Movies.PushRelease(this.Mapper.Map<MovieReleaseInfo>(message));
 
                 if (success || string.IsNullOrWhiteSpace(message.Name) == false)
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
+                    this.Logger.LogInformation("Pushed: {{@message}}", message);
                 }
                 else
                 {
                     this.Queue.Requeue(message.DeliveryTag);
+                    this.Logger.LogInformation("Requeued: {{@message}}", message);
                 }
             }
             catch (Exception ex)

@@ -39,7 +39,11 @@ namespace NativeCode.Node.Services
 
         public virtual void OnNext(T value)
         {
-            AsyncContext.Run(() => this.Process(value));
+            AsyncContext.Run(() =>
+            {
+                this.Logger.LogInformation("Pushing release: {{@value}}", value);
+                this.Process(value);
+            });
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

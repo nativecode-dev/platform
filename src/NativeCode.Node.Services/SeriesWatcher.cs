@@ -26,16 +26,17 @@ namespace NativeCode.Node.Services
         {
             try
             {
-                this.Logger.LogInformation($"Pushing release: {message.Name} {message.Link}");
                 var success = await this.Client.Series.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
 
                 if (success)
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
+                    this.Logger.LogInformation("Pushed: {{@message}}", message);
                 }
                 else
                 {
                     this.Queue.Requeue(message.DeliveryTag);
+                    this.Logger.LogInformation("Requeued: {{@message}}", message);
                 }
             }
             catch (Exception ex)
