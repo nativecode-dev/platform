@@ -10,8 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".settings", ".settings", "{20A11138-E196-421D-8F73-19EAED782078}"
 	ProjectSection(SolutionItems) = preProject
 		.drone.yml = .drone.yml
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		build.cake = build.cake
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -49,7 +51,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core.Data", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core.Messaging", "src\NativeCode.Core.Messaging\NativeCode.Core.Messaging.csproj", "{7C526160-BB06-4F93-A423-E6B24DEBE40C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeCode.Node.Core", "src\NativeCode.Node.Core\NativeCode.Node.Core.csproj", "{0D445A6A-54F9-409E-883D-B3A20EB9B38D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Core", "src\NativeCode.Node.Core\NativeCode.Node.Core.csproj", "{0D445A6A-54F9-409E-883D-B3A20EB9B38D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -39,10 +39,10 @@ namespace NativeCode.Node.Services
 
         public virtual void OnNext(T value)
         {
-            AsyncContext.Run(() =>
+            AsyncContext.Run(async () =>
             {
                 this.Logger.LogInformation("Pushing: {@value}", value);
-                this.Process(value);
+                await this.Process(value);
             });
         }
 
