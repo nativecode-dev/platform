@@ -22,28 +22,9 @@ namespace NativeCode.Node.Services
 
         protected RadarrClient Client { get; }
 
-        protected override async Task Process(MovieRelease message)
+        protected override Task<bool> PushRelease(MovieRelease message)
         {
-            try
-            {
-                var success = await this.Client.Movies.PushRelease(this.Mapper.Map<MovieReleaseInfo>(message));
-
-                if (success || string.IsNullOrWhiteSpace(message.Name) == false)
-                {
-                    this.Queue.Acknowledge(message.DeliveryTag);
-                    this.Logger.LogInformation("Pushed: {@message}", message);
-                }
-                else
-                {
-                    this.Queue.Requeue(message.DeliveryTag);
-                    this.Logger.LogInformation("Requeued: {@message}", message);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Queue.Requeue(message.DeliveryTag);
-                this.Logger.LogError(ex, ex.Message);
-            }
+            return this.Client.Movies.PushRelease(this.Mapper.Map<MovieReleaseInfo>(message));
         }
     }
 }

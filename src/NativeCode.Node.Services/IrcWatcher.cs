@@ -119,7 +119,7 @@ namespace NativeCode.Node.Services
 
         private void ChannelOnMessageReceived(object sender, IrcMessageEventArgs e)
         {
-            AsyncContext.Run(() => this.HandleMessage(e.Text));
+            AsyncContext.Run(async () => await this.HandleMessage(e.Text));
         }
 
         private static string Strip(string original)

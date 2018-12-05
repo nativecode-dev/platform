@@ -22,28 +22,10 @@ namespace NativeCode.Node.Services
 
         protected SonarrClient Client { get; }
 
-        protected override async Task Process(SeriesRelease message)
+        protected override Task<bool> PushRelease(SeriesRelease message)
         {
-            try
-            {
-                var success = await this.Client.Series.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
-
-                if (success)
-                {
-                    this.Queue.Acknowledge(message.DeliveryTag);
-                    this.Logger.LogInformation("Pushed: {@message}", message);
-                }
-                else
-                {
-                    this.Queue.Requeue(message.DeliveryTag);
-                    this.Logger.LogInformation("Requeued: {@message}", message);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Queue.Requeue(message.DeliveryTag);
-                this.Logger.LogError(ex, ex.Message);
-            }
+            return this.Client.Series.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
+            ;
         }
     }
 }

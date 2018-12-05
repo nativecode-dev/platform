@@ -65,6 +65,30 @@ namespace NativeCode.Node.Services
             this.Subscription?.Dispose();
         }
 
-        protected abstract Task Process(T message);
+        protected async Task Process(T message)
+        {
+            try
+            {
+                var success = await this.PushRelease(message);
+
+                if (success || string.IsNullOrWhiteSpace(message.Name) == false)
+                {
+                    this.Queue.Acknowledge(message.DeliveryTag);
+                    this.Logger.LogInformation("Pushed: {@message}", message);
+                }
+                else
+                {
+                    this.Queue.Requeue(message.DeliveryTag);
+                    this.Logger.LogInformation("Requeued: {@message}", message);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Queue.Requeue(message.DeliveryTag);
+                this.Logger.LogError(ex, ex.Message);
+            }
+        }
+
+        protected abstract Task<bool> PushRelease(T message);
     }
 }
