@@ -6,7 +6,7 @@ prod: &prod
   <<: *hub
   tags: [ "latest", "1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}" ]
   when:
-    branch: [ develop, master ]
+    branch: [ master ]
 
 deploy: &deploy
   image: peloton/drone-rancher

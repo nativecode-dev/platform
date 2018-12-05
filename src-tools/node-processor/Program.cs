@@ -17,6 +17,7 @@ namespace node_processor
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Messages;
     using NativeCode.Node.Services;
+    using NativeCode.Node.Services.Watchers;
     using Serilog;
     using Serilog.Exceptions;
     using Serilog.Sinks.Elasticsearch;

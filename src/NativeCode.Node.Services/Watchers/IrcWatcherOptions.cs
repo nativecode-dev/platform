@@ -1,4 +1,4 @@
-namespace NativeCode.Node.Services
+namespace NativeCode.Node.Services.Watchers
 {
     public class IrcWatcherOptions
     {
