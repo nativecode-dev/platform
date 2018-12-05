@@ -148,7 +148,7 @@ namespace NativeCode.Node.Services
 
             if (string.IsNullOrWhiteSpace(release.Name))
             {
-                this.Logger.LogError($"Found non-parsable name: {release.Name} {stripped}");
+                this.Logger.LogError($"Found non-parsable name: {{@release}} {stripped}", release);
 
                 return;
             }
@@ -171,7 +171,7 @@ namespace NativeCode.Node.Services
                 await this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
             }
 
-            this.Logger.LogInformation($"Announced: {release.Name} [{release.Category}] {release.Link}");
+            this.Logger.LogInformation($"Announced: {{@release}} [{release.Category}] {release.Link}", release);
         }
 
         private string GetUserName()
