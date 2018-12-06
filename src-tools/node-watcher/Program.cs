@@ -69,6 +69,8 @@ namespace node_watcher
                         .WriteTo.Trace()
                         .CreateLogger();
 
+                    Log.Logger.Information("Startup: {@node}", node);
+
                     services.AddDistributedRedisCache(options =>
                     {
                         options.Configuration = node.RedisHost;

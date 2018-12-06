@@ -52,6 +52,8 @@ namespace node
 
             this.Logging.AddSerilog();
 
+            Log.Logger.Information("Startup: {@node}", node);
+
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = node.RedisHost;
