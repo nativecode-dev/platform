@@ -129,49 +129,56 @@ namespace NativeCode.Node.Services.Watchers
 
         private async Task HandleMessage(string message)
         {
-            var stripped = Strip(message);
-            var matches = AnnouncePattern.Matches(stripped);
-
-            var release = new IrcRelease();
-
-            foreach (Match match in matches)
+            try
             {
-                var property = match.Groups[1]
-                    .Value.Trim();
+                var stripped = Strip(message);
+                var matches = AnnouncePattern.Matches(stripped);
 
-                var value = match.Groups[2]
-                    .Value.Trim();
+                var release = new IrcRelease();
 
-                var map = this.propertyMap[property];
-                map(value, release);
+                foreach (Match match in matches)
+                {
+                    var property = match.Groups[1]
+                        .Value.Trim();
+
+                    var value = match.Groups[2]
+                        .Value.Trim();
+
+                    var map = this.propertyMap[property];
+                    map(value, release);
+                }
+
+                if (string.IsNullOrWhiteSpace(release.Name))
+                {
+                    this.Logger.LogError($"Found non-parsable name: {message} {{@release}}", release);
+
+                    return;
+                }
+
+                var cached = await this.Cache.GetAsync(release.Link);
+
+                if (cached != null)
+                {
+                    return;
+                }
+
+                this.Cache.Set(release.Link, release.ToJsonBytes());
+
+                if (MovieCategories.Contains(release.Category))
+                {
+                    await this.Movies.Publish(this.Mapper.Map<MovieRelease>(release));
+                }
+                else if (ShowCategories.Contains(release.Category))
+                {
+                    await this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
+                }
+
+                this.Logger.LogInformation($"Announced: {{@release}}", release);
             }
-
-            if (string.IsNullOrWhiteSpace(release.Name))
+            catch (Exception ex)
             {
-                this.Logger.LogError($"Found non-parsable name: {message} {{@release}}", release);
-
-                return;
+                this.Logger.LogError(ex, ex.Message);
             }
-
-            var cached = await this.Cache.GetAsync(release.Link);
-
-            if (cached != null)
-            {
-                return;
-            }
-
-            this.Cache.Set(release.Link, release.ToJsonBytes());
-
-            if (MovieCategories.Contains(release.Category))
-            {
-                await this.Movies.Publish(this.Mapper.Map<MovieRelease>(release));
-            }
-            else if (ShowCategories.Contains(release.Category))
-            {
-                await this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
-            }
-
-            this.Logger.LogInformation($"Announced: {{@release}}", release);
         }
 
         private string GetUserName()
