@@ -7,7 +7,7 @@ namespace node
 
     public class Program
     {
-        internal const string AppName = "node";
+        internal const string AppName = "Node";
 
         internal const string Name = "Platform";
 
@@ -25,7 +25,7 @@ namespace node
             return new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
-                .UseKeyValueConfig(AppName, AppName)
+                .UseKeyValueConfig(Name, AppName)
                 .UseSerilog()
                 .UseStartup<Startup>();
         }

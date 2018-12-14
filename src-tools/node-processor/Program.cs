@@ -46,7 +46,9 @@ namespace node_processor
                         options.Configuration = node.RedisHost;
                         options.InstanceName = AppName;
                     });
-
+                })
+                .ConfigureServices((context, services) =>
+                {
                     services.AddAutoMapper(config => config.AddProfile<DefaultMapperProfile>());
                     services.AddRabbitServices(context.Configuration);
                     services.AddObjectSerializer();
@@ -60,8 +62,8 @@ namespace node_processor
                     services.AddHostedService<MovieWatcher>();
                     services.AddHostedService<SeriesWatcher>();
                 })
-                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConsoleLifetime()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseEnvironment(Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT"))
                 .UseKeyValueConfig(Name, AppName)
                 .UseSerilog();

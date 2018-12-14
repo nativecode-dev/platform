@@ -42,15 +42,17 @@ namespace node_watcher
                         options.Configuration = node.RedisHost;
                         options.InstanceName = AppName;
                     });
-
+                })
+                .ConfigureServices((context, services) =>
+                {
                     services.AddAutoMapper();
                     services.AddRabbitServices(context.Configuration);
                     services.AddIrcWatch(context.Configuration);
                 })
-                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConsoleLifetime()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseEnvironment(Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT"))
-                .UseKeyValueConfig(AppName, AppName)
+                .UseKeyValueConfig(Name, AppName)
                 .UseSerilog();
         }
     }
