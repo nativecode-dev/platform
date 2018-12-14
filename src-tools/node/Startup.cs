@@ -8,12 +8,11 @@ namespace node
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using NativeCode.Core.Extensions;
+    using NativeCode.Node.Core;
     using NativeCode.Node.Core.Options;
     using Newtonsoft.Json.Converters;
     using NSwag;
     using Serilog;
-    using Serilog.Exceptions;
-    using Serilog.Sinks.Elasticsearch;
 
     public class Startup : IStartup
     {
@@ -35,22 +34,7 @@ namespace node
             services.AddOption<NodeOptions>(this.Configuration, out var node);
             services.AddOption<ElasticSearchOptions>(this.Configuration, out var elasticsearch);
 
-            var esconfig = new ElasticsearchSinkOptions(new Uri(elasticsearch.Url))
-            {
-                AutoRegisterTemplate = true
-            };
-
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .Enrich.WithExceptionDetails()
-                .ReadFrom.Configuration(this.Configuration)
-                .WriteTo.Elasticsearch(esconfig)
-                .WriteTo.Console()
-                .WriteTo.Debug()
-                .WriteTo.Trace()
-                .CreateLogger();
-
-            this.Logging.AddSerilog();
+            services.AddSerilog(this.Configuration, elasticsearch.Url);
 
             Log.Logger.Information("Startup: {@node}", node);
 

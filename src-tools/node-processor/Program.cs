@@ -14,12 +14,11 @@ namespace node_processor
     using NativeCode.Core.Configuration;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
+    using NativeCode.Node.Core;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Messages;
     using NativeCode.Node.Services.Watchers;
     using Serilog;
-    using Serilog.Exceptions;
-    using Serilog.Sinks.Elasticsearch;
     using Protocol = NativeCode.Clients.Radarr.Requests.Protocol;
 
     internal class Program
@@ -55,21 +54,7 @@ namespace node_processor
                 {
                     services.AddOption<NodeOptions>(context.Configuration, out var node);
                     services.AddOption<ElasticSearchOptions>(context.Configuration, out var elasticsearch);
-
-                    var esconfig = new ElasticsearchSinkOptions(new Uri(elasticsearch.Url))
-                    {
-                        AutoRegisterTemplate = true
-                    };
-
-                    Log.Logger = new LoggerConfiguration()
-                        .Enrich.FromLogContext()
-                        .Enrich.WithExceptionDetails()
-                        .ReadFrom.Configuration(context.Configuration)
-                        .WriteTo.Elasticsearch(esconfig)
-                        .WriteTo.Console()
-                        .WriteTo.Debug()
-                        .WriteTo.Trace()
-                        .CreateLogger();
+                    services.AddSerilog(context.Configuration, elasticsearch.Url);
 
                     Log.Logger.Information("Startup: {@node}", node);
 
