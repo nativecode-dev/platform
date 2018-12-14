@@ -24,10 +24,6 @@ namespace node_processor
 
     internal class Program
     {
-        internal const string ConfigRoot = "tcp://etcd:2379/NativeCode/Node/Processor";
-
-        internal const string ConfigShared = "tcp://etcd:2379/NativeCode/Node/Shared";
-
         internal const string Name = "processor";
 
         internal const string Version = "v1";
@@ -45,14 +41,15 @@ namespace node_processor
                 .ConfigureAppConfiguration((context, builder) =>
                 {
                     var env = context.HostingEnvironment.EnvironmentName;
-                    var defaultConfig = $"{ConfigRoot}/{Version}";
-                    var environmentConfig = $"{ConfigRoot}/{env}";
-                    var machineConfig = $"{ConfigRoot}/{Environment.MachineName}";
-                    var sharedConfig = $"{ConfigShared}";
+
+                    var common = "tcp://etcd:2379/root/Platform/Common";
+                    var options = $"tcp://etcd:2379/root/Platform/Node/{env}";
+                    var machine = "tcp://etcd:2379/NativeCode/Platform/Common";
+                    var legacy = $"tcp://etcd:2379/NativeCode/Node/Node/{Version}";
 
                     builder.AddJsonFile("appsettings.json", false, true);
                     builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                    builder.AddEtcdConfig(sharedConfig, defaultConfig, environmentConfig, machineConfig);
+                    builder.AddEtcdConfig(common, options, machine, legacy);
                     builder.AddEnvironmentVariables();
                 })
                 .ConfigureLogging((context, builder) => builder.AddSerilog())
