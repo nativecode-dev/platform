@@ -29,34 +29,6 @@ namespace node
 
         protected ILoggerFactory Logging { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            services.AddOption<NodeOptions>(this.Configuration, out var node);
-            services.AddOption<ElasticSearchOptions>(this.Configuration, out var elasticsearch);
-
-            services.AddSerilog(this.Configuration, elasticsearch.Url);
-
-            Log.Logger.Information("Startup: {@node}", node);
-
-            services.AddDistributedRedisCache(options =>
-            {
-                options.Configuration = node.RedisHost;
-                options.InstanceName = Program.Name;
-            });
-
-            services.AddMvc()
-                .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.AddSwaggerDocument(options =>
-            {
-                options.DocumentName = Program.Version;
-                options.Title = Program.Name;
-            });
-
-            return services.BuildServiceProvider();
-        }
-
         public void Configure(IApplicationBuilder app)
         {
             if (this.HostEnv.IsDevelopment())
@@ -80,6 +52,33 @@ namespace node
                 };
             });
             app.UseSwaggerUi3();
+        }
+
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            services.AddOption<NodeOptions>(this.Configuration, out var node);
+            services.AddOption<ElasticSearchOptions>(this.Configuration, out var elasticsearch);
+            services.AddSerilog(this.Configuration, elasticsearch.Url);
+
+            Log.Logger.Information("Startup: {@node}", node);
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = node.RedisHost;
+                options.InstanceName = Program.AppName;
+            });
+
+            services.AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSwaggerDocument(options =>
+            {
+                options.DocumentName = Program.Version;
+                options.Title = Program.AppName;
+            });
+
+            return services.BuildServiceProvider();
         }
     }
 }

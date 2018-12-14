@@ -2,13 +2,14 @@ namespace node
 {
     using System.IO;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using NativeCode.Core.Configuration;
+    using NativeCode.Node.Core;
     using Serilog;
 
     public class Program
     {
-        internal const string Name = "node";
+        internal const string AppName = "node";
+
+        internal const string Name = "Platform";
 
         internal const string Version = "v1";
 
@@ -22,20 +23,9 @@ namespace node
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return new WebHostBuilder()
-                .ConfigureAppConfiguration((context, builder) =>
-                {
-                    var env = context.HostingEnvironment.EnvironmentName;
-
-                    var common = "tcp://etcd:2379/root/Platform/Common";
-                    var options = $"tcp://etcd:2379/root/Platform/Node/{env}";
-
-                    builder.AddJsonFile("appsettings.json", false, true);
-                    builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                    builder.AddEtcdConfig(common, options);
-                    builder.AddEnvironmentVariables();
-                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
+                .UseKeyValueConfig(AppName, AppName)
                 .UseSerilog()
                 .UseStartup<Startup>();
         }

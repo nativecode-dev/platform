@@ -3,10 +3,8 @@ namespace node_watcher
     using System;
     using System.IO;
     using AutoMapper;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using NativeCode.Core.Configuration;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
     using NativeCode.Node.Core;
@@ -16,7 +14,9 @@ namespace node_watcher
 
     internal class Program
     {
-        internal const string Name = "watcher";
+        internal const string AppName = "Watcher";
+
+        internal const string Name = "Platform";
 
         internal const string Version = "v1";
 
@@ -30,30 +30,17 @@ namespace node_watcher
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             return new HostBuilder()
-                .ConfigureAppConfiguration((context, builder) =>
-                {
-                    var env = context.HostingEnvironment.EnvironmentName;
-                    var common = "tcp://etcd:2379/root/Platform/Common";
-                    var options = $"tcp://etcd:2379/root/Platform/Watcher/{env}";
-
-                    builder.AddJsonFile("appsettings.json", false, true);
-                    builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                    builder.AddEtcdConfig(common, options);
-                    builder.AddEnvironmentVariables();
-                })
-                .ConfigureLogging((context, builder) => builder.AddSerilog())
                 .ConfigureServices((context, services) =>
                 {
                     services.AddOption<NodeOptions>(context.Configuration, out var node);
                     services.AddOption<ElasticSearchOptions>(context.Configuration, out var elasticsearch);
                     services.AddSerilog(context.Configuration, elasticsearch.Url);
-
                     Log.Logger.Information("Startup: {@node}", node);
 
                     services.AddDistributedRedisCache(options =>
                     {
                         options.Configuration = node.RedisHost;
-                        options.InstanceName = Name;
+                        options.InstanceName = AppName;
                     });
 
                     services.AddAutoMapper();
@@ -63,6 +50,7 @@ namespace node_watcher
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConsoleLifetime()
                 .UseEnvironment(Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT"))
+                .UseKeyValueConfig(AppName, AppName)
                 .UseSerilog();
         }
     }
