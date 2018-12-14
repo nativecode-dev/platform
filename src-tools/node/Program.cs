@@ -28,12 +28,10 @@ namespace node
 
                     var common = "tcp://etcd:2379/root/Platform/Common";
                     var options = $"tcp://etcd:2379/root/Platform/Node/{env}";
-                    var machine = "tcp://etcd:2379/NativeCode/Platform/Common";
-                    var legacy = $"tcp://etcd:2379/NativeCode/Node/Node/{Version}";
 
                     builder.AddJsonFile("appsettings.json", false, true);
                     builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                    builder.AddEtcdConfig(common, options, machine, legacy);
+                    builder.AddEtcdConfig(common, options);
                     builder.AddEnvironmentVariables();
                 })
                 .UseContentRoot(Directory.GetCurrentDirectory())

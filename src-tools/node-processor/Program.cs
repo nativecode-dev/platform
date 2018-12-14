@@ -43,13 +43,11 @@ namespace node_processor
                     var env = context.HostingEnvironment.EnvironmentName;
 
                     var common = "tcp://etcd:2379/root/Platform/Common";
-                    var options = $"tcp://etcd:2379/root/Platform/Node/{env}";
-                    var machine = "tcp://etcd:2379/NativeCode/Platform/Common";
-                    var legacy = $"tcp://etcd:2379/NativeCode/Node/Node/{Version}";
+                    var options = $"tcp://etcd:2379/root/Platform/Processor/{env}";
 
                     builder.AddJsonFile("appsettings.json", false, true);
                     builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                    builder.AddEtcdConfig(common, options, machine, legacy);
+                    builder.AddEtcdConfig(common, options);
                     builder.AddEnvironmentVariables();
                 })
                 .ConfigureLogging((context, builder) => builder.AddSerilog())
