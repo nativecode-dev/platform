@@ -26,12 +26,5 @@ namespace NativeCode.Core.Data
 
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.EnableSoftDelete();
-
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }

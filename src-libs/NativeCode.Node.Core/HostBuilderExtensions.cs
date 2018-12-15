@@ -2,21 +2,20 @@ namespace NativeCode.Node.Core
 {
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Hosting;
+    using NativeCode.Core;
     using NativeCode.Core.Configuration;
 
     public static class HostBuilderExtensions
     {
-        public static IHostBuilder UseKeyValueConfig(this IHostBuilder host, string name, string applicationName)
+        public static IHostBuilder UseKeyValueConfig(this IHostBuilder host, string owner, string name)
         {
             return host.ConfigureAppConfiguration((context, builder) =>
             {
-                var env = context.HostingEnvironment.EnvironmentName;
-                var common = $"tcp://etcd:2379/root/{name}/Common";
-                var options = $"tcp://etcd:2379/root/{name}/{applicationName}/{env}";
+                var (global, common, env) = KeyValueServerConfig.Standard(owner, name, context.HostingEnvironment.EnvironmentName);
 
                 builder.AddJsonFile("appsettings.json", false, true);
                 builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                builder.AddEtcdConfig(common, options);
+                builder.AddEtcdConfig(global, common, env);
                 builder.AddEnvironmentVariables();
             });
         }

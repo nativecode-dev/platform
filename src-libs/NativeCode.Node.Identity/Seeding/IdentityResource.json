@@ -1,0 +1,22 @@
+[
+  {
+    "Name": "email",
+    "DisplayName": "User email",
+    "Description": "Your email address",
+    "Emphasize": true,
+    "UserClaims": [ "email" ]
+  },
+  {
+    "Name": "openid",
+    "DisplayName": "Your user identifier",
+    "Required": true,
+    "UserClaims": [ "sub" ]
+  },
+  {
+    "Name": "profile",
+    "DisplayName": "User profile",
+    "Description": "Your user profile information (first name, last name, etc.)",
+    "Emphasize": true,
+    "UserClaims": [ "profile" ]
+  }
+]

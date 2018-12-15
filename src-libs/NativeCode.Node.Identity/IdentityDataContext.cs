@@ -1,8 +1,9 @@
-﻿namespace NativeCode.Node.Identity
+namespace NativeCode.Node.Identity
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Core.Data.Extensions;
     using Entities;
     using IdentityServer4.EntityFramework.Entities;
     using IdentityServer4.EntityFramework.Interfaces;
@@ -31,6 +32,14 @@
         public Task<int> SaveChangesAsync()
         {
             return this.SaveChangesAsync(true, CancellationToken.None);
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.SeedJsonDataFromManifest<Role>("NativeCode.Node.Identity.Seeding.Role.json");
+            builder.SeedJsonDataFromManifest<Role>("NativeCode.Node.Identity.Seeding.RoleClaim.json");
+
+            base.OnModelCreating(builder);
         }
     }
 }

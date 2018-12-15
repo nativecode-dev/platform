@@ -1,0 +1,9 @@
+[
+  {
+    "AllowedGrantTypes": ["client_credentials", "password"],
+    "AllowedScopes": ["identity", "openid", "profile"],
+    "ClientId": "nativecode",
+    "ClientName": "NativeCode",
+    "ClientSecrets": ["&mB2gGm@S1H1gxezkikNf&$n"]
+  }
+]

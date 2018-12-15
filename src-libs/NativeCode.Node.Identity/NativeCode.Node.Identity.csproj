@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Seeding\ApiResource.json" />
+    <None Remove="Seeding\Client.json" />
+    <None Remove="Seeding\IdentityResource.json" />
+    <None Remove="Seeding\Role.json" />
+    <None Remove="Seeding\RoleClaim.json" />
+    <None Remove="Seeding\User.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Seeding\ApiResource.json" />
+    <EmbeddedResource Include="Seeding\Role.json" />
+    <EmbeddedResource Include="Seeding\RoleClaim.json" />
+    <EmbeddedResource Include="Seeding\User.json" />
+    <EmbeddedResource Include="Seeding\Client.json" />
+    <EmbeddedResource Include="Seeding\IdentityResource.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="2.3.2" />
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
+    <PackageReference Include="IdentityServer4.EntityFramework" Version="2.3.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Core.Data\NativeCode.Core.Data.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+[
+  {
+    "Id": "AC5051DF-8B61-4D6F-B079-D6D180984D9B",
+    "Name": "Administrator",
+    "NormalizedName": "ADMINISTRATOR"
+  },
+  {
+    "Id": "B765372F-49B7-4F34-ACD3-461BB1562A3F",
+    "Name": "Service",
+    "NormalizedName": "SERVICE"
+  },
+  {
+    "Id": "223194A3-A3B0-4D95-A78C-AEAAC63F4761",
+    "Name": "System",
+    "NormalizedName": "SYSTEM"
+  },
+  {
+    "Id": "C2A0A2AC-1202-4AE9-9210-D4419F8F8CB9",
+    "Name": "User",
+    "NormalizedName": "USER"
+  }
+]

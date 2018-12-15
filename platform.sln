@@ -37,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core.Services", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "node", "src-tools\node\node.csproj", "{9B7DC3BE-B51D-4DE7-BA44-4FBA361D72B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Services", "src\NativeCode.Node.Services\NativeCode.Node.Services.csproj", "{12B4FE9D-1734-4B60-B8C1-79FD534C6C65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Services", "src-libs\NativeCode.Node.Services\NativeCode.Node.Services.csproj", "{12B4FE9D-1734-4B60-B8C1-79FD534C6C65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Messages", "src\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj", "{7859095A-194F-4F92-9335-C469F5E36E7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Messages", "src-libs\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj", "{7859095A-194F-4F92-9335-C469F5E36E7A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "node-processor", "src-tools\node-processor\node-processor.csproj", "{C89286DB-7307-4A99-9A29-E1CAA0262DB1}"
 EndProject
@@ -51,13 +51,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core.Data", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core.Messaging", "src\NativeCode.Core.Messaging\NativeCode.Core.Messaging.csproj", "{7C526160-BB06-4F93-A423-E6B24DEBE40C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Core", "src\NativeCode.Node.Core\NativeCode.Node.Core.csproj", "{0D445A6A-54F9-409E-883D-B3A20EB9B38D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Core", "src-libs\NativeCode.Node.Core\NativeCode.Node.Core.csproj", "{0D445A6A-54F9-409E-883D-B3A20EB9B38D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "identity", "src-tools\identity\identity.csproj", "{03E76C76-DA24-4F31-A3D0-6C1273B4429A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Identity", "src\NativeCode.Node.Identity\NativeCode.Node.Identity.csproj", "{A5EC9444-C02C-433B-AEBA-6A1A9F98243D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Identity", "src-libs\NativeCode.Node.Identity\NativeCode.Node.Identity.csproj", "{A5EC9444-C02C-433B-AEBA-6A1A9F98243D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Identity.Protected", "src\NativeCode.Node.Identity.Protected\NativeCode.Node.Identity.Protected.csproj", "{CC3B3EF8-1ABF-4D08-8464-B4AFD944DDD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Identity.Protected", "src-libs\NativeCode.Node.Identity.Protected\NativeCode.Node.Identity.Protected.csproj", "{CC3B3EF8-1ABF-4D08-8464-B4AFD944DDD9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core.Mvc", "src\NativeCode.Core.Mvc\NativeCode.Core.Mvc.csproj", "{FEA5EFEF-AAAF-464E-94AF-8FA95E76CE94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeCode.Core.Web", "src\NativeCode.Core.Web\NativeCode.Core.Web.csproj", "{A2614B13-4803-475D-845D-D98BE2138A6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +145,14 @@ Global
 		{CC3B3EF8-1ABF-4D08-8464-B4AFD944DDD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC3B3EF8-1ABF-4D08-8464-B4AFD944DDD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC3B3EF8-1ABF-4D08-8464-B4AFD944DDD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEA5EFEF-AAAF-464E-94AF-8FA95E76CE94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEA5EFEF-AAAF-464E-94AF-8FA95E76CE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEA5EFEF-AAAF-464E-94AF-8FA95E76CE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEA5EFEF-AAAF-464E-94AF-8FA95E76CE94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2614B13-4803-475D-845D-D98BE2138A6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2614B13-4803-475D-845D-D98BE2138A6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2614B13-4803-475D-845D-D98BE2138A6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2614B13-4803-475D-845D-D98BE2138A6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,6 +173,8 @@ Global
 		{0D445A6A-54F9-409E-883D-B3A20EB9B38D} = {4DD0BE98-DAA2-42EF-8041-E1B2078874B4}
 		{A5EC9444-C02C-433B-AEBA-6A1A9F98243D} = {4DD0BE98-DAA2-42EF-8041-E1B2078874B4}
 		{CC3B3EF8-1ABF-4D08-8464-B4AFD944DDD9} = {4DD0BE98-DAA2-42EF-8041-E1B2078874B4}
+		{FEA5EFEF-AAAF-464E-94AF-8FA95E76CE94} = {4A73B9E2-60C7-4F70-9BCE-F0F47572AC49}
+		{A2614B13-4803-475D-845D-D98BE2138A6C} = {4A73B9E2-60C7-4F70-9BCE-F0F47572AC49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {489590FE-8EC3-438D-B14E-F7B65684D449}

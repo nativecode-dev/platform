@@ -1,0 +1,58 @@
+[
+  {
+    "ClaimType": "read",
+    "ClaimValue": "*",
+    "Id": "60B140EE-10CE-432E-AB6B-66B364D960CF",
+    "UniqueId": "308CBD2D-2BCB-4386-A685-174AAA1DB8B3",
+    "RoleId": "AC5051DF-8B61-4D6F-B079-D6D180984D9B"
+  },
+  {
+    "ClaimType": "write",
+    "ClaimValue": "*",
+    "Id": "7384F518-BB39-43B7-A858-78F66988EDDF",
+    "UniqueId": "73AA8BE8-F3AC-4C54-BECE-285CBB823E59",
+    "RoleId": "AC5051DF-8B61-4D6F-B079-D6D180984D9B"
+  },
+  {
+    "ClaimType": "read",
+    "ClaimValue": "service:*",
+    "Id": "06ABE995-B89C-4D2A-9067-0D571A0C9D8D",
+    "UniqueId": "F07E3BAC-D0D1-47E4-A3E3-2D20016FDF0F",
+    "RoleId": "B765372F-49B7-4F34-ACD3-461BB1562A3F"
+  },
+  {
+    "ClaimType": "write",
+    "ClaimValue": "service:*",
+    "Id": "2E643172-B07E-48AA-9588-C20CCD226117",
+    "UniqueId": "6914EC6A-B6A5-405C-8647-6ACA6FF53081",
+    "RoleId": "B765372F-49B7-4F34-ACD3-461BB1562A3F"
+  },
+  {
+    "ClaimType": "read",
+    "ClaimValue": "system:*",
+    "Id": "C541C65A-27A4-4937-B5E4-F6B14C2DDAD9",
+    "UniqueId": "5A68129C-2766-4C7F-810C-BE3B643BA639",
+    "RoleId": "223194A3-A3B0-4D95-A78C-AEAAC63F4761"
+  },
+  {
+    "ClaimType": "write",
+    "ClaimValue": "system:*",
+    "Id": "AD8146C0-9C2A-45E9-895F-2921DE685448",
+    "UniqueId": "DA1D9D4C-88A5-4E12-A732-4AB0EB83CB2F",
+    "RoleId": "223194A3-A3B0-4D95-A78C-AEAAC63F4761"
+  },
+  {
+    "ClaimType": "read",
+    "ClaimValue": "system:*",
+    "Id": "79537994-9D9F-452E-9AA7-E9A5D7004468",
+    "UniqueId": "82888DBF-9985-4F57-9113-4BE62E039CDE",
+    "RoleId": "C2A0A2AC-1202-4AE9-9210-D4419F8F8CB9"
+  },
+  {
+    "ClaimType": "write",
+    "ClaimValue": "system:*",
+    "Id": "C9442FA0-97CE-4210-AF7A-1D8745AC2C19",
+    "UniqueId": "188AD4CF-961F-4448-B077-DB7B2E80233D",
+    "RoleId": "C2A0A2AC-1202-4AE9-9210-D4419F8F8CB9"
+  }
+]

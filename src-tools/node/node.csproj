@@ -36,8 +36,8 @@
         <ProjectReference Include="..\..\src\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
-        <ProjectReference Include="..\..\src\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
-        <ProjectReference Include="..\..\src\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj" />
+        <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
+        <ProjectReference Include="..\..\src-libs\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj" />
     </ItemGroup>
 
 </Project>

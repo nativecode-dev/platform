@@ -8,17 +8,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
         <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
+        <PackageReference Include="IdentityServer4.Contrib.RedisStore" Version="2.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
+        <ProjectReference Include="..\..\src-libs\NativeCode.Node.Identity\NativeCode.Node.Identity.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Data\NativeCode.Core.Data.csproj" />
+        <ProjectReference Include="..\..\src\NativeCode.Core.Mvc\NativeCode.Core.Mvc.csproj" />
+        <ProjectReference Include="..\..\src\NativeCode.Core.Web\NativeCode.Core.Web.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
-        <ProjectReference Include="..\..\src\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
-        <ProjectReference Include="..\..\src\NativeCode.Node.Identity\NativeCode.Node.Identity.csproj" />
     </ItemGroup>
 
 </Project>

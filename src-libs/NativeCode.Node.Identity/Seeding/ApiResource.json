@@ -1,0 +1,10 @@
+[
+  {
+    "ApiSecrets": ["lLo3zoT@XZr5O08L7xS*trJu"],
+    "Description": "Node",
+    "DisplyName": "Node",
+    "Name": "node",
+    "Scopes": ["identity"],
+    "UserClaims": ["email", "preferred_username", "role"]
+  }
+]
