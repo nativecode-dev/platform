@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
+      <ProjectReference Include="..\NativeCode.Core\NativeCode.Core.csproj" />
     </ItemGroup>
 
 </Project>

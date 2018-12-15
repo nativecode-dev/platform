@@ -14,7 +14,7 @@ namespace NativeCode.Core.Data
         public static IServiceCollection AddContextSeeder<TContext>(this IServiceCollection services)
             where TContext : DbContext
         {
-            services.AddScoped<IContextSeeder<TContext>, ContextSeeder<TContext>>();
+            services.AddScoped<IDataContextSeeder<TContext>, DataContextSeeder<TContext>>();
 
             return services;
         }

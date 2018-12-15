@@ -57,8 +57,7 @@ namespace node
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOption<NodeOptions>(this.Configuration, out var node);
-            services.AddOption<ElasticSearchOptions>(this.Configuration, out var elasticsearch);
-            services.AddSerilog(this.Configuration, elasticsearch.Url);
+            services.AddSerilog(this.Configuration, Program.Name);
 
             Log.Logger.Information("Startup: {@node}", node);
 

@@ -37,8 +37,7 @@ namespace node_processor
                 .ConfigureServices((context, services) =>
                 {
                     services.AddOption<NodeOptions>(context.Configuration, out var node);
-                    services.AddOption<ElasticSearchOptions>(context.Configuration, out var elasticsearch);
-                    services.AddSerilog(context.Configuration, elasticsearch.Url);
+                    services.AddSerilog(context.Configuration, Program.Name);
                     Log.Logger.Information("Startup: {@node}", node);
 
                     services.AddDistributedRedisCache(options =>
