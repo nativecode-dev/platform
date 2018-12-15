@@ -1,20 +1,42 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+# -----------------------------------------------------------------------------
+# STAGE: Runtime
+# -----------------------------------------------------------------------------
+FROM microsoft/dotnet:aspnetcore-runtime AS RUNTIME
+ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
-FROM microsoft/dotnet:2.2-sdk AS build
-WORKDIR /src
-COPY ["src-tools/identity/identity.csproj", "src-tools/identity/"]
-RUN dotnet restore "src-tools/identity/identity.csproj"
-COPY . .
-WORKDIR "/src/src-tools/identity"
-RUN dotnet build "identity.csproj" -c Release -o /app
+# -----------------------------------------------------------------------------
+# STAGE: Build
+# -----------------------------------------------------------------------------
+FROM microsoft/dotnet:sdk AS BUILD
+# Build Arguments
+ENV CAKE_VERSION "0.30.0"
+ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /build
+# Copy Files
+COPY .gitattributes /build
+COPY .gitignore /build
+COPY build.cake /build
+COPY build.ps1 /build
+COPY platform.sln /build
+# Copy Folders
+COPY templates/ /build/templates
+COPY src/ /build/src
+COPY src-tools/ /build/src-tools
+COPY src-tests/ /build/src-tests
+RUN set -ex \
+    && curl --silent --location https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install nodejs -y \
+    && mkdir tools \
+    && cp templates/tools-csproj.template tools/tools.csproj \
+    && dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION \
+    && dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release" \
+    ;
 
-FROM build AS publish
-RUN dotnet publish "identity.csproj" -c Release -o /app
-
-FROM base AS final
+# -----------------------------------------------------------------------------
+# STAGE: Final
+# -----------------------------------------------------------------------------
+FROM RUNTIME
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=BUILD /build/.artifacts/published/identity /app
 ENTRYPOINT ["dotnet", "identity.dll"]

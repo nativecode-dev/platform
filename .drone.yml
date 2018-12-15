@@ -28,6 +28,11 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
+  idp: &idp
+    <<: *prod
+    dockerfile: src-tools/identity/Dockerfile
+    repo: nativecode/identity
+
   node: &node
     <<: *prod
     dockerfile: src-tools/node/Dockerfile
@@ -42,6 +47,13 @@ pipeline:
     <<: *prod
     dockerfile: src-tools/node-watcher/Dockerfile
     repo: nativecode/node-watcher
+
+  release-idp: &release-idp
+    <<: *deploy
+    docker_image: "nativecode/identity:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "platform/identity"
+    when:
+      branch: master
 
   release-node: &release-node
     <<: *deploy
