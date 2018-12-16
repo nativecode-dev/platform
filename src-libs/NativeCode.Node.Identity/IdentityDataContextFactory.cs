@@ -16,10 +16,10 @@ namespace NativeCode.Node.Identity
         protected override IConfigurationBuilder Configure(string basePath, string environment, IConfigurationBuilder builder)
         {
             var name = typeof(IdentityDataContext).Name.Replace("DataContext", string.Empty);
-            var (global, common, env) = KeyValueServerConfig.Standard(AppName, name, environment);
+            var configs = KeyValueServerConfig.Standard(AppName, name, environment);
 
             return base.Configure(basePath, environment, builder)
-                .AddEtcdConfig(global, common, env);
+                .AddEtcdConfig(configs);
         }
 
         protected override IdentityDataContext CreateNewInstance(DbContextOptionsBuilder<IdentityDataContext> builder,

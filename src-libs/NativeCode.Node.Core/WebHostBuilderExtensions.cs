@@ -11,11 +11,12 @@ namespace NativeCode.Node.Core
         {
             return host.ConfigureAppConfiguration((context, builder) =>
             {
-                var (global, common, env) = KeyValueServerConfig.Standard(owner, name, context.HostingEnvironment.EnvironmentName);
+                var environment = context.HostingEnvironment.EnvironmentName;
+                var configs = KeyValueServerConfig.Standard(owner, name, environment);
 
                 builder.AddJsonFile("appsettings.json", false, true);
-                builder.AddJsonFile($"appsettings.{env}.json", true, true);
-                builder.AddEtcdConfig(global, common, env);
+                builder.AddJsonFile($"appsettings.{environment}.json", true, true);
+                builder.AddEtcdConfig(configs);
                 builder.AddEnvironmentVariables();
             });
         }
