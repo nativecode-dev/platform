@@ -80,8 +80,10 @@ namespace NativeCode.Core.Data
                     }
                     else
                     {
+                        /*
                         this.Mapper.Map(model, existing);
                         this.Logger.LogTrace("Updated: {@model}", model);
+                        */
                     }
                 }
                 catch (Exception ex)
