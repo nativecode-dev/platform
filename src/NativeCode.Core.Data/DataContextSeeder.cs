@@ -15,7 +15,7 @@ namespace NativeCode.Core.Data
         where T : DbContext
     {
         public DataContextSeeder(T context, JsonSerializerSettings settings, IMapper mapper,
-            ILogger<DataContextSeeder<T>> logger)
+            ILogger<IDataContextSeeder<T>> logger)
         {
             this.Context = context;
             this.Logger = logger;
@@ -25,7 +25,7 @@ namespace NativeCode.Core.Data
 
         protected T Context { get; }
 
-        protected ILogger<DataContextSeeder<T>> Logger { get; }
+        protected ILogger<IDataContextSeeder<T>> Logger { get; }
 
         protected IMapper Mapper { get; }
 
@@ -44,14 +44,14 @@ namespace NativeCode.Core.Data
         }
 
         public Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> select,
-            Func<TModel, TEntity> converter, Func<TModel, TEntity, Task> callback = null)
+            Func<TModel, Task<TEntity>> converter, Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
             return this.SeedAsync(Assembly.GetEntryAssembly(), name, select, converter, callback);
         }
 
         public async Task<bool> SeedAsync<TModel, TEntity>(Assembly assembly, string name,
-            Func<TModel, DbSet<TEntity>, Task<TEntity>> select, Func<TModel, TEntity> converter,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> select, Func<TModel, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
@@ -68,7 +68,7 @@ namespace NativeCode.Core.Data
 
                     if (existing == null)
                     {
-                        var entity = converter(model);
+                        var entity = await converter.Invoke(model);
 
                         if (callback != null)
                         {

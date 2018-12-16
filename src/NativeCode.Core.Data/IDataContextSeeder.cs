@@ -12,13 +12,13 @@ namespace NativeCode.Core.Data
             where TEntity : class;
 
         Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> select,
-            Func<TModel, TEntity> converter,
+            Func<TModel, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class;
 
         Task<bool> SeedAsync<TModel, TEntity>(Assembly assembly, string name,
             Func<TModel, DbSet<TEntity>, Task<TEntity>> select,
-            Func<TModel, TEntity> converter,
+            Func<TModel, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class;
 

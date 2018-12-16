@@ -10,6 +10,7 @@ namespace NativeCode.Core
             {
                 "tcp://etcd:2379/root/Global",
                 $"tcp://etcd:2379/root/{owner}/Common",
+                $"tcp://etcd:2379/root/{owner}/{product}/Common",
                 $"tcp://etcd:2379/root/{owner}/{product}/{environment}",
                 $"tcp://etcd:2379/root/{owner}/{product}/{Environment.MachineName}",
             };

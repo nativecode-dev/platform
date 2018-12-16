@@ -44,7 +44,6 @@ namespace identity
             services.AddOption<AppOptions>(this.Configuration, out var app);
             services.AddOption<RedisOptions>(this.Configuration, out var redis);
 
-            services.AddContextSeeder<IdentityDataContext>();
             services.AddIdentityConverters();
 
             this.ConfigureAutoMapper(services);
@@ -187,10 +186,10 @@ namespace identity
             services.AddAutoMapper(options =>
             {
                 options.CreateMap<User, UserInfo>()
-                    .ForSourceMember(source => source.Email, expression => expression.DoNotValidate())
-                    .ForSourceMember(source => source.EmailConfirmed, expression => expression.DoNotValidate())
-                    .ForSourceMember(source => source.Id, expression => expression.DoNotValidate())
-                    .ForSourceMember(source => source.UserName, expression => expression.DoNotValidate())
+                    .ForSourceMember(src => src.Email, expr => expr.DoNotValidate())
+                    .ForSourceMember(src => src.EmailConfirmed, expr => expr.DoNotValidate())
+                    .ForSourceMember(src => src.Id, expr => expr.DoNotValidate())
+                    .ForSourceMember(src => src.UserName, expr => expr.DoNotValidate())
                     .ReverseMap();
             });
         }
