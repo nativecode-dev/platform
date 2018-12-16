@@ -3,10 +3,14 @@ namespace identity
     using System;
     using AutoMapper;
     using IdentityServer4;
+    using IdentityServer4.AccessTokenValidation;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -41,29 +45,92 @@ namespace identity
             services.AddOption<RedisOptions>(this.Configuration, out var redis);
 
             services.AddContextSeeder<IdentityDataContext>();
-
-            services.AddAutoMapper(options =>
-            {
-                options.CreateMap<User, UserInfo>()
-                    .ForSourceMember(source => source.Email, expression => expression.DoNotValidate())
-                    .ForSourceMember(source => source.EmailConfirmed, expression => expression.DoNotValidate())
-                    .ForSourceMember(source => source.Id, expression => expression.DoNotValidate())
-                    .ForSourceMember(source => source.UserName, expression => expression.DoNotValidate())
-                    .ReverseMap();
-            });
-
             services.AddIdentityConverters();
 
-            services.AddDbContext<IdentityDataContext>(options =>
-            {
-                var connectionString = this.Configuration.GetConnectionString(nameof(IdentityDataContext));
-                this.Logger.LogTrace("{@connectionString}", connectionString);
-                options.UseSqlServer(connectionString, opts => opts.MigrationsAssembly("NativeCode.Node.Identity"));
-#if DEBUG
-                options.EnableSensitiveDataLogging();
-#endif
-            });
+            this.ConfigureAutoMapper(services);
+            this.ConfigureDbContext(services);
+            this.ConfigureIdentityServer(services, app, redis);
+            this.ConfigureAutoMapper(services);
+            this.ConfigureMvc(services, app);
 
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.ApiName = app.ApiName;
+                    options.ApiSecret = app.ApiSecret;
+                    options.Authority = app.Authority;
+                    options.RequireHttpsMetadata = app.RequireHttpsMetadata;
+                    options.JwtValidationClockSkew = app.ClockSkew;
+                });
+
+            services.AddSwaggerDocument(options => { options.DocumentName = Program.AppName; });
+
+            return services.BuildServiceProvider();
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            if (this.HostingEnvironment.IsProduction())
+            {
+                app.UseHsts();
+            }
+            else
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseAuthentication();
+            app.UseCors();
+            app.UseIdentityServer();
+            app.UseHttpsRedirection();
+            app.UseForwardedHeaders();
+            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
+            app.UseSwaggerUi3();
+            app.UseSwagger(settings => { settings.DocumentName = Program.AppName; });
+        }
+
+        private void ConfigureMvc(IServiceCollection services, AppOptions app)
+        {
+            services.AddMvc()
+                .AddModelValidator()
+                .AddMvcOptions(options =>
+                {
+                    var policy = ScopePolicy.Create(app.ApiScope);
+                    options.Filters.Add(new AuthorizeFilter(policy));
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddAuthorization(options =>
+                {
+                    options.AddPolicy(app.ApiScope, configure =>
+                    {
+                        configure.RequireAuthenticatedUser();
+                        configure.RequireScope(app.ApiScope);
+                    });
+                })
+                .AddCors(options =>
+                {
+                    options.AddDefaultPolicy(configure =>
+                    {
+                        configure.AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin()
+                            .AllowCredentials();
+                    });
+                });
+        }
+
+        private void ConfigureIdentityServer(IServiceCollection services, AppOptions app, RedisOptions redis)
+        {
             services.AddIdentity<User, Role>()
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
@@ -100,24 +167,32 @@ namespace identity
                     options.RedisConnectionString = redis.RedisConnection;
                     this.Logger.LogTrace("{@options}", options);
                 });
-
-            services.AddMvc()
-                .AddModelValidator()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            return services.BuildServiceProvider();
         }
 
-        public void Configure(IApplicationBuilder app)
+        private void ConfigureDbContext(IServiceCollection services)
         {
-            if (this.HostingEnvironment.IsDevelopment())
+            services.AddDbContext<IdentityDataContext>(options =>
             {
-                app.UseDeveloperExceptionPage();
-            }
+                var connectionString = this.Configuration.GetConnectionString(nameof(IdentityDataContext));
+                this.Logger.LogTrace("{@connectionString}", connectionString);
+                options.UseSqlServer(connectionString, opts => opts.MigrationsAssembly("NativeCode.Node.Identity"));
+#if DEBUG
+                options.EnableSensitiveDataLogging();
+#endif
+            });
+        }
 
-            app.UseAuthentication();
-            app.UseIdentityServer();
-            app.UseMvc();
+        private void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(options =>
+            {
+                options.CreateMap<User, UserInfo>()
+                    .ForSourceMember(source => source.Email, expression => expression.DoNotValidate())
+                    .ForSourceMember(source => source.EmailConfirmed, expression => expression.DoNotValidate())
+                    .ForSourceMember(source => source.Id, expression => expression.DoNotValidate())
+                    .ForSourceMember(source => source.UserName, expression => expression.DoNotValidate())
+                    .ReverseMap();
+            });
         }
     }
 }
