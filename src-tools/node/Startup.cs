@@ -1,15 +1,18 @@
 namespace node
 {
     using System;
+    using IdentityServer4.AccessTokenValidation;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using NativeCode.Core.Extensions;
     using NativeCode.Node.Core;
-    using NativeCode.Node.Core.Options;
     using Newtonsoft.Json.Converters;
     using NSwag;
     using Serilog;
@@ -67,7 +70,40 @@ namespace node
                 options.InstanceName = Program.AppName;
             });
 
-            services.AddMvc()
+            services.AddSerilog(this.Configuration, Program.AppName);
+
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters()
+                .AddMvcOptions(options =>
+                {
+                    var policy = ScopePolicy.Create(node.ApiScope);
+                    options.Filters.Add(new AuthorizeFilter(policy));
+                })
+                .AddAuthorization(options => { options.AddPolicy(node.ApiScope, configure => configure.RequireAuthenticatedUser()); })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.ApiName = node.ApiName;
+                    options.ApiSecret = node.ApiSecret;
+                    options.Authority = node.Authority;
+                    options.RequireHttpsMetadata = false;
+                    options.JwtValidationClockSkew = TimeSpan.FromMinutes(10);
+                });
+
+            services
+                .AddCors()
+                .AddMvc()
                 .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

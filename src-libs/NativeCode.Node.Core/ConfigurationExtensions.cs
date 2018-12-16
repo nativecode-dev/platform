@@ -6,6 +6,7 @@ namespace NativeCode.Node.Core
     using NativeCode.Core.Extensions;
     using Options;
     using Serilog;
+    using Serilog.Events;
     using Serilog.Exceptions;
     using Serilog.Sinks.Elasticsearch;
 
@@ -19,16 +20,20 @@ namespace NativeCode.Node.Core
             {
                 AutoRegisterTemplate = true,
                 IndexFormat = $"log-{name}-{{0:yyyy.MM.dd}}",
+                MinimumLogEventLevel = LogEventLevel.Verbose,
             };
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
+                .Enrich.WithAssemblyName()
                 .Enrich.WithExceptionDetails()
-                .ReadFrom.Configuration(configuration)
+                .Enrich.WithProcessId()
+                .Enrich.WithProcessName()
                 .WriteTo.Elasticsearch(esconfig)
                 .WriteTo.Console()
                 .WriteTo.Debug()
                 .WriteTo.Trace()
+                .ReadFrom.Configuration(configuration)
                 .CreateLogger();
 
             return services;

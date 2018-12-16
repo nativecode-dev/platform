@@ -1,10 +1,10 @@
-﻿namespace NativeCode.Core.Configuration
+namespace NativeCode.Core.Configuration
 {
-    using System.Diagnostics;
     using System.Threading.Tasks;
     using dotnet_etcd;
     using Microsoft.Extensions.Configuration;
     using Nito.AsyncEx;
+    using Serilog;
 
     public class EtcdConfigurationProvider : ConfigurationProvider
     {
@@ -27,8 +27,6 @@
                 var path = this.Options.HostUri.AbsolutePath;
                 var response = await client.GetRangeAsync(path);
 
-                Trace.WriteLine(path);
-
                 foreach (var kvp in response)
                 {
                     if (kvp.Key == path)
@@ -38,8 +36,11 @@
 
                     var key = kvp.Key.Substring(path.Length + 1)
                         .Replace("/", ":");
+
                     this.Data.Add(key, kvp.Value);
                 }
+
+                Log.Logger.Verbose($"Path: {path}, Keys: {response.Keys.Count}");
             }
         }
 

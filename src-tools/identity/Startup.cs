@@ -19,7 +19,6 @@ namespace identity
     using NativeCode.Node.Identity.Entities;
     using NativeCode.Node.Identity.JsonConverters;
     using NativeCode.Node.Identity.SeedModels;
-    using Newtonsoft.Json;
 
     public class Startup : IStartup
     {
@@ -53,15 +52,7 @@ namespace identity
                     .ReverseMap();
             });
 
-            services.AddSingleton(provider =>
-            {
-                var settings = new JsonSerializerSettings
-                {
-                    ContractResolver = new IdentityContractResolver()
-                };
-
-                return settings;
-            });
+            services.AddIdentityConverters();
 
             services.AddDbContext<IdentityDataContext>(options =>
             {
@@ -90,7 +81,6 @@ namespace identity
                     options.IssuerUri = app.Authority;
                     this.Logger.LogTrace("{@options}", options);
                 })
-                .AddJwtBearerClientAuthentication()
                 .AddAspNetIdentity<User>()
                 .AddConfigurationStore(options =>
                 {
@@ -102,6 +92,7 @@ namespace identity
                     this.Logger.LogTrace("{@options}", options);
                 })
                 .AddConfigurationStoreCache()
+                .AddJwtBearerClientAuthentication()
                 .AddOperationalStore(options =>
                 {
                     options.Db = redis.RedisOperationalStore;

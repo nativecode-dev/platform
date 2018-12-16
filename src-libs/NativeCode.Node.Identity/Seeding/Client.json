@@ -1,9 +1,9 @@
 [
   {
-    "AllowedGrantTypes": ["client_credentials", "password"],
-    "AllowedScopes": ["identity", "openid", "profile"],
+    "AllowedGrantTypes": ["password"],
+    "AllowedScopes": ["api.identity", "api.node", "openid", "profile"],
     "ClientId": "nativecode",
     "ClientName": "NativeCode",
-    "ClientSecrets": ["&mB2gGm@S1H1gxezkikNf&$n"]
+    "ClientSecrets": ["[AppSecrets:CLIENT_NATIVECODE_SECRET]"]
   }
 ]

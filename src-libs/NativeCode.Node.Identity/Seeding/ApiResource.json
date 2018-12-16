@@ -1,10 +1,18 @@
 [
   {
-    "ApiSecrets": ["lLo3zoT@XZr5O08L7xS*trJu"],
+    "ApiSecrets": ["[AppSecrets:RESOURCE_IDENTITY_SECRET]"],
+    "Description": "Identity",
+    "DisplyName": "Identity",
+    "Name": "identity",
+    "Scopes": ["api.identity"],
+    "UserClaims": ["email", "preferred_username", "role"]
+  },
+  {
+    "ApiSecrets": ["[AppSecrets:RESOURCE_NODE_SECRET]"],
     "Description": "Node",
     "DisplyName": "Node",
     "Name": "node",
-    "Scopes": ["identity"],
+    "Scopes": ["api.node"],
     "UserClaims": ["email", "preferred_username", "role"]
   }
 ]

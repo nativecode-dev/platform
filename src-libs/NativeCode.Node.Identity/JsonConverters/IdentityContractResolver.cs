@@ -1,11 +1,20 @@
 namespace NativeCode.Node.Identity.JsonConverters
 {
+    using System;
     using System.Reflection;
+    using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
 
     public class IdentityContractResolver : DefaultContractResolver
     {
+        public IdentityContractResolver(IServiceProvider provider)
+        {
+            this.Provider = provider;
+        }
+
+        protected IServiceProvider Provider { get; }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);
@@ -13,23 +22,23 @@ namespace NativeCode.Node.Identity.JsonConverters
             switch (property.PropertyName)
             {
                 case "ApiSecrets":
-                    property.ItemConverter = new SecretConverter();
+                    property.ItemConverter = this.Provider.GetService<SecretConverter>();
                     return property;
 
                 case "Claims":
-                    property.ItemConverter = new ClaimConverter();
+                    property.ItemConverter = this.Provider.GetService<ClaimConverter>();
                     return property;
 
                 case "ClientSecrets":
-                    property.ItemConverter = new SecretConverter();
+                    property.ItemConverter = this.Provider.GetService<SecretConverter>();
                     return property;
 
                 case "Secrets":
-                    property.ItemConverter = new SecretConverter();
+                    property.ItemConverter = this.Provider.GetService<SecretConverter>();
                     return property;
 
                 case "Scopes":
-                    property.ItemConverter = new ScopeConverter();
+                    property.ItemConverter = this.Provider.GetService<ScopeConverter>();
                     return property;
 
                 default:
