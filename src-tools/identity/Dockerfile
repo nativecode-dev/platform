@@ -22,6 +22,7 @@ COPY platform.sln /build
 # Copy Folders
 COPY templates/ /build/templates
 COPY src/ /build/src
+COPY src-libs/ /build/src-libs
 COPY src-tools/ /build/src-tools
 COPY src-tests/ /build/src-tests
 RUN set -ex \

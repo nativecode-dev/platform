@@ -43,7 +43,7 @@ Action<NpxSettings> requiredSemanticVersionPackages = settings => settings
 
 const string SOLUTION = "**/*.sln";
 const string SOLUTION_APPS = "src-tools/**/*.csproj";
-const string SOLUTION_NUGET = "src/**/*.csproj;src-libs/**/*.csproj";
+const string SOLUTION_NUGET = "src/**/*.csproj; src-libs/**/*.csproj";
 const string SOLUTION_TESTS = "src-tests/**/*.csproj";
 
 ///////////////////////////////////////////////////////////////////////////////
