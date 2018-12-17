@@ -10,6 +10,7 @@ namespace node_processor
     using NativeCode.Clients.Sonarr;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
+    using NativeCode.Core.Messaging.Options;
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Services;
@@ -37,8 +38,19 @@ namespace node_processor
                 .ConfigureServices((context, services) =>
                 {
                     services.AddOption<NodeOptions>(context.Configuration, out var node);
-                    services.AddSerilog(context.Configuration, Program.Name);
-                    Log.Logger.Information("Startup: {@node}", node);
+                    services.AddOption<RabbitOptions>(context.Configuration, out var rabbit);
+                    services.AddOption<MovieWatcherOptions>(context.Configuration, out var movies);
+                    services.AddOption<SeriesWatcherOptions>(context.Configuration, out var series);
+                    services.AddSerilog(context.Configuration, Name);
+
+                    Log.Logger.Information("Startup: {@node}", new
+                    {
+                        node.RedisHost,
+                        RabbitHost = rabbit.Host,
+                        RabbitUser = rabbit.User,
+                        MoviesEndpoint = movies.Endpoint,
+                        SeriesEndpoint = series.Endpoint,
+                    });
 
                     services.AddDistributedRedisCache(options =>
                     {

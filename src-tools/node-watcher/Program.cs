@@ -7,9 +7,11 @@ namespace node_watcher
     using Microsoft.Extensions.Hosting;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
+    using NativeCode.Core.Messaging.Options;
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Services;
+    using NativeCode.Node.Services.Watchers;
     using Serilog;
 
     internal class Program
@@ -33,8 +35,18 @@ namespace node_watcher
                 .ConfigureServices((context, services) =>
                 {
                     services.AddOption<NodeOptions>(context.Configuration, out var node);
-                    services.AddSerilog(context.Configuration, Program.Name);
-                    Log.Logger.Information("Startup: {@node}", node);
+                    services.AddOption<RabbitOptions>(context.Configuration, out var rabbit);
+                    services.AddOption<IrcWatcherOptions>(context.Configuration, out var irc);
+                    services.AddSerilog(context.Configuration, Name);
+
+                    Log.Logger.Information("Startup: {@node}", new
+                    {
+                        node.RedisHost,
+                        RabbitHost = rabbit.Host,
+                        RabbitUser = rabbit.User,
+                        IrcHost = irc.Host,
+                        IrcUser = irc.UserName,
+                    });
 
                     services.AddDistributedRedisCache(options =>
                     {

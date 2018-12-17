@@ -15,7 +15,6 @@ namespace identity
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using NativeCode.Core.Data;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Mvc;
     using NativeCode.Node.Core.Options;
