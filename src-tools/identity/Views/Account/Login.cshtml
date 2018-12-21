@@ -1,0 +1,38 @@
+@model identity.Controllers.Account.LoginViewModel
+
+<div>
+    @await Html.PartialAsync("_ValidationSummary")
+
+    <div class="row">
+
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Local Login</h3>
+                </div>
+                <div class="panel-body">
+
+                    <form asp-route="Login">
+                        <input type="hidden" asp-for="ReturnUrl" />
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label asp-for="Login"></label>
+                                <input class="form-control" placeholder="Username" asp-for="Login" autofocus>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit" name="button" value="login">Login</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

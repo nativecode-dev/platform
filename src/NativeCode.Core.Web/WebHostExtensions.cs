@@ -50,12 +50,14 @@ namespace NativeCode.Core.Web
             return host;
         }
 
-        public static IWebHost UseDataSeeder<T>(this IWebHost host, Func<IDataContextSeeder<T>, IServiceScope, Task> seed) where T : DbContext
+        public static IWebHost UseDataSeeder<T>(this IWebHost host, Func<IDataContextSeeder<T>, IServiceScope, Task> seed)
+            where T : DbContext
         {
-            return AsyncContext.Run(() => UseDataSeederAsync(host, seed));
+            return AsyncContext.Run(() => host.UseDataSeederAsync(seed));
         }
 
-        public static async Task<IWebHost> UseDataSeederAsync<T>(this IWebHost host, Func<IDataContextSeeder<T>, IServiceScope, Task> seed)
+        public static async Task<IWebHost> UseDataSeederAsync<T>(this IWebHost host,
+            Func<IDataContextSeeder<T>, IServiceScope, Task> seed)
             where T : DbContext
         {
             using (var scope = host.Services.CreateScope())

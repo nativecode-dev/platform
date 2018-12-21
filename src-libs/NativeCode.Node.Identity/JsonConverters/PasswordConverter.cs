@@ -30,10 +30,14 @@ namespace NativeCode.Node.Identity.JsonConverters
                 {
                     var section = value.Substring(1, value.Length - 2);
                     var password = this.Configuration.GetValue<string>(section);
-                    return password.Sha512();
+
+                    if (string.IsNullOrWhiteSpace(password) == false)
+                    {
+                        return password.Sha512();
+                    }
                 }
 
-                return value.Sha512();
+                return value;
             }
 
             return reader.Value;

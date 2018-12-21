@@ -1,13 +1,13 @@
-namespace NativeCode.Node.Core
+namespace NativeCode.Node.Core.WebHosting
 {
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Hosting;
     using NativeCode.Core;
     using NativeCode.Core.Configuration;
 
-    public static class HostBuilderExtensions
+    public static class WebHostBuilderExtensions
     {
-        public static IHostBuilder UseKeyValueConfig(this IHostBuilder host, string owner, string name)
+        public static IWebHostBuilder UseKeyValueConfig(this IWebHostBuilder host, string owner, string name)
         {
             return host.ConfigureAppConfiguration((context, builder) =>
             {

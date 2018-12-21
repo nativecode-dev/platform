@@ -6,6 +6,16 @@
         <RootNamespace>node_processor</RootNamespace>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <WarningsAsErrors />
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <WarningsAsErrors />
+    </PropertyGroup>
+
     <ItemGroup>
         <None Remove="appsettings.json" />
         <None Remove="appsettings.Production.json" />
@@ -34,6 +44,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core.Hosting\NativeCode.Node.Core.Hosting.csproj" />
         <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
         <ProjectReference Include="..\..\src-libs\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj" />
         <ProjectReference Include="..\..\src-libs\NativeCode.Node.Services\NativeCode.Node.Services.csproj" />

@@ -1,119 +1,121 @@
 namespace node
 {
     using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Threading.Tasks;
+    using Hangfire;
+    using IdentityModel;
     using IdentityServer4.AccessTokenValidation;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using NativeCode.Core.Extensions;
-    using NativeCode.Node.Core;
-    using Newtonsoft.Json.Converters;
-    using NSwag;
-    using Serilog;
+    using NativeCode.Core.Web;
+    using NativeCode.Node.Core.WebHosting;
 
-    public class Startup : IStartup
+    public class Startup : AspNetStartup<NodeOptions>
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory logging)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory loggingFactory,
+            ILogger<AspNetStartup<NodeOptions>> logger) : base(configuration, hostingEnvironment, loggingFactory, logger)
         {
-            this.Configuration = configuration;
-            this.HostEnv = hostingEnvironment;
-            this.Logging = logging;
         }
 
-        protected IConfiguration Configuration { get; }
+        protected override string AppName => "Node";
 
-        protected IHostingEnvironment HostEnv { get; }
+        protected override string AppProduct => "Platform";
 
-        protected ILoggerFactory Logging { get; }
+        protected override string AppVersion => "v1";
 
-        public void Configure(IApplicationBuilder app)
+        protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
         {
-            if (this.HostEnv.IsDevelopment())
+            return services.AddAuthentication(options =>
             {
-                app.UseDeveloperExceptionPage();
-                app.UseHttpsRedirection();
-            }
-            else
+                options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
+        }
+
+        protected override IApplicationBuilder ConfigureMiddleware(IApplicationBuilder app)
+        {
+            if (this.HostingEnvironment.IsProduction())
             {
                 app.UseHsts();
             }
-
-            app.UseForwardedHeaders();
-            app.UseMvc();
-            app.UseSwagger(config =>
+            else
             {
-                config.PostProcess = (settings, c) =>
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+            }
+
+            app.UseCors()
+                .UseForwardedHeaders()
+                .UseHangfireDashboard("/jobs", new DashboardOptions
                 {
-                    settings.Schemes.Clear();
-                    settings.Schemes.Add(SwaggerSchema.Https);
-                };
-            });
-            app.UseSwaggerUi3();
-        }
-
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            services.AddOption<NodeOptions>(this.Configuration, out var node);
-            services.AddSerilog(this.Configuration, Program.Name);
-
-            Log.Logger.Information("Startup: {@node}", node);
-
-            services.AddDistributedRedisCache(options =>
-            {
-                options.Configuration = node.RedisHost;
-                options.InstanceName = Program.AppName;
-            });
-
-            services.AddSerilog(this.Configuration, Program.AppName);
-
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters()
-                .AddMvcOptions(options =>
-                {
-                    var policy = ScopePolicy.Create(node.ApiScope);
-                    options.Filters.Add(new AuthorizeFilter(policy));
+                    AppPath = "/",
+                    Authorization = new[] {new DashboardAuthorizationFilter()},
                 })
-                .AddAuthorization(options => { options.AddPolicy(node.ApiScope, configure => configure.RequireAuthenticatedUser()); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddAuthentication(options =>
+                .UseHangfireServer(new BackgroundJobServerOptions
                 {
-                    options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    ServerName = $"{Environment.MachineName}:{this.Options.Name}:{Process.GetCurrentProcess().Id}",
+                    WorkerCount = this.Options.WorkerCount,
                 })
-                .AddIdentityServerAuthentication(options =>
+                .UseMvcWithDefaultRoute()
+                .UseStaticFiles()
+                .UseStatusCodePages(context =>
                 {
-                    options.ApiName = node.ApiName;
-                    options.ApiSecret = node.ApiSecret;
-                    options.Authority = node.Authority;
-                    options.RequireHttpsMetadata = false;
-                    options.JwtValidationClockSkew = TimeSpan.FromMinutes(10);
+                    var response = context.HttpContext.Response;
+
+                    if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
+                    {
+                        response.Redirect("/account/login");
+                    }
+
+                    return Task.CompletedTask;
                 });
 
-            services
-                .AddCors()
-                .AddMvc()
-                .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()))
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            return app;
+        }
 
-            services.AddSwaggerDocument(options =>
+        protected override IMvcCoreBuilder ConfigureMvc(IMvcCoreBuilder builder)
+        {
+            return builder.AddCacheTagHelper()
+                .AddCookieTempDataProvider()
+                .AddDataAnnotations()
+                .AddModelValidator()
+                .AddRazorPages()
+                .AddRazorViewEngine()
+                .AddViews()
+                .AddMvcOptions(options =>
+                {
+                    var policy = ScopePolicy.Create(this.Options.ApiScope);
+                    options.Filters.Add(new AuthorizeFilter(policy));
+                });
+        }
+
+        public override IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            services.AddHangfire(x => x.UseRedisStorage("redis"));
+
+            services.AddAuthorization(options =>
             {
-                options.DocumentName = Program.Version;
-                options.Title = Program.AppName;
+                options.AddPolicy(this.Options.ApiScope, configure =>
+                {
+                    configure.RequireAuthenticatedUser();
+                    configure.RequireScope(this.Options.ApiScope);
+                });
             });
 
-            return services.BuildServiceProvider();
+            return base.ConfigureServices(services);
         }
     }
 }

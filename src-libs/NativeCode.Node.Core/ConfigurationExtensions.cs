@@ -16,14 +16,23 @@ namespace NativeCode.Node.Core
         {
             services.AddOption<ElasticSearchOptions>(configuration, out var elasticsearch);
 
-            var esconfig = new ElasticsearchSinkOptions(new Uri(elasticsearch.Url))
+            var serilog = CreateSerilogConfig(elasticsearch.Url, name);
+            Log.Logger = serilog.ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
+            return services;
+        }
+
+        public static LoggerConfiguration CreateSerilogConfig(string elasticSearchUrl, string name)
+        {
+            var esconfig = new ElasticsearchSinkOptions(new Uri(elasticSearchUrl))
             {
                 AutoRegisterTemplate = true,
                 IndexFormat = $"log-{name}-{{0:yyyy.MM.dd}}",
                 MinimumLogEventLevel = LogEventLevel.Verbose,
             };
 
-            Log.Logger = new LoggerConfiguration()
+            return new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithAssemblyName()
                 .Enrich.WithExceptionDetails()
@@ -32,11 +41,7 @@ namespace NativeCode.Node.Core
                 .WriteTo.Elasticsearch(esconfig)
                 .WriteTo.Console()
                 .WriteTo.Debug()
-                .WriteTo.Trace()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
-
-            return services;
+                .WriteTo.Trace();
         }
     }
 }

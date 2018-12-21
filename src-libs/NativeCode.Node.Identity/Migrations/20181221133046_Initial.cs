@@ -15,9 +15,9 @@ namespace NativeCode.Node.Identity.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Enabled = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    DisplayName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     Updated = table.Column<DateTime>(nullable: true),
                     LastAccessed = table.Column<DateTime>(nullable: true),
@@ -65,22 +65,22 @@ namespace NativeCode.Node.Identity.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Enabled = table.Column<bool>(nullable: false),
-                    ClientId = table.Column<string>(nullable: true),
-                    ProtocolType = table.Column<string>(nullable: true),
+                    ClientId = table.Column<string>(maxLength: 200, nullable: false),
+                    ProtocolType = table.Column<string>(maxLength: 200, nullable: false),
                     RequireClientSecret = table.Column<bool>(nullable: false),
-                    ClientName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    ClientUri = table.Column<string>(nullable: true),
-                    LogoUri = table.Column<string>(nullable: true),
+                    ClientName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    ClientUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    LogoUri = table.Column<string>(maxLength: 2000, nullable: true),
                     RequireConsent = table.Column<bool>(nullable: false),
                     AllowRememberConsent = table.Column<bool>(nullable: false),
                     AlwaysIncludeUserClaimsInIdToken = table.Column<bool>(nullable: false),
                     RequirePkce = table.Column<bool>(nullable: false),
                     AllowPlainTextPkce = table.Column<bool>(nullable: false),
                     AllowAccessTokensViaBrowser = table.Column<bool>(nullable: false),
-                    FrontChannelLogoutUri = table.Column<string>(nullable: true),
+                    FrontChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
                     FrontChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
-                    BackChannelLogoutUri = table.Column<string>(nullable: true),
+                    BackChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
                     BackChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
                     AllowOfflineAccess = table.Column<bool>(nullable: false),
                     IdentityTokenLifetime = table.Column<int>(nullable: false),
@@ -96,17 +96,28 @@ namespace NativeCode.Node.Identity.Migrations
                     EnableLocalLogin = table.Column<bool>(nullable: false),
                     IncludeJwtId = table.Column<bool>(nullable: false),
                     AlwaysSendClientClaims = table.Column<bool>(nullable: false),
-                    ClientClaimsPrefix = table.Column<string>(nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(nullable: true),
+                    ClientClaimsPrefix = table.Column<string>(maxLength: 200, nullable: true),
+                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     Updated = table.Column<DateTime>(nullable: true),
                     LastAccessed = table.Column<DateTime>(nullable: true),
                     UserSsoLifetime = table.Column<int>(nullable: true),
-                    UserCodeType = table.Column<string>(nullable: true),
+                    UserCodeType = table.Column<string>(maxLength: 100, nullable: true),
                     DeviceCodeLifetime = table.Column<int>(nullable: false),
                     NonEditable = table.Column<bool>(nullable: false)
                 },
                 constraints: table => { table.PrimaryKey("PK_Clients", x => x.Id); });
+
+            migrationBuilder.CreateTable(
+                "DataProtectionKeys",
+                table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FriendlyName = table.Column<string>(nullable: true),
+                    Xml = table.Column<string>(nullable: true)
+                },
+                constraints: table => { table.PrimaryKey("PK_DataProtectionKeys", x => x.Id); });
 
             migrationBuilder.CreateTable(
                 "IdentityResources",
@@ -115,9 +126,9 @@ namespace NativeCode.Node.Identity.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Enabled = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    DisplayName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
@@ -128,19 +139,19 @@ namespace NativeCode.Node.Identity.Migrations
                 constraints: table => { table.PrimaryKey("PK_IdentityResources", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                "ApiResourceClaim",
+                "ApiClaims",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiResourceClaim", x => x.Id);
+                    table.PrimaryKey("PK_ApiClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiResourceClaim_ApiResources_ApiResourceId",
+                        "FK_ApiClaims_ApiResources_ApiResourceId",
                         x => x.ApiResourceId,
                         "ApiResources",
                         "Id",
@@ -148,20 +159,20 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ApiResourceProperty",
+                "ApiProperties",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Key = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: false),
                     ApiResourceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiResourceProperty", x => x.Id);
+                    table.PrimaryKey("PK_ApiProperties", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiResourceProperty_ApiResources_ApiResourceId",
+                        "FK_ApiProperties_ApiResources_ApiResourceId",
                         x => x.ApiResourceId,
                         "ApiResources",
                         "Id",
@@ -169,14 +180,14 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ApiScope",
+                "ApiScopes",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    DisplayName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
@@ -184,9 +195,9 @@ namespace NativeCode.Node.Identity.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiScope", x => x.Id);
+                    table.PrimaryKey("PK_ApiScopes", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiScope_ApiResources_ApiResourceId",
+                        "FK_ApiScopes_ApiResources_ApiResourceId",
                         x => x.ApiResourceId,
                         "ApiResources",
                         "Id",
@@ -194,23 +205,23 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ApiSecret",
+                "ApiSecrets",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     ApiResourceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiSecret", x => x.Id);
+                    table.PrimaryKey("PK_ApiSecrets", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiSecret_ApiResources_ApiResourceId",
+                        "FK_ApiSecrets_ApiResources_ApiResourceId",
                         x => x.ApiResourceId,
                         "ApiResources",
                         "Id",
@@ -324,20 +335,20 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientClaim",
+                "ClientClaims",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 250, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientClaim", x => x.Id);
+                    table.PrimaryKey("PK_ClientClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientClaim_Clients_ClientId",
+                        "FK_ClientClaims_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -345,19 +356,19 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientCorsOrigin",
+                "ClientCorsOrigins",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Origin = table.Column<string>(nullable: true),
+                    Origin = table.Column<string>(maxLength: 150, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientCorsOrigin", x => x.Id);
+                    table.PrimaryKey("PK_ClientCorsOrigins", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientCorsOrigin_Clients_ClientId",
+                        "FK_ClientCorsOrigins_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -365,19 +376,19 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientGrantType",
+                "ClientGrantTypes",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    GrantType = table.Column<string>(nullable: true),
+                    GrantType = table.Column<string>(maxLength: 250, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientGrantType", x => x.Id);
+                    table.PrimaryKey("PK_ClientGrantTypes", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientGrantType_Clients_ClientId",
+                        "FK_ClientGrantTypes_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -385,19 +396,19 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientIdPRestriction",
+                "ClientIdPRestrictions",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Provider = table.Column<string>(nullable: true),
+                    Provider = table.Column<string>(maxLength: 200, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientIdPRestriction", x => x.Id);
+                    table.PrimaryKey("PK_ClientIdPRestrictions", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientIdPRestriction_Clients_ClientId",
+                        "FK_ClientIdPRestrictions_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -405,19 +416,19 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientPostLogoutRedirectUri",
+                "ClientPostLogoutRedirectUris",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PostLogoutRedirectUri = table.Column<string>(nullable: true),
+                    PostLogoutRedirectUri = table.Column<string>(maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientPostLogoutRedirectUri", x => x.Id);
+                    table.PrimaryKey("PK_ClientPostLogoutRedirectUris", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientPostLogoutRedirectUri_Clients_ClientId",
+                        "FK_ClientPostLogoutRedirectUris_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -425,20 +436,20 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientProperty",
+                "ClientProperties",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Key = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientProperty", x => x.Id);
+                    table.PrimaryKey("PK_ClientProperties", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientProperty_Clients_ClientId",
+                        "FK_ClientProperties_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -446,19 +457,19 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientRedirectUri",
+                "ClientRedirectUris",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RedirectUri = table.Column<string>(nullable: true),
+                    RedirectUri = table.Column<string>(maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientRedirectUri", x => x.Id);
+                    table.PrimaryKey("PK_ClientRedirectUris", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientRedirectUri_Clients_ClientId",
+                        "FK_ClientRedirectUris_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -466,19 +477,19 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientScope",
+                "ClientScopes",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Scope = table.Column<string>(nullable: true),
+                    Scope = table.Column<string>(maxLength: 200, nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientScope", x => x.Id);
+                    table.PrimaryKey("PK_ClientScopes", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientScope_Clients_ClientId",
+                        "FK_ClientScopes_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -486,23 +497,23 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ClientSecret",
+                "ClientSecrets",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     ClientId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientSecret", x => x.Id);
+                    table.PrimaryKey("PK_ClientSecrets", x => x.Id);
                     table.ForeignKey(
-                        "FK_ClientSecret_Clients_ClientId",
+                        "FK_ClientSecrets_Clients_ClientId",
                         x => x.ClientId,
                         "Clients",
                         "Id",
@@ -510,19 +521,19 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "IdentityClaim",
+                "IdentityClaims",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     IdentityResourceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityClaim", x => x.Id);
+                    table.PrimaryKey("PK_IdentityClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_IdentityClaim_IdentityResources_IdentityResourceId",
+                        "FK_IdentityClaims_IdentityResources_IdentityResourceId",
                         x => x.IdentityResourceId,
                         "IdentityResources",
                         "Id",
@@ -530,20 +541,20 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "IdentityResourceProperty",
+                "IdentityProperties",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Key = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: false),
                     IdentityResourceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityResourceProperty", x => x.Id);
+                    table.PrimaryKey("PK_IdentityProperties", x => x.Id);
                     table.ForeignKey(
-                        "FK_IdentityResourceProperty_IdentityResources_IdentityResourceId",
+                        "FK_IdentityProperties_IdentityResources_IdentityResourceId",
                         x => x.IdentityResourceId,
                         "IdentityResources",
                         "Id",
@@ -551,48 +562,82 @@ namespace NativeCode.Node.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                "ApiScopeClaim",
+                "ApiScopeClaims",
                 table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     ApiScopeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiScopeClaim", x => x.Id);
+                    table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
                     table.ForeignKey(
-                        "FK_ApiScopeClaim_ApiScope_ApiScopeId",
+                        "FK_ApiScopeClaims_ApiScopes_ApiScopeId",
                         x => x.ApiScopeId,
-                        "ApiScope",
+                        "ApiScopes",
                         "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                "AspNetRoles",
+                new[] {"Id", "ConcurrencyStamp", "Name", "NormalizedName"},
+                new object[,]
+                {
+                    {
+                        new Guid("ac5051df-8b61-4d6f-b079-d6d180984d9b"), "76510cf9-6d5a-43af-978f-edc796febe5f", "Administrator",
+                        "ADMINISTRATOR"
+                    },
+                    {new Guid("b765372f-49b7-4f34-acd3-461bb1562a3f"), "7ac7019f-33c7-4bf1-b75c-e52e79a9e52b", "Service", "SERVICE"},
+                    {new Guid("223194a3-a3b0-4d95-a78c-aeaac63f4761"), "ed69ec81-60ea-4aad-a235-f404ce8c9a1a", "System", "SYSTEM"},
+                    {new Guid("c2a0a2ac-1202-4ae9-9210-d4419f8f8cb9"), "e4f087f4-4db6-4435-bcaf-6429cfda51ba", "User", "USER"},
+                    {new Guid("60b140ee-10ce-432e-ab6b-66b364d960cf"), "00e9f56b-62c9-4553-b1df-591c6a511386", null, null},
+                    {new Guid("7384f518-bb39-43b7-a858-78f66988eddf"), "d8a360b3-2959-4573-96eb-d6eeda4b3ef5", null, null},
+                    {new Guid("06abe995-b89c-4d2a-9067-0d571a0c9d8d"), "c8a77f43-8e4d-4252-b35e-0286ef7ebadc", null, null},
+                    {new Guid("2e643172-b07e-48aa-9588-c20ccd226117"), "49ed10af-aad7-477d-9c5d-4fa73d6b4b21", null, null},
+                    {new Guid("c541c65a-27a4-4937-b5e4-f6b14c2ddad9"), "7854ef46-d31e-4784-be1d-784c5b3a036f", null, null},
+                    {new Guid("ad8146c0-9c2a-45e9-895f-2921de685448"), "f1902271-0461-46a7-99c1-59ee149a64fb", null, null},
+                    {new Guid("79537994-9d9f-452e-9aa7-e9a5d7004468"), "3ba074df-ea87-4897-a3da-128b60748afa", null, null},
+                    {new Guid("c9442fa0-97ce-4210-af7a-1d8745ac2c19"), "2694f006-751e-4f22-9076-cf1ee7d8d9ec", null, null}
+                });
+
             migrationBuilder.CreateIndex(
-                "IX_ApiResourceClaim_ApiResourceId",
-                "ApiResourceClaim",
+                "IX_ApiClaims_ApiResourceId",
+                "ApiClaims",
                 "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiResourceProperty_ApiResourceId",
-                "ApiResourceProperty",
+                "IX_ApiProperties_ApiResourceId",
+                "ApiProperties",
                 "ApiResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiScope_ApiResourceId",
-                "ApiScope",
-                "ApiResourceId");
+                "IX_ApiResources_Name",
+                "ApiResources",
+                "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                "IX_ApiScopeClaim_ApiScopeId",
-                "ApiScopeClaim",
+                "IX_ApiScopeClaims_ApiScopeId",
+                "ApiScopeClaims",
                 "ApiScopeId");
 
             migrationBuilder.CreateIndex(
-                "IX_ApiSecret_ApiResourceId",
-                "ApiSecret",
+                "IX_ApiScopes_ApiResourceId",
+                "ApiScopes",
+                "ApiResourceId");
+
+            migrationBuilder.CreateIndex(
+                "IX_ApiScopes_Name",
+                "ApiScopes",
+                "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                "IX_ApiSecrets_ApiResourceId",
+                "ApiSecrets",
                 "ApiResourceId");
 
             migrationBuilder.CreateIndex(
@@ -635,74 +680,86 @@ namespace NativeCode.Node.Identity.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientClaim_ClientId",
-                "ClientClaim",
+                "IX_ClientClaims_ClientId",
+                "ClientClaims",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientCorsOrigin_ClientId",
-                "ClientCorsOrigin",
+                "IX_ClientCorsOrigins_ClientId",
+                "ClientCorsOrigins",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientGrantType_ClientId",
-                "ClientGrantType",
+                "IX_ClientGrantTypes_ClientId",
+                "ClientGrantTypes",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientIdPRestriction_ClientId",
-                "ClientIdPRestriction",
+                "IX_ClientIdPRestrictions_ClientId",
+                "ClientIdPRestrictions",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientPostLogoutRedirectUri_ClientId",
-                "ClientPostLogoutRedirectUri",
+                "IX_ClientPostLogoutRedirectUris_ClientId",
+                "ClientPostLogoutRedirectUris",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientProperty_ClientId",
-                "ClientProperty",
+                "IX_ClientProperties_ClientId",
+                "ClientProperties",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientRedirectUri_ClientId",
-                "ClientRedirectUri",
+                "IX_ClientRedirectUris_ClientId",
+                "ClientRedirectUris",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientScope_ClientId",
-                "ClientScope",
+                "IX_Clients_ClientId",
+                "Clients",
+                "ClientId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                "IX_ClientScopes_ClientId",
+                "ClientScopes",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_ClientSecret_ClientId",
-                "ClientSecret",
+                "IX_ClientSecrets_ClientId",
+                "ClientSecrets",
                 "ClientId");
 
             migrationBuilder.CreateIndex(
-                "IX_IdentityClaim_IdentityResourceId",
-                "IdentityClaim",
+                "IX_IdentityClaims_IdentityResourceId",
+                "IdentityClaims",
                 "IdentityResourceId");
 
             migrationBuilder.CreateIndex(
-                "IX_IdentityResourceProperty_IdentityResourceId",
-                "IdentityResourceProperty",
+                "IX_IdentityProperties_IdentityResourceId",
+                "IdentityProperties",
                 "IdentityResourceId");
+
+            migrationBuilder.CreateIndex(
+                "IX_IdentityResources_Name",
+                "IdentityResources",
+                "Name",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                "ApiResourceClaim");
+                "ApiClaims");
 
             migrationBuilder.DropTable(
-                "ApiResourceProperty");
+                "ApiProperties");
 
             migrationBuilder.DropTable(
-                "ApiScopeClaim");
+                "ApiScopeClaims");
 
             migrationBuilder.DropTable(
-                "ApiSecret");
+                "ApiSecrets");
 
             migrationBuilder.DropTable(
                 "AspNetRoleClaims");
@@ -720,40 +777,43 @@ namespace NativeCode.Node.Identity.Migrations
                 "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                "ClientClaim");
+                "ClientClaims");
 
             migrationBuilder.DropTable(
-                "ClientCorsOrigin");
+                "ClientCorsOrigins");
 
             migrationBuilder.DropTable(
-                "ClientGrantType");
+                "ClientGrantTypes");
 
             migrationBuilder.DropTable(
-                "ClientIdPRestriction");
+                "ClientIdPRestrictions");
 
             migrationBuilder.DropTable(
-                "ClientPostLogoutRedirectUri");
+                "ClientPostLogoutRedirectUris");
 
             migrationBuilder.DropTable(
-                "ClientProperty");
+                "ClientProperties");
 
             migrationBuilder.DropTable(
-                "ClientRedirectUri");
+                "ClientRedirectUris");
 
             migrationBuilder.DropTable(
-                "ClientScope");
+                "ClientScopes");
 
             migrationBuilder.DropTable(
-                "ClientSecret");
+                "ClientSecrets");
 
             migrationBuilder.DropTable(
-                "IdentityClaim");
+                "DataProtectionKeys");
 
             migrationBuilder.DropTable(
-                "IdentityResourceProperty");
+                "IdentityClaims");
 
             migrationBuilder.DropTable(
-                "ApiScope");
+                "IdentityProperties");
+
+            migrationBuilder.DropTable(
+                "ApiScopes");
 
             migrationBuilder.DropTable(
                 "AspNetRoles");

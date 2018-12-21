@@ -1,22 +1,14 @@
 namespace identity
 {
-    using System;
+    using NativeCode.Node.Core.Options;
 
-    public class AppOptions
+    public class AppOptions : NodeOptions
     {
-        public string Authority { get; set; } = "https://localhost:5000";
-
-        public string ApiName { get; set; } = "identity";
-
-        public string ApiScope { get; set; } = "api.identity";
-
-        public string ApiSecret { get; set; }
-
-        public string ClientId { get; set; } = "nativecode";
-
-        public string ClientSecret { get; set; }
-
-        public TimeSpan ClockSkew { get; set; } = TimeSpan.FromMinutes(5);
+        public AppOptions()
+        {
+            this.ClientId = "nativecode-mvc";
+            this.ClientSecret = "dev-2018-NATIVECODE-MVC";
+        }
 
         public bool RequireHttpsMetadata { get; set; }
     }

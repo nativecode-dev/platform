@@ -8,10 +8,12 @@ namespace node_processor
     using NativeCode.Clients;
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Sonarr;
+    using NativeCode.Core.Configuration;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
     using NativeCode.Core.Messaging.Options;
     using NativeCode.Node.Core;
+    using NativeCode.Node.Core.Hosting;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Services;
     using NativeCode.Node.Services.Watchers;
@@ -45,6 +47,7 @@ namespace node_processor
 
                     Log.Logger.Information("Startup: {@node}", new
                     {
+                        node.Name,
                         node.RedisHost,
                         RabbitHost = rabbit.Host,
                         RabbitUser = rabbit.User,

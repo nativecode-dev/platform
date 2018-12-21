@@ -1,0 +1,20 @@
+[
+  {
+    "AllowedGrantTypes": ["client_credentials", "password"],
+    "AllowedScopes": ["api.identity", "api.node", "openid", "profile"],
+    "ClientId": "nativecode",
+    "ClientName": "NativeCode",
+    "ClientSecrets": ["[AppSecrets:CLIENT_NATIVECODE_SECRET]"]
+  },
+  {
+    "AllowedGrantTypes": ["client_credentials", "hybrid", "password"],
+    "AllowedScopes": ["api.identity", "api.node", "openid", "profile"],
+    "AllowOfflineAccess": true,
+    "ClientId": "nativecode-mvc",
+    "ClientName": "NativeCode MVC",
+    "ClientSecrets": ["[AppSecrets:CLIENT_NATIVECODE_SECRET]"],
+    "RequireConsent": true,
+    "RedirectUris": ["https://idp.nativecode.com/signin-oidc"],
+    "PostLogoutRedirectUris": ["https://idp.nativecode.com/signout-callback-oidc"]
+  }
+]

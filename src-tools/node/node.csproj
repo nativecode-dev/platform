@@ -6,15 +6,23 @@
         <UserSecretsId>69ee2a9a-5f86-42cd-a1c6-46d314221fab</UserSecretsId>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Compile Remove="wwwroot\**" />
-      <Content Remove="wwwroot\**" />
-      <EmbeddedResource Remove="wwwroot\**" />
-      <None Remove="wwwroot\**" />
-    </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <WarningsAsErrors />
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <WarningsAsErrors />
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Hangfire" Version="1.6.21" />
+        <PackageReference Include="Hangfire.Dashboard.Dark" Version="1.0.6" />
+        <PackageReference Include="Hangfire.Dashboard.Management" Version="1.0.0" />
+        <PackageReference Include="Hangfire.Redis.StackExchange" Version="1.8.0" />
+        <PackageReference Include="IdentityModel" Version="3.10.4" />
         <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -29,13 +37,16 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.2.0" />
-        <PackageReference Include="NSwag.AspNetCore" Version="12.0.7" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+        <PackageReference Include="NSwag.AspNetCore" Version="12.0.9" />
         <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core.WebHosting\NativeCode.Node.Core.WebHosting.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
+        <ProjectReference Include="..\..\src\NativeCode.Core.Web\NativeCode.Core.Web.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
         <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
         <ProjectReference Include="..\..\src-libs\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj" />

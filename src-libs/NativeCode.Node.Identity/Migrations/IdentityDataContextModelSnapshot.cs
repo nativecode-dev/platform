@@ -27,21 +27,28 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000);
 
-                    b.Property<string>("DisplayName");
+                    b.Property<string>("DisplayName")
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Enabled");
 
                     b.Property<DateTime?>("LastAccessed");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.Property<bool>("NonEditable");
 
                     b.Property<DateTime?>("Updated");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("ApiResources");
                 });
@@ -54,13 +61,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ApiResourceId");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiResourceId");
 
-                    b.ToTable("ApiResourceClaim");
+                    b.ToTable("ApiClaims");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceProperty", b =>
@@ -71,15 +80,19 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ApiResourceId");
 
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiResourceId");
 
-                    b.ToTable("ApiResourceProperty");
+                    b.ToTable("ApiProperties");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiScope", b =>
@@ -90,13 +103,17 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ApiResourceId");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000);
 
-                    b.Property<string>("DisplayName");
+                    b.Property<string>("DisplayName")
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Required");
 
@@ -106,7 +123,10 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.HasIndex("ApiResourceId");
 
-                    b.ToTable("ApiScope");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("ApiScopes");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiScopeClaim", b =>
@@ -117,13 +137,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ApiScopeId");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiScopeId");
 
-                    b.ToTable("ApiScopeClaim");
+                    b.ToTable("ApiScopeClaims");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiSecret", b =>
@@ -136,19 +158,24 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000);
 
                     b.Property<DateTime?>("Expiration");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(4000);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiResourceId");
 
-                    b.ToTable("ApiSecret");
+                    b.ToTable("ApiSecrets");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.Client", b =>
@@ -179,21 +206,28 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<bool>("BackChannelLogoutSessionRequired");
 
-                    b.Property<string>("BackChannelLogoutUri");
+                    b.Property<string>("BackChannelLogoutUri")
+                        .HasMaxLength(2000);
 
-                    b.Property<string>("ClientClaimsPrefix");
+                    b.Property<string>("ClientClaimsPrefix")
+                        .HasMaxLength(200);
 
-                    b.Property<string>("ClientId");
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
-                    b.Property<string>("ClientName");
+                    b.Property<string>("ClientName")
+                        .HasMaxLength(200);
 
-                    b.Property<string>("ClientUri");
+                    b.Property<string>("ClientUri")
+                        .HasMaxLength(2000);
 
                     b.Property<int?>("ConsentLifetime");
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000);
 
                     b.Property<int>("DeviceCodeLifetime");
 
@@ -203,7 +237,8 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<bool>("FrontChannelLogoutSessionRequired");
 
-                    b.Property<string>("FrontChannelLogoutUri");
+                    b.Property<string>("FrontChannelLogoutUri")
+                        .HasMaxLength(2000);
 
                     b.Property<int>("IdentityTokenLifetime");
 
@@ -211,13 +246,17 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<DateTime?>("LastAccessed");
 
-                    b.Property<string>("LogoUri");
+                    b.Property<string>("LogoUri")
+                        .HasMaxLength(2000);
 
                     b.Property<bool>("NonEditable");
 
-                    b.Property<string>("PairWiseSubjectSalt");
+                    b.Property<string>("PairWiseSubjectSalt")
+                        .HasMaxLength(200);
 
-                    b.Property<string>("ProtocolType");
+                    b.Property<string>("ProtocolType")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.Property<int>("RefreshTokenExpiration");
 
@@ -235,11 +274,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<DateTime?>("Updated");
 
-                    b.Property<string>("UserCodeType");
+                    b.Property<string>("UserCodeType")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("UserSsoLifetime");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique();
 
                     b.ToTable("Clients");
                 });
@@ -252,15 +295,19 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientClaim");
+                    b.ToTable("ClientClaims");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientCorsOrigin", b =>
@@ -271,13 +318,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("Origin");
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasMaxLength(150);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientCorsOrigin");
+                    b.ToTable("ClientCorsOrigins");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientGrantType", b =>
@@ -288,13 +337,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("GrantType");
+                    b.Property<string>("GrantType")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientGrantType");
+                    b.ToTable("ClientGrantTypes");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientIdPRestriction", b =>
@@ -305,13 +356,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("Provider");
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientIdPRestriction");
+                    b.ToTable("ClientIdPRestrictions");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri", b =>
@@ -322,13 +375,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("PostLogoutRedirectUri");
+                    b.Property<string>("PostLogoutRedirectUri")
+                        .IsRequired()
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientPostLogoutRedirectUri");
+                    b.ToTable("ClientPostLogoutRedirectUris");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientProperty", b =>
@@ -339,15 +394,19 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientProperty");
+                    b.ToTable("ClientProperties");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientRedirectUri", b =>
@@ -358,13 +417,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("RedirectUri");
+                    b.Property<string>("RedirectUri")
+                        .IsRequired()
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientRedirectUri");
+                    b.ToTable("ClientRedirectUris");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientScope", b =>
@@ -375,13 +436,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<string>("Scope");
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientScope");
+                    b.ToTable("ClientScopes");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientSecret", b =>
@@ -394,19 +457,24 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(4000);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ClientSecret");
+                    b.ToTable("ClientSecrets");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityClaim", b =>
@@ -417,13 +485,15 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("IdentityResourceId");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityResourceId");
 
-                    b.ToTable("IdentityClaim");
+                    b.ToTable("IdentityClaims");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityResource", b =>
@@ -434,15 +504,19 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000);
 
-                    b.Property<string>("DisplayName");
+                    b.Property<string>("DisplayName")
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize");
 
                     b.Property<bool>("Enabled");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.Property<bool>("NonEditable");
 
@@ -453,6 +527,9 @@ namespace NativeCode.Node.Identity.Migrations
                     b.Property<DateTime?>("Updated");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("IdentityResources");
                 });
@@ -465,15 +542,34 @@ namespace NativeCode.Node.Identity.Migrations
 
                     b.Property<int>("IdentityResourceId");
 
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityResourceId");
 
-                    b.ToTable("IdentityResourceProperty");
+                    b.ToTable("IdentityProperties");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FriendlyName");
+
+                    b.Property<string>("Xml");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataProtectionKeys");
                 });
 
             modelBuilder.Entity("NativeCode.Node.Identity.Entities.Role", b =>
@@ -503,70 +599,70 @@ namespace NativeCode.Node.Identity.Migrations
                         new
                         {
                             Id = new Guid("ac5051df-8b61-4d6f-b079-d6d180984d9b"),
-                            ConcurrencyStamp = "c0f6d982-a37a-41b6-97c2-a61be4693997",
+                            ConcurrencyStamp = "76510cf9-6d5a-43af-978f-edc796febe5f",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = new Guid("b765372f-49b7-4f34-acd3-461bb1562a3f"),
-                            ConcurrencyStamp = "320d9ebd-1af3-4b19-b0eb-3c1c118a1db5",
+                            ConcurrencyStamp = "7ac7019f-33c7-4bf1-b75c-e52e79a9e52b",
                             Name = "Service",
                             NormalizedName = "SERVICE"
                         },
                         new
                         {
                             Id = new Guid("223194a3-a3b0-4d95-a78c-aeaac63f4761"),
-                            ConcurrencyStamp = "b0d56e55-afe0-435e-8e3a-552165faa54a",
+                            ConcurrencyStamp = "ed69ec81-60ea-4aad-a235-f404ce8c9a1a",
                             Name = "System",
                             NormalizedName = "SYSTEM"
                         },
                         new
                         {
                             Id = new Guid("c2a0a2ac-1202-4ae9-9210-d4419f8f8cb9"),
-                            ConcurrencyStamp = "0fb3505a-3fe9-4d2b-b655-d9ff200ed495",
+                            ConcurrencyStamp = "e4f087f4-4db6-4435-bcaf-6429cfda51ba",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = new Guid("60b140ee-10ce-432e-ab6b-66b364d960cf"),
-                            ConcurrencyStamp = "e630904f-7598-4bd3-b8cd-dad653a966e8"
+                            ConcurrencyStamp = "00e9f56b-62c9-4553-b1df-591c6a511386"
                         },
                         new
                         {
                             Id = new Guid("7384f518-bb39-43b7-a858-78f66988eddf"),
-                            ConcurrencyStamp = "1a45dcaa-b305-4cb8-b9b0-672ba868499f"
+                            ConcurrencyStamp = "d8a360b3-2959-4573-96eb-d6eeda4b3ef5"
                         },
                         new
                         {
                             Id = new Guid("06abe995-b89c-4d2a-9067-0d571a0c9d8d"),
-                            ConcurrencyStamp = "82a729ad-2b38-4a5d-a215-3defd482087a"
+                            ConcurrencyStamp = "c8a77f43-8e4d-4252-b35e-0286ef7ebadc"
                         },
                         new
                         {
                             Id = new Guid("2e643172-b07e-48aa-9588-c20ccd226117"),
-                            ConcurrencyStamp = "95f3f40a-72b8-482f-8401-e7c6261f5b01"
+                            ConcurrencyStamp = "49ed10af-aad7-477d-9c5d-4fa73d6b4b21"
                         },
                         new
                         {
                             Id = new Guid("c541c65a-27a4-4937-b5e4-f6b14c2ddad9"),
-                            ConcurrencyStamp = "b4565c7f-f591-4db1-aa32-50515c9e8a3f"
+                            ConcurrencyStamp = "7854ef46-d31e-4784-be1d-784c5b3a036f"
                         },
                         new
                         {
                             Id = new Guid("ad8146c0-9c2a-45e9-895f-2921de685448"),
-                            ConcurrencyStamp = "11413e47-68b4-4dbd-8948-a274b8b50a56"
+                            ConcurrencyStamp = "f1902271-0461-46a7-99c1-59ee149a64fb"
                         },
                         new
                         {
                             Id = new Guid("79537994-9d9f-452e-9aa7-e9a5d7004468"),
-                            ConcurrencyStamp = "30b6a168-7f15-4d11-a1f7-75d2ac7f6d93"
+                            ConcurrencyStamp = "3ba074df-ea87-4897-a3da-128b60748afa"
                         },
                         new
                         {
                             Id = new Guid("c9442fa0-97ce-4210-af7a-1d8745ac2c19"),
-                            ConcurrencyStamp = "1003ab05-5a1a-46bc-bfcc-01d41d6c7f26"
+                            ConcurrencyStamp = "2694f006-751e-4f22-9076-cf1ee7d8d9ec"
                         });
                 });
 

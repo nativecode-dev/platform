@@ -3,6 +3,7 @@ namespace node
     using System.IO;
     using Microsoft.AspNetCore.Hosting;
     using NativeCode.Node.Core;
+    using NativeCode.Node.Core.WebHosting;
     using Serilog;
 
     public class Program
@@ -16,6 +17,7 @@ namespace node
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
+                .ConfigureServices((context, options) => options.AddSerilog(context.Configuration, AppName))
                 .Build()
                 .Run();
         }

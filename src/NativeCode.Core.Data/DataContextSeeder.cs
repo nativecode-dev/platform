@@ -44,14 +44,14 @@ namespace NativeCode.Core.Data
         }
 
         public Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> select,
-            Func<TModel, Task<TEntity>> converter, Func<TModel, TEntity, Task> callback = null)
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> converter, Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
             return this.SeedAsync(Assembly.GetEntryAssembly(), name, select, converter, callback);
         }
 
         public async Task<bool> SeedAsync<TModel, TEntity>(Assembly assembly, string name,
-            Func<TModel, DbSet<TEntity>, Task<TEntity>> select, Func<TModel, Task<TEntity>> converter,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> select, Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
@@ -68,7 +68,7 @@ namespace NativeCode.Core.Data
 
                     if (existing == null)
                     {
-                        var entity = await converter.Invoke(model);
+                        var entity = await converter.Invoke(model, dbset);
 
                         if (callback != null)
                         {

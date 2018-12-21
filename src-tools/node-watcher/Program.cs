@@ -9,6 +9,7 @@ namespace node_watcher
     using NativeCode.Core.Messaging.Extensions;
     using NativeCode.Core.Messaging.Options;
     using NativeCode.Node.Core;
+    using NativeCode.Node.Core.Hosting;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Services;
     using NativeCode.Node.Services.Watchers;
@@ -41,6 +42,7 @@ namespace node_watcher
 
                     Log.Logger.Information("Startup: {@node}", new
                     {
+                        node.Name,
                         node.RedisHost,
                         RabbitHost = rabbit.Host,
                         RabbitUser = rabbit.User,

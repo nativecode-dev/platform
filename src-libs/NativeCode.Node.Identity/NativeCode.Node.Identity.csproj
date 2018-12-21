@@ -18,17 +18,23 @@
     <None Remove="Seeding\ApiResource.json" />
     <None Remove="Seeding\Client.json" />
     <None Remove="Seeding\IdentityResource.json" />
+    <None Remove="Seeding\Production\ApiResource.json" />
+    <None Remove="Seeding\Production\Client.json" />
+    <None Remove="Seeding\Production\User.json" />
     <None Remove="Seeding\Role.json" />
     <None Remove="Seeding\RoleClaim.json" />
     <None Remove="Seeding\User.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Seeding\ApiResource.json" />
+    <EmbeddedResource Include="Seeding\Development\ApiResource.json" />
+    <EmbeddedResource Include="Seeding\Production\ApiResource.json" />
+    <EmbeddedResource Include="Seeding\Production\Client.json" />
+    <EmbeddedResource Include="Seeding\Production\User.json" />
     <EmbeddedResource Include="Seeding\Role.json" />
     <EmbeddedResource Include="Seeding\RoleClaim.json" />
-    <EmbeddedResource Include="Seeding\User.json" />
-    <EmbeddedResource Include="Seeding\Client.json" />
+    <EmbeddedResource Include="Seeding\Development\User.json" />
+    <EmbeddedResource Include="Seeding\Development\Client.json" />
     <EmbeddedResource Include="Seeding\IdentityResource.json" />
   </ItemGroup>
 
@@ -36,6 +42,7 @@
     <PackageReference Include="IdentityServer4" Version="2.3.2" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="2.3.2" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />

@@ -1,6 +1,8 @@
 namespace identity
 {
+    using System;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using IdentityServer4.EntityFramework.Mappers;
     using IdentityServer4.Models;
@@ -11,6 +13,7 @@ namespace identity
     using NativeCode.Core.Data;
     using NativeCode.Core.Web;
     using NativeCode.Node.Core;
+    using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Identity;
     using NativeCode.Node.Identity.Entities;
     using NativeCode.Node.Identity.SeedModels;
@@ -27,6 +30,7 @@ namespace identity
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
+                .ConfigureServices((context, options) => options.AddSerilog(context.Configuration, AppName))
                 .Build()
                 .MigrateDatabase<IdentityDataContext>("Development", "Production")
                 .UseDataSeeder<IdentityDataContext>(Seed)
@@ -36,29 +40,32 @@ namespace identity
         private static async Task Seed(IDataContextSeeder<IdentityDataContext> seeder, IServiceScope scope)
         {
             var assembly = typeof(IdentityDataContext).Assembly;
+            var hosting = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
+            var env = hosting.EnvironmentName;
 
-            using (var users = scope.ServiceProvider.GetRequiredService<UserManager<User>>())
-            {
-                await seeder.SeedAsync<ApiResource, IdentityServer4.EntityFramework.Entities.ApiResource>(assembly,
-                    "NativeCode.Node.Identity.Seeding.ApiResource.json",
-                    (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Name == model.Name),
-                    model => Task.FromResult(model.ToEntity()));
+            await seeder.SeedAsync<ApiResource, IdentityServer4.EntityFramework.Entities.ApiResource>(assembly,
+                $"NativeCode.Node.Identity.Seeding.{env}.ApiResource.json",
+                (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Name == model.Name),
+                (model, dbset) => Task.FromResult(model.ToEntity()));
 
-                await seeder.SeedAsync<Client, IdentityServer4.EntityFramework.Entities.Client>(assembly,
-                    "NativeCode.Node.Identity.Seeding.Client.json",
-                    (model, dbset) => dbset.SingleOrDefaultAsync(x => x.ClientId == model.ClientId),
-                    model => Task.FromResult(model.ToEntity()));
+            await seeder.SeedAsync<Client, IdentityServer4.EntityFramework.Entities.Client>(assembly,
+                $"NativeCode.Node.Identity.Seeding.{env}.Client.json",
+                (model, dbset) => dbset.SingleOrDefaultAsync(x => x.ClientId == model.ClientId),
+                (model, dbset) => Task.FromResult(model.ToEntity()));
 
-                await seeder.SeedAsync<IdentityResource, IdentityServer4.EntityFramework.Entities.IdentityResource>(assembly,
-                    "NativeCode.Node.Identity.Seeding.IdentityResource.json",
-                    (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Name == model.Name),
-                    model => Task.FromResult(model.ToEntity()));
+            await seeder.SeedAsync<IdentityResource, IdentityServer4.EntityFramework.Entities.IdentityResource>(assembly,
+                "NativeCode.Node.Identity.Seeding.IdentityResource.json",
+                (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Name == model.Name),
+                (model, dbset) => Task.FromResult(model.ToEntity()));
 
-                await seeder.SaveChangesAsync();
+            await seeder.SaveChangesAsync();
 
-                await seeder.SeedAsync<UserInfo, User>(assembly, "NativeCode.Node.Identity.Seeding.User.json",
-                    (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Id == model.Id),
-                    async model =>
+            await seeder.SeedAsync<UserInfo, User>(assembly, $"NativeCode.Node.Identity.Seeding.{env}.User.json",
+                (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Email == model.Email),
+                async (model, dbset) =>
+                {
+                    using (var inner = scope.ServiceProvider.CreateScope())
+                    using (var users = inner.ServiceProvider.GetRequiredService<UserManager<User>>())
                     {
                         var user = new User
                         {
@@ -67,11 +74,16 @@ namespace identity
                             UserName = model.UserName,
                         };
 
-                        await users.CreateAsync(user, model.Password);
+                        var result = await users.CreateAsync(user, model.Password);
 
-                        return user;
-                    });
-            }
+                        if (result.Succeeded == false)
+                        {
+                            throw new AggregateException(result.Errors.Select(x => new InvalidOperationException(x.Description)));
+                        }
+
+                        return await dbset.FindAsync(user.Id);
+                    }
+                });
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)

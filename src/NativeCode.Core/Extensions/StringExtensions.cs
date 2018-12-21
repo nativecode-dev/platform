@@ -14,5 +14,15 @@ namespace NativeCode.Core.Extensions
                 return new Guid(hash);
             }
         }
+
+        public static string ToSecretString(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value) || value.Length < 3)
+            {
+                return value;
+            }
+
+            return $"*****{value.Substring(value.Length - 5, 5)}";
+        }
     }
 }
