@@ -150,7 +150,14 @@ namespace identity
 
         private void ConfigureIdentityServer(IServiceCollection services, RedisOptions redis)
         {
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<User, Role>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequiredLength = 8;
+                })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<IdentityDataContext>();
 

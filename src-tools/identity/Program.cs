@@ -41,15 +41,15 @@ namespace identity
         {
             var assembly = typeof(IdentityDataContext).Assembly;
             var hosting = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
-            var env = hosting.EnvironmentName;
+            var environment = hosting.EnvironmentName;
 
             await seeder.SeedAsync<ApiResource, IdentityServer4.EntityFramework.Entities.ApiResource>(assembly,
-                $"NativeCode.Node.Identity.Seeding.{env}.ApiResource.json",
+                $"NativeCode.Node.Identity.Seeding.{environment}.ApiResource.json",
                 (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Name == model.Name),
                 (model, dbset) => Task.FromResult(model.ToEntity()));
 
             await seeder.SeedAsync<Client, IdentityServer4.EntityFramework.Entities.Client>(assembly,
-                $"NativeCode.Node.Identity.Seeding.{env}.Client.json",
+                $"NativeCode.Node.Identity.Seeding.{environment}.Client.json",
                 (model, dbset) => dbset.SingleOrDefaultAsync(x => x.ClientId == model.ClientId),
                 (model, dbset) => Task.FromResult(model.ToEntity()));
 
@@ -60,7 +60,7 @@ namespace identity
 
             await seeder.SaveChangesAsync();
 
-            await seeder.SeedAsync<UserInfo, User>(assembly, $"NativeCode.Node.Identity.Seeding.{env}.User.json",
+            await seeder.SeedAsync<UserInfo, User>(assembly, $"NativeCode.Node.Identity.Seeding.{environment}.User.json",
                 (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Email == model.Email),
                 async (model, dbset) =>
                 {

@@ -10,7 +10,7 @@
     "Email": "mike.pham@nativecode.com",
     "EmailConfirmed": true,
     "Id": "BBA9F01F-42A4-4000-BCE0-B7574BA9194A",
-    "Password": "[AppSecrets:ACCOUNT_MIKEPHAM_SECRET]",
+    "Password": "[@@AppSecrets:ACCOUNT_MIKEPHAM_SECRET]",
     "UserName": "mike.pham@nativecode.com"
   }
 ]

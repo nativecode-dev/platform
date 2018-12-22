@@ -29,6 +29,14 @@ namespace NativeCode.Node.Identity.JsonConverters
                 if (bracketStarts && bracketEnds)
                 {
                     var section = value.Substring(1, value.Length - 2);
+
+                    // NOTE: We use "@@" to indicate that we should not
+                    // convert the password to a hash first.
+                    if (section.StartsWith("@@"))
+                    {
+                        return this.Configuration.GetValue<string>(section.Substring(2));
+                    }
+
                     var password = this.Configuration.GetValue<string>(section);
 
                     if (string.IsNullOrWhiteSpace(password) == false)
