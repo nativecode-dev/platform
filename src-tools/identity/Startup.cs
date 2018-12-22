@@ -173,6 +173,9 @@ namespace identity
                     options.PublicOrigin = this.Options.Authority;
                     this.Logger.LogTrace("{@options}", options);
                 })
+#if DEBUG
+                .AddDeveloperSigningCredential()
+#endif
                 .AddAspNetIdentity<User>()
                 .AddConfigurationStore(options =>
                 {

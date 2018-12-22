@@ -8,11 +8,11 @@ namespace NativeCode.Node.Core.Options
 
         public string ApiScope { get; set; } = "api.node";
 
-        public string ApiSecret { get; set; } = "lLo3zoT@XZr5O08L7xS*trJu";
+        public string ApiSecret { get; set; } = "dev-2018-NATIVECODE";
 
         public string ClientId { get; set; } = "nativecode";
 
-        public string ClientSecret { get; set; } = "&mB2gGm@S1H1gxezkikNf&$n";
+        public string ClientSecret { get; set; } = "dev-2018-NATIVECODE";
 
         public TimeSpan? ClockSkew { get; set; }
 
