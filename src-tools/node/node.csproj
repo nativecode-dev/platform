@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -27,16 +27,10 @@
         <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.2.0" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
         <PackageReference Include="NSwag.AspNetCore" Version="12.0.9" />
         <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
@@ -44,6 +38,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core.WebHosting\NativeCode.Node.Core.WebHosting.csproj" />
+        <ProjectReference Include="..\..\src-libs\NativeCode.Node.Media\NativeCode.Node.Media.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
         <ProjectReference Include="..\..\src\NativeCode.Core.Web\NativeCode.Core.Web.csproj" />

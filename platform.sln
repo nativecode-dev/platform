@@ -71,7 +71,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Core.Hostin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Node.Core.WebHosting", "src-libs\NativeCode.Node.Core.WebHosting\NativeCode.Node.Core.WebHosting.csproj", "{C56F7F8A-0E09-40B1-B815-5769AF7996A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeCode.Core.Storage", "src\NativeCode.Core.Storage\NativeCode.Core.Storage.csproj", "{DAF5B328-30C0-40F1-90E9-7CEF5D07BEF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeCode.Core.Storage", "src\NativeCode.Core.Storage\NativeCode.Core.Storage.csproj", "{DAF5B328-30C0-40F1-90E9-7CEF5D07BEF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "node-delegate", "src-tools\node-delegate\node-delegate.csproj", "{07EF9334-A24C-4D73-B5AC-88CB5FCD55C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeCode.Node.Media", "src-libs\NativeCode.Node.Media\NativeCode.Node.Media.csproj", "{EE30C006-5C75-47F3-90C8-9EA8E5B3B2A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -183,6 +187,14 @@ Global
 		{DAF5B328-30C0-40F1-90E9-7CEF5D07BEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAF5B328-30C0-40F1-90E9-7CEF5D07BEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAF5B328-30C0-40F1-90E9-7CEF5D07BEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07EF9334-A24C-4D73-B5AC-88CB5FCD55C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07EF9334-A24C-4D73-B5AC-88CB5FCD55C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07EF9334-A24C-4D73-B5AC-88CB5FCD55C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07EF9334-A24C-4D73-B5AC-88CB5FCD55C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE30C006-5C75-47F3-90C8-9EA8E5B3B2A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE30C006-5C75-47F3-90C8-9EA8E5B3B2A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE30C006-5C75-47F3-90C8-9EA8E5B3B2A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE30C006-5C75-47F3-90C8-9EA8E5B3B2A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -210,6 +222,7 @@ Global
 		{36F193C6-BB45-4624-9254-D21DCC96EB6B} = {4DD0BE98-DAA2-42EF-8041-E1B2078874B4}
 		{C56F7F8A-0E09-40B1-B815-5769AF7996A6} = {4DD0BE98-DAA2-42EF-8041-E1B2078874B4}
 		{DAF5B328-30C0-40F1-90E9-7CEF5D07BEF8} = {4A73B9E2-60C7-4F70-9BCE-F0F47572AC49}
+		{EE30C006-5C75-47F3-90C8-9EA8E5B3B2A2} = {4DD0BE98-DAA2-42EF-8041-E1B2078874B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {489590FE-8EC3-438D-B14E-F7B65684D449}

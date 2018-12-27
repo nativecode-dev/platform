@@ -1,6 +1,7 @@
 namespace NativeCode.Node.Core.WebHosting
 {
     using System;
+    using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
@@ -12,12 +13,14 @@ namespace NativeCode.Node.Core.WebHosting
     using Microsoft.Extensions.Logging;
     using NativeCode.Core.Extensions;
     using NSwag;
+    using NSwag.SwaggerGeneration.Processors.Security;
     using Options;
     using Serilog;
 
     public abstract class AspNetStartup<TOptions> : IStartup where TOptions : NodeOptions, new()
     {
-        protected AspNetStartup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory loggingFactory, ILogger<AspNetStartup<TOptions>> logger)
+        protected AspNetStartup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory loggingFactory,
+            ILogger<AspNetStartup<TOptions>> logger)
         {
             this.Configuration = configuration;
             this.HostingEnvironment = hostingEnvironment;
@@ -40,7 +43,7 @@ namespace NativeCode.Node.Core.WebHosting
         protected ILogger<AspNetStartup<TOptions>> Logger { get; }
 
         protected ILoggerFactory LoggingFactory { get; }
-        
+
         protected TOptions Options { get; } = new TOptions();
 
         public virtual void Configure(IApplicationBuilder app)
@@ -115,7 +118,19 @@ namespace NativeCode.Node.Core.WebHosting
             {
                 options.DocumentName = this.AppVersion;
                 options.Title = this.AppName;
+                options.DocumentProcessors.Add(new SecurityDefinitionAppender(IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                    new SwaggerSecurityScheme
+                    {
+                        Type = SwaggerSecuritySchemeType.ApiKey,
+                        Name = "Authorization",
+                        Description = IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                        In = SwaggerSecurityApiKeyLocation.Header,
+                    }));
+
+                options.OperationProcessors.Add(
+                    new OperationSecurityScopeProcessor(IdentityServerAuthenticationDefaults.AuthenticationScheme));
             });
+
 
             return services.BuildServiceProvider();
         }

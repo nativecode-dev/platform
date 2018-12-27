@@ -1,4 +1,4 @@
-﻿namespace node_scheduler
+namespace node_delegate
 {
     using System.IO;
     using Microsoft.AspNetCore.Hosting;
@@ -8,7 +8,7 @@
 
     public class Program
     {
-        internal const string AppName = "Scheduler";
+        internal const string AppName = "Node";
 
         internal const string Name = "Platform";
 
@@ -17,6 +17,7 @@
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
+                .ConfigureServices((context, options) => options.AddSerilog(context.Configuration, AppName))
                 .Build()
                 .Run();
         }

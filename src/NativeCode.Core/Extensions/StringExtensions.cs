@@ -15,6 +15,19 @@ namespace NativeCode.Core.Extensions
             }
         }
 
+        public static string ToHexString(byte[] bytes)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var b in bytes)
+            {
+                sb.Append(b.ToString("x2")
+                    .ToLower());
+            }
+
+            return sb.ToString();
+        }
+
         public static string ToSecretString(this string value)
         {
             if (string.IsNullOrWhiteSpace(value) || value.Length < 3)

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Seed\Mount.json" />
+    <None Remove="Seed\MountPath.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Seed\Mount.json" />
+    <EmbeddedResource Include="Seed\MountPath.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NativeCode.Core.Data\NativeCode.Core.Data.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
+    <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
+    <ProjectReference Include="..\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
+  </ItemGroup>
+
+</Project>

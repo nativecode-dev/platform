@@ -5,7 +5,6 @@ namespace node
     using System.Net;
     using System.Threading.Tasks;
     using Hangfire;
-    using IdentityModel;
     using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,11 +12,13 @@ namespace node
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Authorization;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using NativeCode.Core.Web;
     using NativeCode.Node.Core.WebHosting;
+    using NativeCode.Node.Media;
 
     public class Startup : AspNetStartup<NodeOptions>
     {
@@ -69,7 +70,7 @@ namespace node
                     ServerName = $"{Environment.MachineName}:{this.Options.Name}:{Process.GetCurrentProcess().Id}",
                     WorkerCount = this.Options.WorkerCount,
                 })
-                .UseMvcWithDefaultRoute()
+                .UseMvc()
                 .UseStaticFiles()
                 .UseStatusCodePages(context =>
                 {
@@ -104,6 +105,12 @@ namespace node
 
         public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddMediaServices(options =>
+            {
+                var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
+                options.UseSqlServer(connectionString);
+            });
+
             services.AddHangfire(x => x.UseRedisStorage("redis"));
 
             services.AddAuthorization(options =>

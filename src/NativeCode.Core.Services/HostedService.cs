@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Core.Services
+namespace NativeCode.Core.Services
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -8,9 +8,34 @@
 
     public abstract class HostedService : Disposable, IHostedService
     {
-        public abstract Task StartAsync(CancellationToken cancellationToken);
+        public HostServiceState State { get; private set; }
 
-        public abstract Task StopAsync(CancellationToken cancellationToken);
+        protected Task Current { get; private set; }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            if (this.State == HostServiceState.Running)
+            {
+                return this.Current;
+            }
+
+            this.State = HostServiceState.Running;
+            return (this.Current = this.Start(cancellationToken));
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            if (this.State == HostServiceState.Running)
+            {
+                return this.Stop(cancellationToken);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        protected abstract Task Start(CancellationToken cancellationToken);
+
+        protected abstract Task Stop(CancellationToken cancellationToken);
     }
 
     public abstract class HostedService<TOptions> : HostedService

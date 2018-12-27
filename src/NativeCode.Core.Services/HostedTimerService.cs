@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Core.Services
+namespace NativeCode.Core.Services
 {
     using System;
     using System.Threading;
@@ -17,14 +17,14 @@
 
         public TimeSpan Period { get; set; } = TimeSpan.FromSeconds(10);
 
-        public override Task StartAsync(CancellationToken cancellationToken)
+        protected override Task Start(CancellationToken cancellationToken)
         {
             this.timer.Change(this.Duration, this.Period);
 
             return Task.CompletedTask;
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        protected override Task Stop(CancellationToken cancellationToken)
         {
             this.timer.Change(Timeout.InfiniteTimeSpan, TimeSpan.Zero);
 

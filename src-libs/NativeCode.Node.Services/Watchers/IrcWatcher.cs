@@ -84,7 +84,7 @@ namespace NativeCode.Node.Services.Watchers
             this.Client.Dispose();
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
+        protected override Task Start(CancellationToken cancellationToken)
         {
             var username = this.GetUserName();
 
@@ -100,7 +100,7 @@ namespace NativeCode.Node.Services.Watchers
             return Task.CompletedTask;
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        protected override Task Stop(CancellationToken cancellationToken)
         {
             this.Client.Disconnect();
             this.Logger.LogInformation($"Disconnected from {this.Options.Host}");

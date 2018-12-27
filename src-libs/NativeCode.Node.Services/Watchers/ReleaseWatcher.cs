@@ -42,7 +42,7 @@ namespace NativeCode.Node.Services.Watchers
             AsyncContext.Run(async () => await this.Process(message));
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
+        protected override Task Start(CancellationToken cancellationToken)
         {
             this.Subscription?.Dispose();
             this.Subscription = this.Queue.AsObservable()
@@ -50,7 +50,7 @@ namespace NativeCode.Node.Services.Watchers
             return Task.CompletedTask;
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        protected override Task Stop(CancellationToken cancellationToken)
         {
             this.Subscription?.Dispose();
             return Task.CompletedTask;
