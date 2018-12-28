@@ -1,8 +1,9 @@
 namespace NativeCode.Node.Media
 {
-    using Data.Library.Plex;
-    using Data.Movies;
-    using Data.Series;
+    using Data.Catalog.Movies;
+    using Data.Catalog.Series;
+    using Data.External.LibrarySources.Plex;
+    using Data.MediaSources;
     using Data.Storage;
     using Microsoft.EntityFrameworkCore;
     using NativeCode.Core.Data;
@@ -17,13 +18,17 @@ namespace NativeCode.Node.Media
 
         public DbSet<Episode> Episodes { get; set; }
 
+        public DbSet<MediaSourceEpisode> SourceEpisodes { get; set; }
+
+        public DbSet<MediaSourceMovie> SourceMovies { get; set; }
+
         public DbSet<Mount> Mounts { get; set; }
 
         public DbSet<Movie> Movies { get; set; }
 
         public DbSet<MovieCollection> MovieCollections { get; set; }
 
-        public DbSet<PlexLibrarySource> PlexLibrarySources { get; set; }
+        public DbSet<PlexLibrarySource> PlexSources { get; set; }
 
         public DbSet<PlexServerInfo> PlexServerInfo { get; set; }
 
@@ -32,12 +37,18 @@ namespace NativeCode.Node.Media
         public DbSet<Series> Series { get; set; }
 
         /// <inheritdoc />
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.SeedJsonDataFromManifest<Mount>("NativeCode.Node.Media.Seed.Mount.json");
-            modelBuilder.SeedJsonDataFromManifest<MountPath>("NativeCode.Node.Media.Seed.MountPath.json");
+            builder.Entity<Episode>()
+                .HasOne<Series>()
+                .WithOne()
+                .HasForeignKey<Series>()
+                .OnDelete(DeleteBehavior.Restrict);
 
-            base.OnModelCreating(modelBuilder);
+            builder.SeedJsonDataFromManifest<Mount>("NativeCode.Node.Media.Seed.Mount.json");
+            builder.SeedJsonDataFromManifest<MountPath>("NativeCode.Node.Media.Seed.MountPath.json");
+
+            base.OnModelCreating(builder);
         }
     }
 }

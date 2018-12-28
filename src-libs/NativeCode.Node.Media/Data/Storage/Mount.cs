@@ -11,7 +11,7 @@ namespace NativeCode.Node.Media.Data.Storage
     {
         [CanBeNull]
         [ForeignKey(nameof(CredentialId))]
-        public Credential Credential { get; set; }
+        public Credential Credentials { get; set; }
 
         public Guid? CredentialId { get; set; }
 

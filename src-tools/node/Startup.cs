@@ -4,6 +4,7 @@ namespace node
     using System.Diagnostics;
     using System.Net;
     using System.Threading.Tasks;
+    using Filters;
     using Hangfire;
     using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Authentication;
@@ -19,6 +20,7 @@ namespace node
     using NativeCode.Core.Web;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Media;
+    using NativeCode.Node.Media.Services;
 
     public class Startup : AspNetStartup<NodeOptions>
     {
@@ -105,7 +107,7 @@ namespace node
 
         public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMediaServices(options =>
+            services.AddMediaServices(this.Configuration, options =>
             {
                 var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
                 options.UseSqlServer(connectionString);

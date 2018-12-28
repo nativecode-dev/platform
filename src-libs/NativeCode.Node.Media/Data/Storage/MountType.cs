@@ -6,8 +6,8 @@ namespace NativeCode.Node.Media.Data.Storage
 
         Local = Default,
 
-        NetworkFileShare = 1,
+        Nfs = 1,
 
-        ServerMessageBlock = 2,
+        Smb = 2,
     }
 }

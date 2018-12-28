@@ -2,8 +2,10 @@ namespace node
 {
     using System.IO;
     using Microsoft.AspNetCore.Hosting;
+    using NativeCode.Core.Web;
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.WebHosting;
+    using NativeCode.Node.Media;
     using Serilog;
 
     public class Program
@@ -19,6 +21,7 @@ namespace node
             CreateWebHostBuilder(args)
                 .ConfigureServices((context, options) => options.AddSerilog(context.Configuration, AppName))
                 .Build()
+                .MigrateDatabase<MediaDataContext>("Development")
                 .Run();
         }
 

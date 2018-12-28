@@ -19,7 +19,7 @@ namespace NativeCode.Node.Media.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Credential", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Images.Image", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -28,19 +28,32 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<DateTimeOffset?>("DateModified");
 
-                    b.Property<string>("Description");
+                    b.Property<int>("DisplayHeight");
 
-                    b.Property<string>("Login");
+                    b.Property<int>("DisplayWidth");
 
-                    b.Property<string>("Name");
+                    b.Property<Guid?>("EpisodeId");
 
-                    b.Property<string>("Password");
+                    b.Property<int>("ImageType");
 
-                    b.Property<byte[]>("SshPrivateKey");
+                    b.Property<Guid?>("MovieCollectionId");
 
-                    b.Property<byte[]>("SshPublicKey");
+                    b.Property<Guid?>("MovieId");
 
-                    b.Property<int>("Type");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<Guid?>("SeasonId");
+
+                    b.Property<Guid?>("SeriesId");
+
+                    b.Property<int>("SourceHeight");
+
+                    b.Property<int>("SourceWidth");
+
+                    b.Property<string>("Text")
+                        .HasMaxLength(4096);
 
                     b.Property<string>("UserCreated");
 
@@ -48,10 +61,20 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Credential");
+                    b.HasIndex("EpisodeId");
+
+                    b.HasIndex("MovieCollectionId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("SeasonId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("Image");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Library.Plex.PlexLibrarySource", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.MediaProperty", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -60,57 +83,53 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<DateTimeOffset?>("DateModified");
 
-                    b.Property<string>("Description");
+                    b.Property<Guid?>("EpisodeId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(256);
 
-                    b.Property<string>("UserCreated");
+                    b.Property<Guid?>("MovieCollectionId");
 
-                    b.Property<string>("UserModified");
+                    b.Property<Guid?>("MovieId");
 
-                    b.HasKey("Id");
+                    b.Property<Guid?>("SeasonId");
 
-                    b.ToTable("PlexLibrarySources");
-                });
-
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Library.Plex.PlexServerInfo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("DateCreated");
-
-                    b.Property<DateTimeOffset?>("DateModified");
-
-                    b.Property<string>("Host");
-
-                    b.Property<string>("Login");
-
-                    b.Property<string>("Password");
-
-                    b.Property<Guid?>("PlexLibrarySourceId");
-
-                    b.Property<int>("Port");
-
-                    b.Property<string>("Token");
+                    b.Property<Guid?>("SeriesId");
 
                     b.Property<string>("UserCreated");
 
                     b.Property<string>("UserModified");
 
+                    b.Property<string>("Value")
+                        .IsRequired();
+
+                    b.Property<string>("ValueType")
+                        .IsRequired()
+                        .HasMaxLength(1024);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("PlexLibrarySourceId");
+                    b.HasIndex("EpisodeId");
 
-                    b.ToTable("PlexServerInfo");
+                    b.HasIndex("MovieCollectionId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("SeasonId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("MediaProperty");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Metadata.MetadataSource", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.MetadataSource", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Agent");
+                    b.Property<string>("Agent")
+                        .IsRequired();
 
                     b.Property<string>("CacheUrl");
 
@@ -122,9 +141,11 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<Guid?>("MovieId");
 
-                    b.Property<string>("Provider");
+                    b.Property<string>("Provider")
+                        .IsRequired();
 
-                    b.Property<string>("SourceUrl");
+                    b.Property<string>("SourceUrl")
+                        .IsRequired();
 
                     b.Property<string>("UserCreated");
 
@@ -139,7 +160,7 @@ namespace NativeCode.Node.Media.Migrations
                     b.ToTable("MetadataSource");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Movies.Movie", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Movies.Movie", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -156,7 +177,8 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<string>("SortTitle");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<string>("UserCreated");
 
@@ -171,7 +193,7 @@ namespace NativeCode.Node.Media.Migrations
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Movies.MovieCollection", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Movies.MovieCollection", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -184,7 +206,8 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<string>("SortTitle");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<string>("UserCreated");
 
@@ -195,7 +218,7 @@ namespace NativeCode.Node.Media.Migrations
                     b.ToTable("MovieCollections");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.ReleaseInfo", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.ReleaseInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -221,7 +244,7 @@ namespace NativeCode.Node.Media.Migrations
                     b.ToTable("ReleaseInfo");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Series.Episode", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Series.Episode", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -236,11 +259,10 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<Guid>("SeasonId");
 
-                    b.Property<Guid>("SeriesId");
-
                     b.Property<string>("SortTitle");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<string>("UserCreated");
 
@@ -252,12 +274,10 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.HasIndex("SeasonId");
 
-                    b.HasIndex("SeriesId");
-
                     b.ToTable("Episodes");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Series.Season", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Series.Season", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -272,7 +292,8 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<string>("SortTitle");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<string>("UserCreated");
 
@@ -285,10 +306,9 @@ namespace NativeCode.Node.Media.Migrations
                     b.ToTable("Seasons");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Series.Series", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Series.Series", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id");
 
                     b.Property<DateTimeOffset>("DateCreated");
 
@@ -300,7 +320,8 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<string>("SortTitle");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<string>("UserCreated");
 
@@ -311,6 +332,182 @@ namespace NativeCode.Node.Media.Migrations
                     b.HasIndex("ReleaseInfoId");
 
                     b.ToTable("Series");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("DateCreated");
+
+                    b.Property<DateTimeOffset?>("DateModified");
+
+                    b.Property<Guid?>("EpisodeId");
+
+                    b.Property<Guid?>("MovieCollectionId");
+
+                    b.Property<Guid?>("MovieId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<Guid?>("SeasonId");
+
+                    b.Property<Guid?>("SeriesId");
+
+                    b.Property<string>("UserCreated");
+
+                    b.Property<string>("UserModified");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EpisodeId");
+
+                    b.HasIndex("MovieCollectionId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("SeasonId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("Tag");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.External.LibrarySources.Plex.PlexLibrarySource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("DateCreated");
+
+                    b.Property<DateTimeOffset?>("DateModified");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("UserCreated");
+
+                    b.Property<string>("UserModified");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PlexSources");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.External.LibrarySources.Plex.PlexServerInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("DateCreated");
+
+                    b.Property<DateTimeOffset?>("DateModified");
+
+                    b.Property<string>("Host")
+                        .IsRequired();
+
+                    b.Property<string>("Login");
+
+                    b.Property<string>("Password");
+
+                    b.Property<Guid?>("PlexLibrarySourceId");
+
+                    b.Property<int>("Port");
+
+                    b.Property<string>("Token");
+
+                    b.Property<string>("UserCreated");
+
+                    b.Property<string>("UserModified");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlexLibrarySourceId");
+
+                    b.ToTable("PlexServerInfo");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.MediaSources.MediaSourceEpisode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("DateCreated");
+
+                    b.Property<DateTimeOffset?>("DateModified");
+
+                    b.Property<Guid>("EpisodeId");
+
+                    b.Property<string>("UserCreated");
+
+                    b.Property<string>("UserModified");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EpisodeId");
+
+                    b.ToTable("SourceEpisodes");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.MediaSources.MediaSourceMovie", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("DateCreated");
+
+                    b.Property<DateTimeOffset?>("DateModified");
+
+                    b.Property<Guid>("MovieId");
+
+                    b.Property<string>("UserCreated");
+
+                    b.Property<string>("UserModified");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("SourceMovies");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Storage.Credential", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("DateCreated");
+
+                    b.Property<DateTimeOffset?>("DateModified");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Login")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(256);
+
+                    b.Property<byte[]>("SshPrivateKey");
+
+                    b.Property<byte[]>("SshPublicKey");
+
+                    b.Property<int>("Type");
+
+                    b.Property<string>("UserCreated");
+
+                    b.Property<string>("UserModified");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Credential");
                 });
 
             modelBuilder.Entity("NativeCode.Node.Media.Data.Storage.Mount", b =>
@@ -350,7 +547,7 @@ namespace NativeCode.Node.Media.Migrations
                             Id = new Guid("dfb9a8fb-320a-4d09-a70f-68184cd10723"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Host = "nas01.in.nativecode.com",
-                            MountType = 1,
+                            MountType = 2,
                             Name = "NAS01"
                         },
                         new
@@ -358,7 +555,7 @@ namespace NativeCode.Node.Media.Migrations
                             Id = new Guid("cd7cebdb-bbb5-4133-a7c4-fa3c700d110c"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Host = "qnap.in.nativecode.com",
-                            MountType = 1,
+                            MountType = 2,
                             Name = "QNAP"
                         },
                         new
@@ -366,7 +563,7 @@ namespace NativeCode.Node.Media.Migrations
                             Id = new Guid("4db231d2-a895-4128-a1a6-295c0fcfed91"),
                             DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Host = "storage.in.nativecode.com",
-                            MountType = 1,
+                            MountType = 2,
                             Name = "STORAGE"
                         });
                 });
@@ -382,7 +579,9 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<Guid>("MountId");
 
-                    b.Property<string>("Path");
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(4096);
 
                     b.Property<string>("UserCreated");
 
@@ -448,11 +647,20 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.Property<DateTimeOffset?>("DateModified");
 
-                    b.Property<string>("FileName");
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(1024);
 
-                    b.Property<string>("FilePath");
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(4096);
 
-                    b.Property<byte[]>("Hash");
+                    b.Property<byte[]>("Hash")
+                        .IsRequired();
+
+                    b.Property<Guid?>("MediaSourceEpisodeId");
+
+                    b.Property<Guid?>("MediaSourceMovieId");
 
                     b.Property<Guid>("MountPathId");
 
@@ -464,117 +672,164 @@ namespace NativeCode.Node.Media.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MediaSourceEpisodeId");
+
+                    b.HasIndex("MediaSourceMovieId");
+
                     b.HasIndex("MountPathId");
 
                     b.ToTable("MountPathFile");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Tag", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Images.Image", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Episode")
+                        .WithMany("Images")
+                        .HasForeignKey("EpisodeId");
 
-                    b.Property<DateTimeOffset>("DateCreated");
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.MovieCollection")
+                        .WithMany("Images")
+                        .HasForeignKey("MovieCollectionId");
 
-                    b.Property<DateTimeOffset?>("DateModified");
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.Movie")
+                        .WithMany("Images")
+                        .HasForeignKey("MovieId");
 
-                    b.Property<Guid?>("EpisodeId");
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Season")
+                        .WithMany("Images")
+                        .HasForeignKey("SeasonId");
 
-                    b.Property<Guid?>("MovieCollectionId");
-
-                    b.Property<Guid?>("MovieId");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Normalized");
-
-                    b.Property<Guid?>("SeasonId");
-
-                    b.Property<Guid?>("SeriesId");
-
-                    b.Property<string>("UserCreated");
-
-                    b.Property<string>("UserModified");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EpisodeId");
-
-                    b.HasIndex("MovieCollectionId");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("SeasonId");
-
-                    b.HasIndex("SeriesId");
-
-                    b.ToTable("Tag");
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Series")
+                        .WithMany("Images")
+                        .HasForeignKey("SeriesId");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Library.Plex.PlexServerInfo", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.MediaProperty", b =>
                 {
-                    b.HasOne("NativeCode.Node.Media.Data.Library.Plex.PlexLibrarySource")
-                        .WithMany("PlexServerInfo")
-                        .HasForeignKey("PlexLibrarySourceId");
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Episode")
+                        .WithMany("Properties")
+                        .HasForeignKey("EpisodeId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.MovieCollection")
+                        .WithMany("Properties")
+                        .HasForeignKey("MovieCollectionId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.Movie")
+                        .WithMany("Properties")
+                        .HasForeignKey("MovieId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Season")
+                        .WithMany("Properties")
+                        .HasForeignKey("SeasonId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Series")
+                        .WithMany("Properties")
+                        .HasForeignKey("SeriesId");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Metadata.MetadataSource", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.MetadataSource", b =>
                 {
-                    b.HasOne("NativeCode.Node.Media.Data.Series.Episode")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Episode")
                         .WithMany("MetadataSources")
                         .HasForeignKey("EpisodeId");
 
-                    b.HasOne("NativeCode.Node.Media.Data.Movies.Movie")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.Movie")
                         .WithMany("MetadataSources")
                         .HasForeignKey("MovieId");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Movies.Movie", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Movies.Movie", b =>
                 {
-                    b.HasOne("NativeCode.Node.Media.Data.Movies.MovieCollection", "MovieCollection")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.MovieCollection", "MovieCollection")
                         .WithMany("Movies")
                         .HasForeignKey("MovieCollectionId");
 
-                    b.HasOne("NativeCode.Node.Media.Data.ReleaseInfo", "ReleaseInfo")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.ReleaseInfo", "ReleaseInfo")
                         .WithMany()
                         .HasForeignKey("ReleaseInfoId");
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Series.Episode", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Series.Episode", b =>
                 {
-                    b.HasOne("NativeCode.Node.Media.Data.ReleaseInfo", "ReleaseInfo")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.ReleaseInfo", "ReleaseInfo")
                         .WithMany()
                         .HasForeignKey("ReleaseInfoId");
 
-                    b.HasOne("NativeCode.Node.Media.Data.Series.Season", "Season")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Season", "Season")
                         .WithMany("Episodes")
                         .HasForeignKey("SeasonId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("NativeCode.Node.Media.Data.Series.Series", "Series")
-                        .WithMany()
-                        .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Series.Season", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Series.Season", b =>
                 {
-                    b.HasOne("NativeCode.Node.Media.Data.Series.Series", "Series")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Series", "Series")
                         .WithMany("Seasons")
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Series.Series", b =>
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Series.Series", b =>
                 {
-                    b.HasOne("NativeCode.Node.Media.Data.ReleaseInfo", "ReleaseInfo")
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Episode")
+                        .WithOne()
+                        .HasForeignKey("NativeCode.Node.Media.Data.Catalog.Series.Series", "Id")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.ReleaseInfo", "ReleaseInfo")
                         .WithMany()
                         .HasForeignKey("ReleaseInfoId");
                 });
 
+            modelBuilder.Entity("NativeCode.Node.Media.Data.Catalog.Tag", b =>
+                {
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Episode")
+                        .WithMany("Tags")
+                        .HasForeignKey("EpisodeId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.MovieCollection")
+                        .WithMany("Tags")
+                        .HasForeignKey("MovieCollectionId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.Movie")
+                        .WithMany("Tags")
+                        .HasForeignKey("MovieId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Season")
+                        .WithMany("Tags")
+                        .HasForeignKey("SeasonId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Series")
+                        .WithMany("Tags")
+                        .HasForeignKey("SeriesId");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.External.LibrarySources.Plex.PlexServerInfo", b =>
+                {
+                    b.HasOne("NativeCode.Node.Media.Data.External.LibrarySources.Plex.PlexLibrarySource")
+                        .WithMany("PlexServerInfo")
+                        .HasForeignKey("PlexLibrarySourceId");
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.MediaSources.MediaSourceEpisode", b =>
+                {
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Series.Episode", "Episode")
+                        .WithMany()
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("NativeCode.Node.Media.Data.MediaSources.MediaSourceMovie", b =>
+                {
+                    b.HasOne("NativeCode.Node.Media.Data.Catalog.Movies.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("NativeCode.Node.Media.Data.Storage.Mount", b =>
                 {
-                    b.HasOne("NativeCode.Node.Media.Data.Credential", "Credential")
+                    b.HasOne("NativeCode.Node.Media.Data.Storage.Credential", "Credential")
                         .WithMany()
                         .HasForeignKey("CredentialId");
                 });
@@ -589,33 +844,18 @@ namespace NativeCode.Node.Media.Migrations
 
             modelBuilder.Entity("NativeCode.Node.Media.Data.Storage.MountPathFile", b =>
                 {
+                    b.HasOne("NativeCode.Node.Media.Data.MediaSources.MediaSourceEpisode")
+                        .WithMany("Files")
+                        .HasForeignKey("MediaSourceEpisodeId");
+
+                    b.HasOne("NativeCode.Node.Media.Data.MediaSources.MediaSourceMovie")
+                        .WithMany("Files")
+                        .HasForeignKey("MediaSourceMovieId");
+
                     b.HasOne("NativeCode.Node.Media.Data.Storage.MountPath", "MountPath")
                         .WithMany("Files")
                         .HasForeignKey("MountPathId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("NativeCode.Node.Media.Data.Tag", b =>
-                {
-                    b.HasOne("NativeCode.Node.Media.Data.Series.Episode")
-                        .WithMany("Tags")
-                        .HasForeignKey("EpisodeId");
-
-                    b.HasOne("NativeCode.Node.Media.Data.Movies.MovieCollection")
-                        .WithMany("Tags")
-                        .HasForeignKey("MovieCollectionId");
-
-                    b.HasOne("NativeCode.Node.Media.Data.Movies.Movie")
-                        .WithMany("Tags")
-                        .HasForeignKey("MovieId");
-
-                    b.HasOne("NativeCode.Node.Media.Data.Series.Season")
-                        .WithMany("Tags")
-                        .HasForeignKey("SeasonId");
-
-                    b.HasOne("NativeCode.Node.Media.Data.Series.Series")
-                        .WithMany("Tags")
-                        .HasForeignKey("SeriesId");
                 });
 #pragma warning restore 612, 618
         }
