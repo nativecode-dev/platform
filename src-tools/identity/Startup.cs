@@ -1,8 +1,9 @@
 namespace identity
 {
     using System;
+
     using AutoMapper;
-    using IdentityServer4;
+
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
@@ -14,6 +15,7 @@ namespace identity
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Mvc;
     using NativeCode.Node.Core.Options;
@@ -25,8 +27,12 @@ namespace identity
 
     public class Startup : AspNetStartup<AppOptions>
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory loggingFactory,
-            ILogger<AspNetStartup<AppOptions>> logger) : base(configuration, hostingEnvironment, loggingFactory, logger)
+        public Startup(
+            IConfiguration configuration,
+            IHostingEnvironment hostingEnvironment,
+            ILoggerFactory loggingFactory,
+            ILogger<AspNetStartup<AppOptions>> logger)
+            : base(configuration, hostingEnvironment, loggingFactory, logger)
         {
         }
 
@@ -71,24 +77,14 @@ namespace identity
             this.ConfigureAutoMapper(services);
             this.ConfigureMvc(services.AddMvcCore());
 
-            services.AddSwaggerDocument(options =>
-            {
-                options.DocumentName = this.AppName;
-                options.OperationProcessors.Add(new UnauthorizedOperationProcessor());
-            });
+            services.AddSwaggerDocument(
+                options =>
+                    {
+                        options.DocumentName = this.AppName;
+                        options.OperationProcessors.Add(new UnauthorizedOperationProcessor());
+                    });
 
             return services.BuildServiceProvider();
-        }
-
-        protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
-        {
-            var authentication = services
-                .AddAuthentication()
-                .AddCookie();
-
-            authentication.AddApplicationCookie();
-
-            return authentication;
         }
 
         protected override IApplicationBuilder ConfigureMiddleware(IApplicationBuilder app)
@@ -107,105 +103,126 @@ namespace identity
                 .AddRazorPages()
                 .AddRazorViewEngine()
                 .AddViews()
-                .AddCors(options => options.AddDefaultPolicy(configure =>
-                {
-                    options.DefaultPolicyName = this.Options.ApiScope;
-                    configure.AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin()
-                        .AllowCredentials();
-                }))
-                .AddMvcOptions(options =>
-                {
-                    var policy = ScopePolicy.Create(this.Options.ApiScope);
-                    options.Filters.Add(new AuthorizeFilter(policy));
-                });
+                .AddCors(
+                    options => options.AddDefaultPolicy(
+                        configure =>
+                            {
+                                options.DefaultPolicyName = this.Options.ApiScope;
+                                configure.AllowAnyHeader()
+                                    .AllowAnyMethod()
+                                    .AllowAnyOrigin()
+                                    .AllowCredentials();
+                            }))
+                .AddMvcOptions(
+                    options =>
+                        {
+                            var policy = ScopePolicy.Create(this.Options.ApiScope);
+                            options.Filters.Add(new AuthorizeFilter(policy));
+                        });
+        }
+
+        protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
+        {
+            var authentication = services.AddAuthentication()
+                .AddCookie();
+
+            authentication.AddApplicationCookie();
+
+            return authentication;
         }
 
         private void ConfigureAutoMapper(IServiceCollection services)
         {
-            services.AddAutoMapper(options =>
-            {
-                options.CreateMap<User, UserInfo>()
-                    .ForSourceMember(src => src.Email, expr => expr.DoNotValidate())
-                    .ForSourceMember(src => src.EmailConfirmed, expr => expr.DoNotValidate())
-                    .ForSourceMember(src => src.Id, expr => expr.DoNotValidate())
-                    .ForSourceMember(src => src.UserName, expr => expr.DoNotValidate())
-                    .ReverseMap();
-            });
+            services.AddAutoMapper(
+                options =>
+                    {
+                        options.CreateMap<User, UserInfo>()
+                            .ForSourceMember(src => src.Email, expr => expr.DoNotValidate())
+                            .ForSourceMember(src => src.EmailConfirmed, expr => expr.DoNotValidate())
+                            .ForSourceMember(src => src.Id, expr => expr.DoNotValidate())
+                            .ForSourceMember(src => src.UserName, expr => expr.DoNotValidate())
+                            .ReverseMap();
+                    });
         }
 
         private void ConfigureDbContext(IServiceCollection services)
         {
-            services.AddDbContext<IdentityDataContext>(options =>
-            {
-                var connectionString = this.Configuration.GetConnectionString(nameof(IdentityDataContext));
-                this.Logger.LogTrace("{@connectionString}", connectionString);
-                options.UseSqlServer(connectionString, opts => opts.MigrationsAssembly("NativeCode.Node.Identity"));
+            services.AddDbContext<IdentityDataContext>(
+                options =>
+                    {
+                        var connectionString = this.Configuration.GetConnectionString(nameof(IdentityDataContext));
+                        this.Logger.LogTrace("{@connectionString}", connectionString);
+                        options.UseSqlServer(connectionString, opts => opts.MigrationsAssembly("NativeCode.Node.Identity"));
 #if DEBUG
-                options.EnableSensitiveDataLogging();
+                        options.EnableSensitiveDataLogging();
 #endif
-            });
+                    });
         }
 
         private void ConfigureIdentityServer(IServiceCollection services, RedisOptions redis)
         {
-            services.AddIdentity<User, Role>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = true;
-                    options.Password.RequireNonAlphanumeric = true;
-                    options.Password.RequireUppercase = true;
-                    options.Password.RequiredLength = 8;
-                })
+            services.AddIdentity<User, Role>(
+                    options =>
+                        {
+                            options.Password.RequireDigit = false;
+                            options.Password.RequireLowercase = true;
+                            options.Password.RequireNonAlphanumeric = true;
+                            options.Password.RequireUppercase = true;
+                            options.Password.RequiredLength = 8;
+                        })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<IdentityDataContext>();
 
             services.AddDataProtection()
                 .PersistKeysToDbContext<IdentityDataContext>();
 
-            services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-                    options.PublicOrigin = this.Options.Authority;
-                    this.Logger.LogTrace("{@options}", options);
-                })
+            services.AddIdentityServer(
+                    options =>
+                        {
+                            options.Events.RaiseErrorEvents = true;
+                            options.Events.RaiseFailureEvents = true;
+                            options.Events.RaiseInformationEvents = true;
+                            options.Events.RaiseSuccessEvents = true;
+                            options.PublicOrigin = this.Options.Authority;
+                            this.Logger.LogTrace("{@options}", options);
+                        })
 #if DEBUG
                 .AddDeveloperSigningCredential()
 #endif
                 .AddAspNetIdentity<User>()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = builder =>
-                    {
-                        var connectionString = this.Configuration.GetConnectionString(nameof(IdentityDataContext));
-                        builder.UseSqlServer(connectionString);
-                    };
-                    this.Logger.LogTrace("{@options}", options);
-                })
+                .AddConfigurationStore(
+                    options =>
+                        {
+                            options.ConfigureDbContext = builder =>
+                                {
+                                    var connectionString = this.Configuration.GetConnectionString(nameof(IdentityDataContext));
+                                    builder.UseSqlServer(connectionString);
+                                };
+                            this.Logger.LogTrace("{@options}", options);
+                        })
                 .AddConfigurationStoreCache()
                 .AddJwtBearerClientAuthentication()
-                .AddOperationalStore(options =>
-                {
-                    options.Db = redis.RedisOperationalStore;
-                    options.KeyPrefix = redis.RedisOperationalStoreKey;
-                    options.RedisConnectionString = redis.RedisConnection;
-                    this.Logger.LogTrace("{@options}", options);
-                });
+                .AddOperationalStore(
+                    options =>
+                        {
+                            options.Db = redis.RedisOperationalStore;
+                            options.KeyPrefix = redis.RedisOperationalStoreKey;
+                            options.RedisConnectionString = redis.RedisConnection;
+                            this.Logger.LogTrace("{@options}", options);
+                        });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(this.Options.ApiScope, configure =>
-                {
-                    options.DefaultPolicy = configure
-                        .RequireAuthenticatedUser()
-                        .RequireScope(this.Options.ApiScope)
-                        .Build();
-                });
-            });
+            services.AddAuthorization(
+                options =>
+                    {
+                        options.AddPolicy(
+                            this.Options.ApiScope,
+                            configure =>
+                                {
+                                    options.DefaultPolicy = configure.RequireAuthenticatedUser()
+                                        .RequireScope(this.Options.ApiScope)
+                                        .Build();
+                                });
+                    });
         }
     }
 }

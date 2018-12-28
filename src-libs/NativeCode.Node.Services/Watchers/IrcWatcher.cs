@@ -7,43 +7,42 @@ namespace NativeCode.Node.Services.Watchers
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
+
     using AutoMapper;
-    using Core.Extensions;
-    using Core.Messaging;
-    using Core.Services;
+
     using IrcDotNet;
-    using Messages;
+
     using Microsoft.Extensions.Caching.Distributed;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+
+    using NativeCode.Core.Extensions;
+    using NativeCode.Core.Messaging;
+    using NativeCode.Core.Services;
+    using NativeCode.Node.Messages;
+
     using Nito.AsyncEx;
 
     public class IrcWatcher : HostedService<IrcWatcherOptions>
     {
         private const string StripPattern = @"[\x02\x1F\x0F\x16]|\x03(\d\d?(,\d\d?)?)?";
 
-        private static readonly IEnumerable<string> MovieCategories = new List<string>
-        {
-            "Blu-Ray",
-            "Movie Boxsets",
-            "Movies",
-        };
+        private static readonly Regex AnnouncePattern = new Regex(
+            @"(New Torrent|Size|Category|Uploader|Link):\s+\((?:\s+)([\w\s\.\-\:\/\?\=\[\]\{\}<>\+]+)(?:\s+)\)");
 
-        private static readonly IEnumerable<string> ShowCategories = new List<string>
-        {
-            "HD Boxsets",
-            "TV Boxsets",
-            "TV-HD",
-        };
+        private static readonly IEnumerable<string> MovieCategories = new List<string> { "Blu-Ray", "Movie Boxsets", "Movies", };
 
-        private static readonly Regex AnnouncePattern =
-            new Regex(
-                @"(New Torrent|Size|Category|Uploader|Link):\s+\((?:\s+)([\w\s\.\-\:\/\?\=\[\]\{\}<>\+]+)(?:\s+)\)");
+        private static readonly IEnumerable<string> ShowCategories = new List<string> { "HD Boxsets", "TV Boxsets", "TV-HD", };
 
         private readonly IDictionary<string, Action<string, IrcRelease>> propertyMap;
 
-        public IrcWatcher(IOptions<IrcWatcherOptions> options, ILogger<IrcWatcher> logger,
-            IQueueManager queue, IMapper mapper, IDistributedCache cache) : base(options)
+        public IrcWatcher(
+            IOptions<IrcWatcherOptions> options,
+            ILogger<IrcWatcher> logger,
+            IQueueManager queue,
+            IMapper mapper,
+            IDistributedCache cache)
+            : base(options)
         {
             this.Cache = cache;
             this.Client = new StandardIrcClient();
@@ -54,17 +53,19 @@ namespace NativeCode.Node.Services.Watchers
             this.Shows = queue.GetOutgoingQueue<SeriesRelease>();
 
             this.propertyMap = new Dictionary<string, Action<string, IrcRelease>>
-            {
-                {"New Torrent", (property, release) => release.Name = property},
-                {"Size", (property, release) => release.Size = property},
-                {"Category", (property, release) => release.Category = property},
-                {"Uploader", (property, release) => release.Uploader = property},
-                {
-                    "Link",
-                    (property, release) =>
-                        release.Link = $"{property}&type=rss&secret_key={this.Options.XspeedsSecret}".Replace("details.php", "download.php")
-                },
-            };
+                                   {
+                                       { "New Torrent", (property, release) => release.Name = property },
+                                       { "Size", (property, release) => release.Size = property },
+                                       { "Category", (property, release) => release.Category = property },
+                                       { "Uploader", (property, release) => release.Uploader = property },
+                                       {
+                                           "Link",
+                                           (property, release) =>
+                                               release.Link = $"{property}&type=rss&secret_key={this.Options.XspeedsSecret}".Replace(
+                                                   "details.php",
+                                                   "download.php")
+                                       },
+                                   };
         }
 
         protected IDistributedCache Cache { get; }
@@ -79,21 +80,11 @@ namespace NativeCode.Node.Services.Watchers
 
         protected IQueueTopic<SeriesRelease> Shows { get; }
 
-        protected override void ReleaseManaged()
-        {
-            this.Client.Dispose();
-        }
-
         protected override Task DoStartAsync(CancellationToken cancellationToken)
         {
             var username = this.GetUserName();
 
-            var registration = new IrcUserRegistrationInfo
-            {
-                NickName = username,
-                RealName = username,
-                UserName = username,
-            };
+            var registration = new IrcUserRegistrationInfo { NickName = username, RealName = username, UserName = username, };
 
             this.Client.Connect(this.Options.Host, this.Options.UseSsl, registration);
             this.Logger.LogInformation($"Connected to {this.Options.Host} as {username}");
@@ -107,14 +98,14 @@ namespace NativeCode.Node.Services.Watchers
             return Task.CompletedTask;
         }
 
-        private void ClientOnConnected(object sender, EventArgs e)
+        protected override void ReleaseManaged()
         {
-            this.Client.LocalUser.JoinedChannel += this.LocalUserOnJoinedChannel;
+            this.Client.Dispose();
         }
 
-        private void LocalUserOnJoinedChannel(object sender, IrcChannelEventArgs e)
+        private static string Strip(string original)
         {
-            e.Channel.MessageReceived += this.ChannelOnMessageReceived;
+            return Regex.Replace(original, StripPattern, string.Empty);
         }
 
         private void ChannelOnMessageReceived(object sender, IrcMessageEventArgs e)
@@ -122,9 +113,23 @@ namespace NativeCode.Node.Services.Watchers
             AsyncContext.Run(async () => await this.HandleMessage(e.Text));
         }
 
-        private static string Strip(string original)
+        private void ClientOnConnected(object sender, EventArgs e)
         {
-            return Regex.Replace(original, StripPattern, string.Empty);
+            this.Client.LocalUser.JoinedChannel += this.LocalUserOnJoinedChannel;
+        }
+
+        private string GetUserName()
+        {
+            var process = Process.GetCurrentProcess();
+
+            // NOTE: In a Docker container, the PID is always 1 so we don't
+            // want to use the PID in the name.
+            if (process.Id == 1)
+            {
+                return $"{this.Options.UserName}-{Environment.MachineName}";
+            }
+
+            return $"{this.Options.UserName}-{process.Id}";
         }
 
         private async Task HandleMessage(string message)
@@ -173,7 +178,7 @@ namespace NativeCode.Node.Services.Watchers
                     await this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
                 }
 
-                this.Logger.LogInformation($"Announced: {{@release}}", release);
+                this.Logger.LogInformation("Announced: {@release}", release);
             }
             catch (Exception ex)
             {
@@ -181,18 +186,9 @@ namespace NativeCode.Node.Services.Watchers
             }
         }
 
-        private string GetUserName()
+        private void LocalUserOnJoinedChannel(object sender, IrcChannelEventArgs e)
         {
-            var process = Process.GetCurrentProcess();
-
-            // NOTE: In a Docker container, the PID is always 1 so we don't
-            // want to use the PID in the name.
-            if (process.Id == 1)
-            {
-                return $"{this.Options.UserName}-{Environment.MachineName}";
-            }
-
-            return $"{this.Options.UserName}-{process.Id}";
+            e.Channel.MessageReceived += this.ChannelOnMessageReceived;
         }
     }
 }

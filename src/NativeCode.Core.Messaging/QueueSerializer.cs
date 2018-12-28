@@ -2,7 +2,9 @@ namespace NativeCode.Core.Messaging
 {
     using System;
     using System.Text;
-    using Exceptions;
+
+    using NativeCode.Core.Messaging.Exceptions;
+
     using Newtonsoft.Json;
 
     public class QueueSerializer : IQueueSerializer

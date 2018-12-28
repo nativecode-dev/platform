@@ -2,10 +2,12 @@ namespace NativeCode.Core.Data
 {
     using System;
     using System.IO;
-    using Core.Extensions;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
     using Microsoft.Extensions.Configuration;
+
+    using NativeCode.Core.Extensions;
 
     public abstract class DataContextFactory<TContext> : IDesignTimeDbContextFactory<TContext>
         where TContext : DbContext
@@ -17,6 +19,14 @@ namespace NativeCode.Core.Data
         public TContext CreateDbContext(string[] args)
         {
             return this.Create(Directory.GetCurrentDirectory(), this.AspNetCoreEnvironment);
+        }
+
+        protected virtual IConfigurationBuilder Configure(string basePath, string environment, IConfigurationBuilder builder)
+        {
+            return builder.SetBasePath(basePath)
+                .AddJsonFile("appsettings.json", true)
+                .AddJsonFile($"appsettings.{environment}.json", true)
+                .AddEnvironmentVariables();
         }
 
         protected virtual TContext Create()
@@ -52,16 +62,6 @@ namespace NativeCode.Core.Data
             return this.Create(connectionString);
         }
 
-        protected virtual IConfigurationBuilder Configure(string basePath, string environment,
-            IConfigurationBuilder builder)
-        {
-            return builder.SetBasePath(basePath)
-                .AddJsonFile("appsettings.json", true)
-                .AddJsonFile($"appsettings.{environment}.json", true)
-                .AddEnvironmentVariables();
-        }
-
-        protected abstract TContext CreateNewInstance(DbContextOptionsBuilder<TContext> builder,
-            string connectionString);
+        protected abstract TContext CreateNewInstance(DbContextOptionsBuilder<TContext> builder, string connectionString);
     }
 }

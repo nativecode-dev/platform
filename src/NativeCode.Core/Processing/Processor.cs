@@ -2,6 +2,7 @@ namespace NativeCode.Core.Processing
 {
     using System.Threading;
     using System.Threading.Tasks;
+
     using Nito.AsyncEx;
 
     public abstract class Processor<TContext, TResults> : IProcessor<TContext, TResults>
@@ -14,9 +15,11 @@ namespace NativeCode.Core.Processing
 
         public async Task<TResults> ProcessAsync(TContext context, CancellationToken cancellationToken)
         {
-            var results = await this.ProcessContext(context, cancellationToken).ConfigureAwait(false);
+            var results = await this.ProcessContext(context, cancellationToken)
+                              .ConfigureAwait(false);
 
-            await this.ProcessResults(results, context, cancellationToken).ConfigureAwait(false);
+            await this.ProcessResults(results, context, cancellationToken)
+                .ConfigureAwait(false);
 
             return results;
         }

@@ -4,8 +4,8 @@ namespace identity.Controllers.Status
 
     public class StatusInfoViewModel
     {
-        public AppOptions Options { get; set; }
-
         public string MachineName { get; set; } = Environment.MachineName;
+
+        public AppOptions Options { get; set; }
     }
 }

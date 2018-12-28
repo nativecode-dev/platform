@@ -6,21 +6,13 @@ namespace NativeCode.Core.Messaging.Options
     {
         public string Host { get; set; }
 
+        public string Password { get; set; }
+
         public int Port { get; set; }
 
         public string Username { get; set; }
 
-        public string Password { get; set; }
-
         public string VirtualHost { get; set; }
-
-        public RabbitOptionsBuilder SetHost(string hostname, int port = 5672)
-        {
-            this.Host = hostname;
-            this.Port = port;
-
-            return this;
-        }
 
         /// <summary>
         /// Set the virtual host, the default if not specified is '/'
@@ -30,6 +22,14 @@ namespace NativeCode.Core.Messaging.Options
         public RabbitOptionsBuilder OnVirtualHost(string virtualHost)
         {
             this.VirtualHost = virtualHost;
+
+            return this;
+        }
+
+        public RabbitOptionsBuilder SetHost(string hostname, int port = 5672)
+        {
+            this.Host = hostname;
+            this.Port = port;
 
             return this;
         }
@@ -50,14 +50,14 @@ namespace NativeCode.Core.Messaging.Options
             }
 
             return new RabbitOptions
-            {
-                Host = this.Host,
-                Port = this.Port,
-                DispatchConsumersAsync = true,
-                VirtualHost = this.VirtualHost,
-                User = this.Username,
-                Password = this.Password,
-            };
+                       {
+                           Host = this.Host,
+                           Port = this.Port,
+                           DispatchConsumersAsync = true,
+                           VirtualHost = this.VirtualHost,
+                           User = this.Username,
+                           Password = this.Password,
+                       };
         }
     }
 }

@@ -4,8 +4,10 @@ namespace NativeCode.Clients
     using System.Net;
     using System.Net.Cache;
     using System.Text;
-    using Core;
-    using Core.Serialization;
+
+    using NativeCode.Core;
+    using NativeCode.Core.Serialization;
+
     using RestSharp;
     using RestSharp.Authenticators;
 
@@ -21,23 +23,23 @@ namespace NativeCode.Clients
             this.BaseAddress = address;
 
             this.Client = new RestClient(this.BaseAddress)
-            {
-                AutomaticDecompression = true,
-                CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable),
-                CookieContainer = new CookieContainer(),
-                Encoding = Encoding.UTF8,
-                FollowRedirects = true,
-                UserAgent = GetUserAgentString(this.GetType())
-            };
+                              {
+                                  AutomaticDecompression = true,
+                                  CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable),
+                                  CookieContainer = new CookieContainer(),
+                                  Encoding = Encoding.UTF8,
+                                  FollowRedirects = true,
+                                  UserAgent = GetUserAgentString(this.GetType()),
+                              };
 
             this.Serializer = serializer;
         }
 
+        public Uri BaseAddress { get; }
+
         protected IRestClient Client { get; }
 
         protected IObjectSerializer Serializer { get; }
-
-        public Uri BaseAddress { get; }
 
         public void SetBasicAuth(string username, string password)
         {
@@ -52,8 +54,7 @@ namespace NativeCode.Clients
         private static string GetUserAgentString(Type type)
         {
             var agent = $"common-client/{Info.AppVersion(type)}";
-            var platform =
-                $"{Environment.OSVersion.Platform}; {Environment.OSVersion.VersionString}; {Environment.OSVersion.ServicePack}";
+            var platform = $"{Environment.OSVersion.Platform}; {Environment.OSVersion.VersionString}; {Environment.OSVersion.ServicePack}";
             var runtime = $"common-client-runtime/{Environment.Version}";
 
             return $"{agent} ({platform}) {runtime}";

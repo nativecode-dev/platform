@@ -5,17 +5,20 @@ namespace NativeCode.Core.Data
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
+
     using AutoMapper;
-    using Core.Extensions;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
+
+    using NativeCode.Core.Extensions;
+
     using Newtonsoft.Json;
 
     public class DataContextSeeder<T> : IDataContextSeeder<T>
         where T : DbContext
     {
-        public DataContextSeeder(T context, JsonSerializerSettings settings, IMapper mapper,
-            ILogger<IDataContextSeeder<T>> logger)
+        public DataContextSeeder(T context, JsonSerializerSettings settings, IMapper mapper, ILogger<IDataContextSeeder<T>> logger)
         {
             this.Context = context;
             this.Logger = logger;
@@ -43,15 +46,21 @@ namespace NativeCode.Core.Data
             return this.Context.SaveChangesAsync();
         }
 
-        public Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> projection,
-            Func<TModel, DbSet<TEntity>, Task<TEntity>> converter, Func<TModel, TEntity, Task> callback = null)
+        public Task<bool> SeedAsync<TModel, TEntity>(
+            string name,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> projection,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
+            Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
             return this.SeedAsync(Assembly.GetEntryAssembly(), name, projection, converter, callback);
         }
 
-        public async Task<bool> SeedAsync<TModel, TEntity>(Assembly assembly, string name,
-            Func<TModel, DbSet<TEntity>, Task<TEntity>> projection, Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
+        public async Task<bool> SeedAsync<TModel, TEntity>(
+            Assembly assembly,
+            string name,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> projection,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
@@ -63,27 +72,23 @@ namespace NativeCode.Core.Data
             {
                 try
                 {
-                    var existing = await projection(model, dbset).ConfigureAwait(false);
+                    var existing = await projection(model, dbset)
+                                       .ConfigureAwait(false);
                     this.Logger.LogTrace("{@existing}", existing);
 
                     if (existing == null)
                     {
-                        var entity = await converter.Invoke(model, dbset).ConfigureAwait(false);
+                        var entity = await converter.Invoke(model, dbset)
+                                         .ConfigureAwait(false);
 
                         if (callback != null)
                         {
-                            await callback.Invoke(model, entity).ConfigureAwait(false);
+                            await callback.Invoke(model, entity)
+                                .ConfigureAwait(false);
                         }
 
                         dbset.Add(entity);
                         this.Logger.LogTrace("Created: {@model}", model);
-                    }
-                    else
-                    {
-                        /*
-                        this.Mapper.Map(model, existing);
-                        this.Logger.LogTrace("Updated: {@model}", model);
-                        */
                     }
                 }
                 catch (Exception ex)

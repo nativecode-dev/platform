@@ -2,7 +2,9 @@ namespace NativeCode.Node.Identity.JsonConverters
 {
     using System;
     using System.Reflection;
+
     using Microsoft.Extensions.DependencyInjection;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
 

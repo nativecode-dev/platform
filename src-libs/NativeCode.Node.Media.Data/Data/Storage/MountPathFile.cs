@@ -3,6 +3,7 @@ namespace NativeCode.Node.Media.Data.Data.Storage
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
     using NativeCode.Core.Data;
 
     public class MountPathFile : Entity<Guid>

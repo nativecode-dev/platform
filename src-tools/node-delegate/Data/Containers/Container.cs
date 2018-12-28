@@ -2,7 +2,9 @@ namespace node_delegate.Data.Containers
 {
     using System;
     using System.Collections.Generic;
+
     using Docker.DotNet.Models;
+
     using NativeCode.Core.Data;
 
     public class Container : Entity<Guid>
@@ -63,28 +65,28 @@ namespace node_delegate.Data.Containers
 
     public class EndpointSettings
     {
-        public EndpointIPAMConfig IPAMConfig { get; set; }
-
-        public IList<string> Links { get; set; }
-
         public IList<string> Aliases { get; set; }
-
-        public string NetworkID { get; set; }
 
         public string EndpointID { get; set; }
 
         public string Gateway { get; set; }
 
+        public string GlobalIPv6Address { get; set; }
+
+        public long GlobalIPv6PrefixLen { get; set; }
+
         public string IPAddress { get; set; }
+
+        public EndpointIPAMConfig IPAMConfig { get; set; }
 
         public long IPPrefixLen { get; set; }
 
         public string IPv6Gateway { get; set; }
 
-        public string GlobalIPv6Address { get; set; }
-
-        public long GlobalIPv6PrefixLen { get; set; }
+        public IList<string> Links { get; set; }
 
         public string MacAddress { get; set; }
+
+        public string NetworkID { get; set; }
     }
 }

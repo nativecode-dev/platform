@@ -6,11 +6,11 @@ namespace NativeCode.Node.Media.Data.Data.Catalog.Shows
 
     public class Series : MediaInfo
     {
-        public List<Season> Seasons { get; } = new List<Season>();
-
         [ForeignKey(nameof(ReleaseInfoId))]
         public ReleaseInfo ReleaseInfo { get; set; }
 
         public Guid? ReleaseInfoId { get; set; }
+
+        public List<Season> Seasons { get; } = new List<Season>();
     }
 }

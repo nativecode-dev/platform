@@ -2,9 +2,12 @@ namespace NativeCode.Clients.Posteio.Resources
 {
     using System.Globalization;
     using System.Threading.Tasks;
+
     using JetBrains.Annotations;
-    using Requests;
-    using Responses;
+
+    using NativeCode.Clients.Posteio.Requests;
+    using NativeCode.Clients.Posteio.Responses;
+
     using RestSharp;
 
     public class MailboxQuotaResource : ClientResource<MailboxQuota, UpdateQuota, UpdateQuota>

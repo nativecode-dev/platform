@@ -1,7 +1,9 @@
 namespace NativeCode.Core.JsonExtensions.ContractResolvers
 {
     using System.Globalization;
+
     using Humanizer;
+
     using Newtonsoft.Json.Serialization;
 
     public class LowerScoreContractResolver : DefaultContractResolver

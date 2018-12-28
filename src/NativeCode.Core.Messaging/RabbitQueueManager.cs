@@ -2,14 +2,16 @@ namespace NativeCode.Core.Messaging
 {
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-    using Options;
+
+    using NativeCode.Core.Messaging.Options;
+    using NativeCode.Core.Reliability;
+
     using RabbitMQ.Client;
-    using Reliability;
 
     /// <summary>
     /// NOTE: This should be registered as a singleton per-application. RabbitMQ has
     /// its own connection pooling and shares a single socket via channels
-    /// <see cref="T:RabbitMQ.Client.IModel" />. Rabbit actually runs two background threads, but that is
+    /// <see cref="RabbitMQ.Client.IModel" />. Rabbit actually runs two background threads, but that is
     /// an implementation detail.
     /// </summary>
     public class RabbitQueueManager : Disposable, IQueueManager
@@ -17,14 +19,14 @@ namespace NativeCode.Core.Messaging
         public RabbitQueueManager(IQueueSerializer serializer, IOptions<RabbitOptions> options, ILoggerFactory logFactory)
         {
             var factory = new ConnectionFactory
-            {
-                DispatchConsumersAsync = options.Value.DispatchConsumersAsync,
-                HostName = options.Value.Host,
-                Password = options.Value.Password,
-                Port = options.Value.Port,
-                UserName = options.Value.User,
-                VirtualHost = options.Value.VirtualHost
-            };
+                              {
+                                  DispatchConsumersAsync = options.Value.DispatchConsumersAsync,
+                                  HostName = options.Value.Host,
+                                  Password = options.Value.Password,
+                                  Port = options.Value.Port,
+                                  UserName = options.Value.User,
+                                  VirtualHost = options.Value.VirtualHost,
+                              };
 
             this.Connection = factory.CreateConnection();
             this.Options = options.Value;
@@ -34,9 +36,9 @@ namespace NativeCode.Core.Messaging
 
         protected IConnection Connection { get; }
 
-        protected RabbitOptions Options { get; }
-
         protected ILoggerFactory LogFactory { get; }
+
+        protected RabbitOptions Options { get; }
 
         protected IQueueSerializer Serializer { get; }
 
@@ -46,11 +48,10 @@ namespace NativeCode.Core.Messaging
             return new RabbitQueueTopic<T>(this.Connection, this.Serializer, this.LogFactory.CreateLogger<T>());
         }
 
-        public IQueueTopic<T> GetIncomingQueue<T>(string queue, string route = default(string))
+        public IQueueTopic<T> GetIncomingQueue<T>(string queue, string route = default)
             where T : IQueueMessage
         {
-            return new RabbitQueueTopic<T>(this.Connection, this.Serializer, this.LogFactory.CreateLogger<T>(), queue,
-                route);
+            return new RabbitQueueTopic<T>(this.Connection, this.Serializer, this.LogFactory.CreateLogger<T>(), queue, route);
         }
 
         public IQueueTopic<T> GetOutgoingQueue<T>()
@@ -59,11 +60,10 @@ namespace NativeCode.Core.Messaging
             return new RabbitQueueTopic<T>(this.Connection, this.Serializer, this.LogFactory.CreateLogger<T>());
         }
 
-        public IQueueTopic<T> GetOutgoingQueue<T>(string queue, string route = default(string))
+        public IQueueTopic<T> GetOutgoingQueue<T>(string queue, string route = default)
             where T : IQueueMessage
         {
-            return new RabbitQueueTopic<T>(this.Connection, this.Serializer, this.LogFactory.CreateLogger<T>(), queue,
-                route);
+            return new RabbitQueueTopic<T>(this.Connection, this.Serializer, this.LogFactory.CreateLogger<T>(), queue, route);
         }
 
         protected override void ReleaseManaged()

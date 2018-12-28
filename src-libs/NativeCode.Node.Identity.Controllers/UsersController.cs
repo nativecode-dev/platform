@@ -3,10 +3,13 @@ namespace NativeCode.Node.Identity.Controllers
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
+
     using AutoMapper;
+
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using SeedModels;
+
+    using NativeCode.Node.Identity.SeedModels;
 
     [ApiController]
     [Route("users")]
@@ -23,7 +26,7 @@ namespace NativeCode.Node.Identity.Controllers
         protected IMapper Mapper { get; }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<UserInfo>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserInfo>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get()
         {
             var users = await this.Context.Users.ToListAsync();

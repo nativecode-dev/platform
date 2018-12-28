@@ -1,32 +1,43 @@
 namespace NativeCode.Node.Media.Data.Extensions
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
-    using Core;
-    using Core.Enums;
-    using Data.Storage;
+
+    using NativeCode.Node.Media.Core.Enums;
+    using NativeCode.Node.Media.Data.Data.Storage;
 
     public static class MountPathExtensions
     {
         public static Uri GetMountUri(this MountPath source)
         {
-            return new Uri(source.GetMountUrl());
+            return source.GetMountUrl();
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1055")]
-        public static string GetMountUrl(this MountPath source)
+        public static Uri GetMountUrl(this MountPath source)
         {
             switch (source.Mount.Type)
             {
                 case MountType.Nfs:
-                    return source.GetNfsMountUrl();
+                    return new Uri(source.GetNfsMountUrl());
 
                 case MountType.Smb:
-                    return source.GetSmbMountUrl();
+                    return new Uri(source.GetSmbMountUrl());
 
                 default:
-                    return source.GetLocalMountUrl();
+                    return new Uri(source.GetLocalMountUrl());
             }
+        }
+
+        private static string GetLocalMountUrl(this MountPath source)
+        {
+            var credentials = source.Mount.Credentials;
+            var userinfo = string.Empty;
+
+            if (credentials != null && credentials.Type == CredentialType.Basic)
+            {
+                userinfo = $"{credentials.Login}:{credentials.Password}@";
+            }
+
+            return $"file://{userinfo}{source.Mount.Host}/{source.Path}";
         }
 
         private static string GetNfsMountUrl(this MountPath source)
@@ -45,19 +56,6 @@ namespace NativeCode.Node.Media.Data.Extensions
         private static string GetSmbMountUrl(this MountPath source)
         {
             return $"file://{source.Mount.Host}{source.Path}";
-        }
-
-        private static string GetLocalMountUrl(this MountPath source)
-        {
-            var credentials = source.Mount.Credentials;
-            var userinfo = string.Empty;
-
-            if (credentials != null && credentials.Type == CredentialType.Basic)
-            {
-                userinfo = $"{credentials.Login}:{credentials.Password}@";
-            }
-
-            return $"file://{userinfo}{source.Mount.Host}/{source.Path}";
         }
     }
 }

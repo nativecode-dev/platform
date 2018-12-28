@@ -3,10 +3,12 @@ namespace NativeCode.Clients.Radarr.Resources
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Core.Extensions;
-    using Core.Serialization;
-    using Requests;
-    using Responses;
+
+    using NativeCode.Clients.Radarr.Requests;
+    using NativeCode.Clients.Radarr.Responses;
+    using NativeCode.Core.Extensions;
+    using NativeCode.Core.Serialization;
+
     using RestSharp;
 
     public class CalendarResource : ResourceBase, IResourceQuery<QueryCalendar, Movie>
@@ -18,10 +20,7 @@ namespace NativeCode.Clients.Radarr.Resources
 
         public Task<IEnumerable<Movie>> Find(QueryCalendar request)
         {
-            var builder = new UriBuilder(this.Client.BaseUrl)
-            {
-                Path = "calendar"
-            };
+            var builder = new UriBuilder(this.Client.BaseUrl) { Path = "calendar" };
 
             if (request.End.HasValue)
             {

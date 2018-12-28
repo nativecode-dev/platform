@@ -4,10 +4,10 @@ namespace NativeCode.Clients.Sonarr.Requests
     {
         public string DownloadUrl { get; set; }
 
-        public string Title { get; set; }
-
         public string Protocol { get; set; }
 
         public string PublishDate { get; set; }
+
+        public string Title { get; set; }
     }
 }

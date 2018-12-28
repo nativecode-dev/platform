@@ -2,7 +2,8 @@ namespace NativeCode.Core.Messaging
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Reliability;
+
+    using NativeCode.Core.Reliability;
 
     public abstract class WorkQueue<TRequest, TResult> : Disposable, IWorkQueue<TRequest, TResult>
         where TRequest : IQueueMessage
@@ -16,13 +17,13 @@ namespace NativeCode.Core.Messaging
             this.Outbox = manager.GetOutgoingQueue<TResult>();
         }
 
-        protected IQueueTopic<TRequest> Inbox { get; }
-
-        protected IQueueTopic<TResult> Outbox { get; }
-
         public abstract IWorkConsumer<TRequest> Consumer { get; }
 
         public abstract IWorkDispatcher<TResult> Dispatcher { get; }
+
+        protected IQueueTopic<TRequest> Inbox { get; }
+
+        protected IQueueTopic<TResult> Outbox { get; }
 
         public Task Publish(TRequest request)
         {

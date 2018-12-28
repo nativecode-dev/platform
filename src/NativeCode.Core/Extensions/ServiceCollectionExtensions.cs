@@ -2,7 +2,8 @@ namespace NativeCode.Core.Extensions
 {
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Serialization;
+
+    using NativeCode.Core.Serialization;
 
     public static class ServiceCollectionExtensions
     {
@@ -11,7 +12,8 @@ namespace NativeCode.Core.Extensions
             return services.AddTransient<IObjectSerializer, JsonObjectSerializer>();
         }
 
-        public static IServiceCollection AddOption<T>(this IServiceCollection services, IConfiguration configuration) where T : class
+        public static IServiceCollection AddOption<T>(this IServiceCollection services, IConfiguration configuration)
+            where T : class
         {
             return services.Configure<T>(configuration.GetSection(typeof(T).Name));
         }

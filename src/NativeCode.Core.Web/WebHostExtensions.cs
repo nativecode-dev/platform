@@ -3,14 +3,19 @@ namespace NativeCode.Core.Web
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using Data;
-    using Data.Extensions;
+
     using JetBrains.Annotations;
+
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+
+    using NativeCode.Core.Data;
+    using NativeCode.Core.Data.Extensions;
+
     using Nito.AsyncEx;
+
     using IHostingEnvironment = Microsoft.Extensions.Hosting.IHostingEnvironment;
 
     public static class WebHostExtensions
@@ -31,13 +36,13 @@ namespace NativeCode.Core.Web
         /// <param name="host"></param>
         /// <param name="environments"></param>
         /// <returns></returns>
-        public static IWebHost MigrateDatabase<T>([NotNull] this IWebHost host, params string[] environments)
+        public static IWebHost Migrate<T>([NotNull] this IWebHost host, params string[] environments)
             where T : DbContext
         {
             using (var scope = host.Services.CreateScope())
             {
                 var env = scope.ServiceProvider.GetRequiredService<IHostingEnvironment>();
-                var enabled = environments.Any(name => env.IsEnvironment(name));
+                var enabled = environments.Any() == false || environments.Any(name => env.IsEnvironment(name));
                 var database = scope.ServiceProvider.GetRequiredService<T>();
                 var migrations = database.Migrations();
 
@@ -56,15 +61,15 @@ namespace NativeCode.Core.Web
             return AsyncContext.Run(() => host.UseDataSeederAsync(seed));
         }
 
-        public static async Task<IWebHost> UseDataSeederAsync<T>(this IWebHost host,
-            Func<IDataContextSeeder<T>, IServiceScope, Task> seed)
+        public static async Task<IWebHost> UseDataSeederAsync<T>(this IWebHost host, Func<IDataContextSeeder<T>, IServiceScope, Task> seed)
             where T : DbContext
         {
             using (var scope = host.Services.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetRequiredService<IDataContextSeeder<T>>();
 
-                await seed(seeder, scope).ConfigureAwait(false);
+                await seed(seeder, scope)
+                    .ConfigureAwait(false);
 
                 return host;
             }

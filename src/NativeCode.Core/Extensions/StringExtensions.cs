@@ -22,7 +22,9 @@ namespace NativeCode.Core.Extensions
 
             foreach (var b in bytes)
             {
-                sb.Append(b.ToString("x2", CultureInfo.CurrentCulture).ToUpperInvariant());
+                sb.Append(
+                    b.ToString("x2", CultureInfo.CurrentCulture)
+                        .ToUpperInvariant());
             }
 
             return sb.ToString();

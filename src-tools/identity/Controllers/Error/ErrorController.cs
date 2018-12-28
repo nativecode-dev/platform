@@ -1,7 +1,9 @@
 namespace identity.Controllers.Error
 {
     using System.Threading.Tasks;
+
     using IdentityServer4.Services;
+
     using Microsoft.AspNetCore.Mvc;
 
     [Route("")]
@@ -21,10 +23,7 @@ namespace identity.Controllers.Error
 
             if (error != null)
             {
-                var model = new ErrorViewModel
-                {
-                    Error = error,
-                };
+                var model = new ErrorViewModel { Error = error, };
 
                 return this.View(model);
             }

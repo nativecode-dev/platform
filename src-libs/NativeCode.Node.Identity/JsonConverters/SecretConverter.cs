@@ -1,8 +1,11 @@
 namespace NativeCode.Node.Identity.JsonConverters
 {
     using System;
+
     using IdentityServer4.Models;
+
     using Microsoft.Extensions.Configuration;
+
     using Newtonsoft.Json;
 
     public class SecretConverter : JsonConverter
@@ -19,8 +22,7 @@ namespace NativeCode.Node.Identity.JsonConverters
             return false;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.Value is string secret)
             {

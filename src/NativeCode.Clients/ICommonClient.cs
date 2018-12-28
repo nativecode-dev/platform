@@ -2,6 +2,7 @@ namespace NativeCode.Clients
 {
     using System;
     using System.Net;
+
     using JetBrains.Annotations;
 
     public interface ICommonClient

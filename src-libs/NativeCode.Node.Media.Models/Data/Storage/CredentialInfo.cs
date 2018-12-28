@@ -1,7 +1,8 @@
 ﻿namespace NativeCode.Node.Media.Models.Data.Storage
 {
     using System.ComponentModel.DataAnnotations;
-    using Core.Enums;
+
+    using NativeCode.Node.Media.Core.Enums;
 
     public class CredentialInfo : DataModel
     {

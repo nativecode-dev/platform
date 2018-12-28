@@ -1,8 +1,10 @@
 namespace NativeCode.Node.Media.Data.Services.Storage
 {
     using System.Threading.Tasks;
-    using Data.Storage;
+
     using JetBrains.Annotations;
+
+    using NativeCode.Node.Media.Data.Data.Storage;
 
     public interface IMonitorService
     {

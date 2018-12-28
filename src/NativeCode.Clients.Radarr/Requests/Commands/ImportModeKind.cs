@@ -4,6 +4,6 @@ namespace NativeCode.Clients.Radarr.Requests.Commands
     {
         Copy,
 
-        Move
+        Move,
     }
 }

@@ -4,9 +4,11 @@ namespace node
     using System.Diagnostics;
     using System.Net;
     using System.Threading.Tasks;
-    using Filters;
+
     using Hangfire;
+
     using IdentityServer4.AccessTokenValidation;
+
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
@@ -17,16 +19,22 @@ namespace node
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
     using NativeCode.Core.Web;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Media;
     using NativeCode.Node.Media.Data;
-    using NativeCode.Node.Media.Services;
+
+    using node.Filters;
 
     public class Startup : AspNetStartup<NodeOptions>
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILoggerFactory loggingFactory,
-            ILogger<AspNetStartup<NodeOptions>> logger) : base(configuration, hostingEnvironment, loggingFactory, logger)
+        public Startup(
+            IConfiguration configuration,
+            IHostingEnvironment hostingEnvironment,
+            ILoggerFactory loggingFactory,
+            ILogger<AspNetStartup<NodeOptions>> logger)
+            : base(configuration, hostingEnvironment, loggingFactory, logger)
         {
         }
 
@@ -36,17 +44,31 @@ namespace node
 
         protected override string AppVersion => "v1";
 
-        protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
+        public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            return services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            });
+            services.AddMediaServices(
+                    options =>
+                        {
+                            var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
+                            options.UseSqlServer(connectionString);
+                        })
+                .AddMediaStorageMonitor(this.Configuration);
+
+            services.AddHangfire(x => x.UseRedisStorage("redis"));
+
+            services.AddAuthorization(
+                options =>
+                    {
+                        options.AddPolicy(
+                            this.Options.ApiScope,
+                            configure =>
+                                {
+                                    configure.RequireAuthenticatedUser();
+                                    configure.RequireScope(this.Options.ApiScope);
+                                });
+                    });
+
+            return base.ConfigureServices(services);
         }
 
         protected override IApplicationBuilder ConfigureMiddleware(IApplicationBuilder app)
@@ -63,29 +85,29 @@ namespace node
 
             app.UseCors()
                 .UseForwardedHeaders()
-                .UseHangfireDashboard("/jobs", new DashboardOptions
-                {
-                    AppPath = "/",
-                    Authorization = new[] {new DashboardAuthorizationFilter()},
-                })
-                .UseHangfireServer(new BackgroundJobServerOptions
-                {
-                    ServerName = $"{Environment.MachineName}:{this.Options.Name}:{Process.GetCurrentProcess().Id}",
-                    WorkerCount = this.Options.WorkerCount,
-                })
+                .UseHangfireDashboard(
+                    "/jobs",
+                    new DashboardOptions { AppPath = "/", Authorization = new[] { new DashboardAuthorizationFilter() }, })
+                .UseHangfireServer(
+                    new BackgroundJobServerOptions
+                        {
+                            ServerName = $"{Environment.MachineName}:{this.Options.Name}:{Process.GetCurrentProcess().Id}",
+                            WorkerCount = this.Options.WorkerCount,
+                        })
                 .UseMvc()
                 .UseStaticFiles()
-                .UseStatusCodePages(context =>
-                {
-                    var response = context.HttpContext.Response;
+                .UseStatusCodePages(
+                    context =>
+                        {
+                            var response = context.HttpContext.Response;
 
-                    if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
-                    {
-                        response.Redirect("/account/login");
-                    }
+                            if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                            {
+                                response.Redirect("/account/login");
+                            }
 
-                    return Task.CompletedTask;
-                });
+                            return Task.CompletedTask;
+                        });
 
             return app;
         }
@@ -99,35 +121,26 @@ namespace node
                 .AddRazorPages()
                 .AddRazorViewEngine()
                 .AddViews()
-                .AddMvcOptions(options =>
-                {
-                    var policy = ScopePolicy.Create(this.Options.ApiScope);
-                    options.Filters.Add(new AuthorizeFilter(policy));
-                });
+                .AddMvcOptions(
+                    options =>
+                        {
+                            var policy = ScopePolicy.Create(this.Options.ApiScope);
+                            options.Filters.Add(new AuthorizeFilter(policy));
+                        });
         }
 
-        public override IServiceProvider ConfigureServices(IServiceCollection services)
+        protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
         {
-            services
-                .AddMediaServices(options =>
-                {
-                    var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
-                    options.UseSqlServer(connectionString);
-                })
-                .AddMediaStorageMonitor(this.Configuration);
-
-            services.AddHangfire(x => x.UseRedisStorage("redis"));
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(this.Options.ApiScope, configure =>
-                {
-                    configure.RequireAuthenticatedUser();
-                    configure.RequireScope(this.Options.ApiScope);
-                });
-            });
-
-            return base.ConfigureServices(services);
+            return services.AddAuthentication(
+                options =>
+                    {
+                        options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    });
         }
     }
 }

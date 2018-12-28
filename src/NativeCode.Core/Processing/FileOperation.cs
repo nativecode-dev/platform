@@ -8,6 +8,6 @@
 
         Move = 2,
 
-        Convert = 3
+        Convert = 3,
     }
 }

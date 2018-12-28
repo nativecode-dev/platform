@@ -3,7 +3,9 @@ namespace NativeCode.Clients.Posteio.Responses
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using JetBrains.Annotations;
+
     using Newtonsoft.Json;
 
     public class Mailbox

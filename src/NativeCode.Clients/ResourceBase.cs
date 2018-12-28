@@ -5,8 +5,10 @@ namespace NativeCode.Clients
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using Core.Extensions;
-    using Core.Serialization;
+
+    using NativeCode.Core.Extensions;
+    using NativeCode.Core.Serialization;
+
     using RestSharp;
 
     public abstract class ResourceBase : IResource
@@ -25,10 +27,7 @@ namespace NativeCode.Clients
 
         protected virtual IRestRequest CreateRequest(string path, Method method)
         {
-            return new RestRequest(path, method)
-            {
-                JsonSerializer = new RestSerializer(this.Serializer)
-            };
+            return new RestRequest(path, method) { JsonSerializer = new RestSerializer(this.Serializer) };
         }
 
         protected virtual IRestRequest CreateRequest<T>(string path, Method method, T body)
@@ -58,8 +57,7 @@ namespace NativeCode.Clients
             return this.Execute(request);
         }
 
-        protected virtual async Task<bool> Execute(IRestRequest request,
-            CancellationToken cancellationToken = new CancellationToken())
+        protected virtual async Task<bool> Execute(IRestRequest request, CancellationToken cancellationToken = default)
         {
             var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid()
                 .ToString();
@@ -69,7 +67,8 @@ namespace NativeCode.Clients
                 return this.Serializer.Deserialize<bool>(this.cache[key]);
             }
 
-            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken)
+                               .ConfigureAwait(false);
             var content = this.Serializer.Serialize(response.IsSuccessful);
 
             this.cache.AddOrUpdate(key, k => content, (k, v) => content);
@@ -119,8 +118,7 @@ namespace NativeCode.Clients
             return this.Returns<TResponse>(request);
         }
 
-        protected virtual async Task<T> Returns<T>(IRestRequest request,
-            CancellationToken cancellationToken = new CancellationToken())
+        protected virtual async Task<T> Returns<T>(IRestRequest request, CancellationToken cancellationToken = default)
         {
             var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid()
                 .ToString();
@@ -130,7 +128,8 @@ namespace NativeCode.Clients
                 return this.Serializer.Deserialize<T>(this.cache[key]);
             }
 
-            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken)
+                               .ConfigureAwait(false);
 
             this.cache.AddOrUpdate(key, k => response.Content, (k, v) => response.Content);
 

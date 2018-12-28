@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Core.Enums;
+
     using JetBrains.Annotations;
+
+    using NativeCode.Node.Media.Core.Enums;
 
     public class MountInfo : DataModel
     {
@@ -14,12 +16,12 @@
         [MaxLength(256)]
         public string Host { get; set; }
 
+        public MountType MountType { get; set; }
+
         [Required]
         [MaxLength(256)]
         public string Name { get; set; }
 
         public List<MountPathInfo> Paths { get; } = new List<MountPathInfo>();
-
-        public MountType MountType { get; set; }
     }
 }

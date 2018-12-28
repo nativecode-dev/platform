@@ -1,14 +1,14 @@
 namespace NativeCode.Node.Identity
 {
-    using System.Diagnostics.CodeAnalysis;
-    using Core;
-    using Core.Configuration;
-    using Core.Data;
     using IdentityServer4.EntityFramework.Options;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
 
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    using NativeCode.Core;
+    using NativeCode.Core.Configuration;
+    using NativeCode.Core.Data;
+
     public class IdentityDataContextFactory : DataContextFactory<IdentityDataContext>
     {
         private const string AppName = "Platform";
@@ -22,7 +22,8 @@ namespace NativeCode.Node.Identity
                 .AddEtcdConfig(configs);
         }
 
-        protected override IdentityDataContext CreateNewInstance(DbContextOptionsBuilder<IdentityDataContext> builder,
+        protected override IdentityDataContext CreateNewInstance(
+            DbContextOptionsBuilder<IdentityDataContext> builder,
             string connectionString)
         {
             builder.UseSqlServer(connectionString);

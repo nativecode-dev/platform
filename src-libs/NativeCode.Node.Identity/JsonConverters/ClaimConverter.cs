@@ -3,6 +3,7 @@ namespace NativeCode.Node.Identity.JsonConverters
     using System;
     using System.Collections.ObjectModel;
     using System.Security.Claims;
+
     using Newtonsoft.Json;
 
     public class ClaimConverter : JsonConverter
@@ -12,8 +13,7 @@ namespace NativeCode.Node.Identity.JsonConverters
             return false;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var value = reader.Value;
 

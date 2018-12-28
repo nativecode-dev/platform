@@ -2,7 +2,8 @@ namespace NativeCode.Core.Messaging.Extensions
 {
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Options;
+
+    using NativeCode.Core.Messaging.Options;
 
     public static class ConfigurationExtensions
     {

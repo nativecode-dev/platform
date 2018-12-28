@@ -56,7 +56,6 @@ namespace NativeCode.Core.Data
         }
     }
 
-    [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass")]
     public abstract class Entity<TKey> : Entity, IEntity<TKey>
         where TKey : struct
     {

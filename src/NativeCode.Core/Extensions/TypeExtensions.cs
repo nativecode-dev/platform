@@ -4,8 +4,10 @@ namespace NativeCode.Core.Extensions
     using System.Collections;
     using System.Linq;
     using System.Reflection;
-    using Exceptions;
+
     using JetBrains.Annotations;
+
+    using NativeCode.Core.Exceptions;
 
     public static class TypeExtensions
     {

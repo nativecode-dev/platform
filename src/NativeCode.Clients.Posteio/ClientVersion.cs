@@ -6,6 +6,6 @@ namespace NativeCode.Clients.Posteio
 
         V1 = Default,
 
-        V2
+        V2,
     }
 }

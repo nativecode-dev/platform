@@ -26,8 +26,11 @@ namespace NativeCode.Core.Messaging
             this.Source = new TaskCompletionSource<bool>();
 
             this.Queue.AsObservable()
-                .Subscribe(async value => await this.ProcessMessage(value)
-                    .ConfigureAwait(false), this.ProcessCompleted, cancellationToken);
+                .Subscribe(
+                    async value => await this.ProcessMessage(value)
+                                       .ConfigureAwait(false),
+                    this.ProcessCompleted,
+                    cancellationToken);
 
             return this.Source.Task;
         }

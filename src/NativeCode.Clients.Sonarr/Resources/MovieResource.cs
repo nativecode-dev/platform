@@ -3,14 +3,16 @@ namespace NativeCode.Clients.Sonarr.Resources
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Core.Serialization;
-    using Requests;
-    using Responses;
+
+    using NativeCode.Clients.Sonarr.Requests;
+    using NativeCode.Clients.Sonarr.Responses;
+    using NativeCode.Core.Serialization;
+
     using RestSharp;
 
-    public class SeriesResource : ResourceBase, IResourceLookup<int, Series>
+    public class MovieResource : ResourceBase, IResourceLookup<int, Series>
     {
-        public SeriesResource(IRestClient client, IObjectSerializer serializer)
+        public MovieResource(IRestClient client, IObjectSerializer serializer)
             : base(client, serializer)
         {
         }

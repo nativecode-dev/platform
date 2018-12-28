@@ -2,11 +2,15 @@ namespace NativeCode.Core.Aws
 {
     using System.Threading;
     using System.Threading.Tasks;
+
     using Amazon;
     using Amazon.Runtime;
+
     using Microsoft.Extensions.Options;
+
+    using NativeCode.Core.Options;
+
     using Nito.AsyncEx;
-    using Options;
 
     public class AwsOptionsCredentialProvider : IAwsCredentialProvider
     {
@@ -16,16 +20,16 @@ namespace NativeCode.Core.Aws
             this.Region = RegionEndpoint.GetBySystemName(this.Options.Region);
         }
 
-        protected AwsOptions Options { get; }
-
         public RegionEndpoint Region { get; set; }
+
+        protected AwsOptions Options { get; }
 
         public AWSCredentials GetCredentials()
         {
             return AsyncContext.Run(() => this.GetCredentialsAsync(CancellationToken.None));
         }
 
-        public Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken = default)
         {
             AWSCredentials credentials = new BasicAWSCredentials(this.Options.AccessKey, this.Options.Secretkey);
 

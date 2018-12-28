@@ -4,9 +4,11 @@ namespace NativeCode.Node.Media.Data.Services.Storage
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using Core.Enums;
-    using Data.Storage;
+
     using JetBrains.Annotations;
+
+    using NativeCode.Node.Media.Core.Enums;
+    using NativeCode.Node.Media.Data.Data.Storage;
 
     public interface IMountService
     {
@@ -17,8 +19,7 @@ namespace NativeCode.Node.Media.Data.Services.Storage
         Task<MountPath> CreateMountPath(Guid mountId, CancellationToken cancellationToken = default);
 
         [NotNull]
-        Task<MountPath> CreateMountPath(Guid mountId, [NotNull] string filepath,
-            CancellationToken cancellationToken = default);
+        Task<MountPath> CreateMountPath(Guid mountId, [NotNull] string filepath, CancellationToken cancellationToken = default);
 
         Task DeleteMount(Guid mountId, CancellationToken cancellationToken = default);
 
@@ -32,8 +33,7 @@ namespace NativeCode.Node.Media.Data.Services.Storage
         Task<MountPath> GetMountPath(Guid mountId, CancellationToken cancellationToken = default);
 
         [NotNull]
-        Task<MountPath> GetMountPath(Guid mountId, [NotNull] string filepath,
-            CancellationToken cancellationToken = default);
+        Task<MountPath> GetMountPath(Guid mountId, [NotNull] string filepath, CancellationToken cancellationToken = default);
 
         [NotNull]
         Task<MountPath> GetMountPathById(Guid mountPathId, CancellationToken cancellationToken);

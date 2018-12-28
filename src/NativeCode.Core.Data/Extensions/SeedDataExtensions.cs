@@ -3,8 +3,11 @@ namespace NativeCode.Core.Data.Extensions
     using System;
     using System.Collections.Generic;
     using System.IO;
+
     using JetBrains.Annotations;
+
     using Microsoft.EntityFrameworkCore;
+
     using Newtonsoft.Json;
 
     public static class SeedDataExtensions
@@ -41,8 +44,7 @@ namespace NativeCode.Core.Data.Extensions
         /// <param name="builder"></param>
         /// <param name="manifest"></param>
         /// <returns></returns>
-        public static ModelBuilder SeedJsonDataFromManifest<T>([NotNull] this ModelBuilder builder,
-            [NotNull] string manifest)
+        public static ModelBuilder SeedJsonDataFromManifest<T>([NotNull] this ModelBuilder builder, [NotNull] string manifest)
             where T : class
         {
             var assembly = typeof(T).Assembly;
@@ -66,8 +68,7 @@ namespace NativeCode.Core.Data.Extensions
         /// <param name="builder"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public static ModelBuilder SeedJsonDataFromManifest<T>([NotNull] this ModelBuilder builder,
-            [NotNull] Func<Type, string> callback)
+        public static ModelBuilder SeedJsonDataFromManifest<T>([NotNull] this ModelBuilder builder, [NotNull] Func<Type, string> callback)
             where T : class
         {
             return builder.SeedJsonDataFromManifest<T>(callback(typeof(T)));

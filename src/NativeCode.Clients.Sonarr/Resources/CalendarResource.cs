@@ -1,6 +1,7 @@
 namespace NativeCode.Clients.Sonarr.Resources
 {
-    using Core.Serialization;
+    using NativeCode.Core.Serialization;
+
     using RestSharp;
 
     public class CalendarResource : ResourceBase

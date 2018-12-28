@@ -3,31 +3,18 @@ namespace NativeCode.Core.Data.Extensions
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Security.Principal;
     using System.Threading;
+
     using JetBrains.Annotations;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.EntityFrameworkCore.Infrastructure;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
     public static class DbContextExtensions
     {
-        public static T EnableQueryLogging<T>([NotNull] this T context, Action<string> logger,
-            Func<string, LogLevel, bool> filter)
-            where T : DbContext
-        {
-            var provider = context.GetInfrastructure();
-            var factory = provider.GetRequiredService<ILoggerFactory>();
-
-            SqlLoggingProvider.CreateOrModifyLoggerForDbContext(context.GetType(), factory, logger, filter);
-
-            return context;
-        }
-
         public static IEnumerable<(EntityEntry, IEntityAuditor)> GetAuditors<T>([NotNull] this T context)
             where T : DbContext
         {
@@ -43,32 +30,13 @@ namespace NativeCode.Core.Data.Extensions
         public static void UpdateAuditEntities<T>([NotNull] this T context)
             where T : DbContext
         {
-            context.UpdateAuditEntities(Thread.CurrentPrincipal.Identity);
+            context.UpdateAuditEntities(Thread.CurrentPrincipal?.Identity);
         }
 
-        [SuppressMessage("ReSharper", "SwitchStatementMissingSomeCases")]
-        public static void UpdateAuditEntities<T>([NotNull] this T context, [NotNull] IIdentity user)
+        public static void UpdateAuditEntities<T>([NotNull] this T context, [CanBeNull] IIdentity user)
             where T : DbContext
         {
-            context.UpdateAuditEntities(
-                (entry, auditor) =>
-                {
-                    switch (entry.State)
-                    {
-                        case EntityState.Added:
-                            auditor?.SetDateCreated(DateTimeOffset.UtcNow);
-                            auditor?.SetUserCreated(user);
-                            return;
-
-                        case EntityState.Modified:
-                            auditor?.SetDateModified(DateTimeOffset.UtcNow);
-                            auditor?.SetUserModified(user);
-                            return;
-
-                        default:
-                            return;
-                    }
-                });
+            context.UpdateAuditEntities((entry, auditor) => UpdateEntry(user, entry, auditor));
         }
 
         public static void UpdateAuditEntities<T>([NotNull] this T context, [NotNull] Action<EntityEntry, IEntityAuditor> callback)
@@ -81,15 +49,15 @@ namespace NativeCode.Core.Data.Extensions
         }
 
         public static IReadOnlyDictionary<EntityEntry, IReadOnlyCollection<ValidationResult>> ValidateChanges<T>(
-            [NotNull] this T context, bool throws = false)
+            [NotNull] this T context,
+            bool throws = false)
             where T : DbContext
         {
             var results = ValidateChanges(context.ChangeTracker);
 
             if (results.Any() && throws)
             {
-                var exceptions = results.SelectMany(kvp =>
-                    kvp.Value.Select(value => new ValidationException(value.ErrorMessage)));
+                var exceptions = results.SelectMany(kvp => kvp.Value.Select(value => new ValidationException(value.ErrorMessage)));
                 throw new AggregateException(exceptions);
             }
 
@@ -123,6 +91,36 @@ namespace NativeCode.Core.Data.Extensions
             }
 
             return dictionary;
+        }
+
+        private static void UpdateEntry(IIdentity user, EntityEntry entry, IEntityAuditor auditor)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    auditor?.SetDateCreated(DateTimeOffset.UtcNow);
+                    if (user != null)
+                    {
+                        auditor?.SetUserCreated(user);
+                    }
+
+                    return;
+
+                case EntityState.Modified:
+                    auditor?.SetDateModified(DateTimeOffset.UtcNow);
+                    if (user != null)
+                    {
+                        auditor?.SetUserModified(user);
+                    }
+
+                    return;
+
+                case EntityState.Deleted:
+                case EntityState.Detached:
+                case EntityState.Unchanged:
+                default:
+                    return;
+            }
         }
     }
 }

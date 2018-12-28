@@ -8,6 +8,6 @@ namespace NativeCode.Node.Services.Watchers
 
         public bool UseSsl { get; set; }
 
-        public string XspeedsSecret { get; set; } = "";
+        public string XspeedsSecret { get; set; } = string.Empty;
     }
 }

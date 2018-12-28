@@ -31,11 +31,11 @@ namespace NativeCode.Core.Services
             return Task.CompletedTask;
         }
 
+        protected abstract void OnTick(object state);
+
         protected override void ReleaseManaged()
         {
             this.timer.Dispose();
         }
-
-        protected abstract void OnTick(object state);
     }
 }

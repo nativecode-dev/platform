@@ -3,8 +3,9 @@ namespace NativeCode.Node.Media.Data.Extensions
     using System;
     using System.IO;
     using System.Security.Cryptography;
-    using Data.Storage;
+
     using NativeCode.Core.Extensions;
+    using NativeCode.Node.Media.Data.Data.Storage;
 
     public static class MediaFileExtensions
     {
@@ -18,7 +19,10 @@ namespace NativeCode.Node.Media.Data.Extensions
         /// </remarks>
         public const long MaxStreamLength = 1024 * 1024 * 100;
 
-        public static void SetFileInfo(this MountPathFile source, FileInfo file, long maxStreamLength = MaxStreamLength,
+        public static void SetFileInfo(
+            this MountPathFile source,
+            FileInfo file,
+            long maxStreamLength = MaxStreamLength,
             int maxSegmentLength = MaxSegmentLength)
         {
             using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))

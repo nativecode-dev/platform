@@ -3,10 +3,13 @@ namespace NativeCode.Core.Messaging
     using System;
     using System.Reactive.Subjects;
     using System.Threading.Tasks;
-    using Envelopes;
-    using Exceptions;
-    using Extensions;
+
     using Microsoft.Extensions.Logging;
+
+    using NativeCode.Core.Messaging.Envelopes;
+    using NativeCode.Core.Messaging.Exceptions;
+    using NativeCode.Core.Messaging.Extensions;
+
     using RabbitMQ.Client;
     using RabbitMQ.Client.Events;
 
@@ -22,9 +25,12 @@ namespace NativeCode.Core.Messaging
         {
         }
 
-        public RabbitQueueTopic(IConnection connection, IQueueSerializer serializer, ILogger<T> logger,
-            string queue = default(string),
-            string route = default(string))
+        public RabbitQueueTopic(
+            IConnection connection,
+            IQueueSerializer serializer,
+            ILogger<T> logger,
+            string queue = default,
+            string route = default)
             : base(serializer, logger)
         {
             this.channel = connection.CreateModel();
@@ -46,11 +52,6 @@ namespace NativeCode.Core.Messaging
             this.channel.BasicAck(deliveryTag, false);
         }
 
-        public override void Requeue(ulong deliveryTag)
-        {
-            this.channel.BasicNack(deliveryTag, false, true);
-        }
-
         public override IObservable<T> AsObservable()
         {
             return this.CreateObservable();
@@ -67,6 +68,11 @@ namespace NativeCode.Core.Messaging
             this.channel.BasicPublish(this.ExchangeName, this.Route, body: bytes);
 
             return Task.CompletedTask;
+        }
+
+        public override void Requeue(ulong deliveryTag)
+        {
+            this.channel.BasicNack(deliveryTag, false, true);
         }
 
         protected override void ReleaseManaged()
@@ -101,50 +107,50 @@ namespace NativeCode.Core.Messaging
             // NOTE: We don't have to release this event handler because:
             // a) It's a lambda and we're wrapping an async method for a void returning event.
             // b) The AsyncEventingBasicConsumer instance is internal and when we're done with the observable,
-            //    either through ProcessCompleted or cancelling the stream, the GC will remove both for us.
+            // either through ProcessCompleted or cancelling the stream, the GC will remove both for us.
             consumer.Received += async (sender, args) =>
-            {
-                // TODO: Allow consumers to override acknowledgment. Likely the best option is to
-                // use a context object that returns the consumer's intent and we call the ack/nack
-                // methods ourselves. It's a YAGNI until someone actually needs this feature.
-                // TODO: Need to implement a throttling method in order to ensure we can control
-                // how many messages can be processed at any given moment.
-                try
                 {
-                    var envelope = this.Serializer.Deserialize<RequestEnvelope<T>>(args.Body);
-
-                    if (envelope.Message != null)
+                    // TODO: Allow consumers to override acknowledgment. Likely the best option is to
+                    // use a context object that returns the consumer's intent and we call the ack/nack
+                    // methods ourselves. It's a YAGNI until someone actually needs this feature.
+                    // TODO: Need to implement a throttling method in order to ensure we can control
+                    // how many messages can be processed at any given moment.
+                    try
                     {
-                        envelope.Message.DeliveryTag = args.DeliveryTag;
-                        this.subject.OnNext(envelope.Message);
+                        var envelope = this.Serializer.Deserialize<RequestEnvelope<T>>(args.Body);
+
+                        if (envelope.Message != null)
+                        {
+                            envelope.Message.DeliveryTag = args.DeliveryTag;
+                            this.subject.OnNext(envelope.Message);
+                        }
                     }
-                }
-                catch (QueueDeserializationException qde)
-                {
-                    // Log the error, but we don't want to fail.
-                    this.Logger.LogDebug(qde.Message);
-                    this.Logger.LogDebug(qde.StackTrace);
+                    catch (QueueDeserializationException qde)
+                    {
+                        // Log the error, but we don't want to fail.
+                        this.Logger.LogDebug(qde.Message);
+                        this.Logger.LogDebug(qde.StackTrace);
 
-                    // TODO: We don't want to requeue a message that can't be deserialized.
-                    // However, we should also queue it somewhere for analysis. That
-                    // will be your job to make that happen!
-                    this.channel.BasicNack(args.DeliveryTag, false, false);
-                }
-                catch (Exception ex)
-                {
-                    // Log the error, but we don't want to fail.
-                    this.Logger.LogDebug(ex.Message);
-                    this.Logger.LogDebug(ex.StackTrace);
+                        // TODO: We don't want to requeue a message that can't be deserialized.
+                        // However, we should also queue it somewhere for analysis. That
+                        // will be your job to make that happen!
+                        this.channel.BasicNack(args.DeliveryTag, false, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the error, but we don't want to fail.
+                        this.Logger.LogDebug(ex.Message);
+                        this.Logger.LogDebug(ex.StackTrace);
 
-                    // TODO: We want to requeue this directly back to the work queue because
-                    // it might be something that is available at a later time.
-                    // In a real production environment, this would go to a new queue for
-                    // re-queuing along with the exception to be resolved.
-                    this.channel.BasicNack(args.DeliveryTag, false, true);
-                }
+                        // TODO: We want to requeue this directly back to the work queue because
+                        // it might be something that is available at a later time.
+                        // In a real production environment, this would go to a new queue for
+                        // re-queuing along with the exception to be resolved.
+                        this.channel.BasicNack(args.DeliveryTag, false, true);
+                    }
 
-                await Task.Yield();
-            };
+                    await Task.Yield();
+                };
 
             return this.subject;
         }

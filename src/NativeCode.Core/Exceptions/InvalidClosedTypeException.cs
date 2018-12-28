@@ -13,11 +13,13 @@ namespace NativeCode.Core.Exceptions
         {
         }
 
-        public InvalidClosedTypeException(string message) : base(message)
+        public InvalidClosedTypeException(string message)
+            : base(message)
         {
         }
 
-        public InvalidClosedTypeException(string message, Exception innerException) : base(message, innerException)
+        public InvalidClosedTypeException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 

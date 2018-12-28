@@ -3,17 +3,23 @@ namespace NativeCode.Node.Services.Watchers
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+
     using AutoMapper;
-    using Core.Messaging;
-    using Core.Services;
-    using Messages;
+
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+
+    using NativeCode.Core.Messaging;
+    using NativeCode.Core.Services;
+    using NativeCode.Node.Messages;
+
     using Nito.AsyncEx;
 
-    public abstract class ReleaseWatcher<T> : HostedService<ReleaseWatcherOptions>, IObserver<T> where T : IrcRelease
+    public abstract class ReleaseWatcher<T> : HostedService<ReleaseWatcherOptions>, IObserver<T>
+        where T : IrcRelease
     {
-        protected ReleaseWatcher(IOptions<ReleaseWatcherOptions> options, IQueueManager queue, ILogger<T> logger, IMapper mapper) : base(options)
+        protected ReleaseWatcher(IOptions<ReleaseWatcherOptions> options, IQueueManager queue, ILogger<T> logger, IMapper mapper)
+            : base(options)
         {
             this.Logger = logger;
             this.Mapper = mapper;
@@ -56,11 +62,6 @@ namespace NativeCode.Node.Services.Watchers
             return Task.CompletedTask;
         }
 
-        protected override void ReleaseManaged()
-        {
-            this.Subscription?.Dispose();
-        }
-
         protected async Task Process(T message)
         {
             try
@@ -89,5 +90,10 @@ namespace NativeCode.Node.Services.Watchers
         }
 
         protected abstract Task<bool> PushRelease(T message);
+
+        protected override void ReleaseManaged()
+        {
+            this.Subscription?.Dispose();
+        }
     }
 }

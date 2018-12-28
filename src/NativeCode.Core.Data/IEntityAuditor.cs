@@ -2,13 +2,14 @@ namespace NativeCode.Core.Data
 {
     using System;
     using System.Security.Principal;
+
     using JetBrains.Annotations;
 
     /// <inheritdoc />
     /// <summary>
     /// Provides a contract to modify audit properties.
     /// </summary>
-    /// <seealso cref="T:NativeCode.Core.Data.IEntity" />
+    /// <seealso cref="NativeCode.Core.Data.IEntity" />
     public interface IEntityAuditor : IEntity
     {
         /// <summary>

@@ -2,6 +2,7 @@ namespace NativeCode.Node.Media.Data
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
+
     using NativeCode.Core;
     using NativeCode.Core.Configuration;
     using NativeCode.Core.Data;
@@ -19,8 +20,7 @@ namespace NativeCode.Node.Media.Data
                 .AddEtcdConfig(configs);
         }
 
-        protected override MediaDataContext CreateNewInstance(DbContextOptionsBuilder<MediaDataContext> builder,
-            string connectionString)
+        protected override MediaDataContext CreateNewInstance(DbContextOptionsBuilder<MediaDataContext> builder, string connectionString)
         {
             builder.UseSqlServer(connectionString);
 

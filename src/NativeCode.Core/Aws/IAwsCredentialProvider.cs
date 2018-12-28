@@ -2,6 +2,7 @@ namespace NativeCode.Core.Aws
 {
     using System.Threading;
     using System.Threading.Tasks;
+
     using Amazon;
     using Amazon.Runtime;
 
@@ -26,6 +27,6 @@ namespace NativeCode.Core.Aws
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -2,8 +2,10 @@ namespace NativeCode.Clients.Radarr.Resources
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Core.Serialization;
-    using Responses;
+
+    using NativeCode.Clients.Radarr.Responses;
+    using NativeCode.Core.Serialization;
+
     using RestSharp;
 
     public class DiskSpaceResource : ResourceBase, IResourceLookup<IEnumerable<DiskSpace>>

@@ -1,7 +1,8 @@
 namespace NativeCode.Node.Media.Data.Data.MediaSources
 {
     using System;
-    using Catalog.Movies;
+
+    using NativeCode.Node.Media.Data.Data.Catalog.Movies;
 
     public class MediaSourceMovie : MediaSource
     {

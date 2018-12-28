@@ -1,11 +1,14 @@
 namespace NativeCode.Node.Services
 {
     using System;
+
     using AutoMapper;
-    using Clients.Radarr.Requests;
-    using Clients.Sonarr.Requests;
-    using Messages;
-    using Protocol = Clients.Radarr.Requests.Protocol;
+
+    using NativeCode.Clients.Radarr.Requests;
+    using NativeCode.Clients.Sonarr.Requests;
+    using NativeCode.Node.Messages;
+
+    using Protocol = NativeCode.Clients.Radarr.Requests.Protocol;
 
     public class DefaultMapperProfile : Profile
     {

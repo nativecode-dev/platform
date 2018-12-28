@@ -10,13 +10,13 @@ namespace NativeCode.Core.Messaging
         IQueueTopic<T> GetIncomingQueue<T>()
             where T : IQueueMessage;
 
-        IQueueTopic<T> GetIncomingQueue<T>(string queue, string route = default(string))
+        IQueueTopic<T> GetIncomingQueue<T>(string queue, string route = default)
             where T : IQueueMessage;
 
         IQueueTopic<T> GetOutgoingQueue<T>()
             where T : IQueueMessage;
 
-        IQueueTopic<T> GetOutgoingQueue<T>(string queue, string route = default(string))
+        IQueueTopic<T> GetOutgoingQueue<T>(string queue, string route = default)
             where T : IQueueMessage;
     }
 }

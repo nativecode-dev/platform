@@ -1,12 +1,13 @@
 namespace NativeCode.Core.Messaging.Attributes
 {
     using System;
-    using Extensions;
+
+    using NativeCode.Core.Messaging.Extensions;
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public sealed class QueueMessageRouteAttribute : Attribute
     {
-        public QueueMessageRouteAttribute(Type type, string route = default(string), int priority = 0)
+        public QueueMessageRouteAttribute(Type type, string route = default, int priority = 0)
             : this(type.GetRouteName(route), priority)
         {
         }

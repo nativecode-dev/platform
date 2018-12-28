@@ -1,7 +1,6 @@
 namespace NativeCode.Node.Media.Models.Data.Storage
 {
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
 
     public class MountPathFileInfo : DataModel
     {
@@ -14,7 +13,6 @@ namespace NativeCode.Node.Media.Models.Data.Storage
         public string FilePath { get; set; }
 
         [Required]
-        [SuppressMessage("Microsoft.Performance", "CA1819")]
         public byte[] Hash { get; set; }
 
         public MountPathInfo MountPathInfo { get; set; }

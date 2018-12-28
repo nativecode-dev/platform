@@ -4,18 +4,19 @@ namespace NativeCode.Node.Media.Data.Data.Storage
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using Core;
-    using Core.Enums;
+
     using JetBrains.Annotations;
+
     using NativeCode.Core.Data;
+    using NativeCode.Node.Media.Core.Enums;
 
     public class Mount : Entity<Guid>
     {
+        public Guid? CredentialId { get; set; }
+
         [CanBeNull]
         [ForeignKey(nameof(CredentialId))]
         public Credential Credentials { get; set; }
-
-        public Guid? CredentialId { get; set; }
 
         [Required]
         [MaxLength(256)]

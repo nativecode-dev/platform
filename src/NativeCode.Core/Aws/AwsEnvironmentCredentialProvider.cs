@@ -3,17 +3,19 @@ namespace NativeCode.Core.Aws
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+
     using Amazon;
     using Amazon.Runtime;
+
     using Nito.AsyncEx;
 
     public class AwsEnvironmentCredentialProvider : IAwsCredentialProvider
     {
         private const string AwsAccessKey = "AWS_ACCESS_KEY";
 
-        private const string AwsSecretKey = "AWS_SECRET_KEY";
-
         private const string AwsRegion = "AWS_REGION";
+
+        private const string AwsSecretKey = "AWS_SECRET_KEY";
 
         public AwsEnvironmentCredentialProvider()
         {
@@ -29,15 +31,14 @@ namespace NativeCode.Core.Aws
             return AsyncContext.Run(() => this.GetCredentialsAsync(CancellationToken.None));
         }
 
-        public Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken = default)
         {
             var accessKey = Environment.GetEnvironmentVariable(AwsAccessKey);
             var secretKey = Environment.GetEnvironmentVariable(AwsSecretKey);
 
             if (string.IsNullOrWhiteSpace(accessKey) || string.IsNullOrWhiteSpace(secretKey))
             {
-                throw new InvalidOperationException(
-                    $"Could not environment variable for either {AwsAccessKey} or {AwsSecretKey}.");
+                throw new InvalidOperationException($"Could not environment variable for either {AwsAccessKey} or {AwsSecretKey}.");
             }
 
             AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);

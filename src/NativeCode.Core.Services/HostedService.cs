@@ -2,9 +2,11 @@ namespace NativeCode.Core.Services
 {
     using System.Threading;
     using System.Threading.Tasks;
+
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Options;
-    using Reliability;
+
+    using NativeCode.Core.Reliability;
 
     public abstract class HostedService : Disposable, IHostedService
     {
@@ -20,7 +22,7 @@ namespace NativeCode.Core.Services
             }
 
             this.State = HostServiceState.Running;
-            return (this.Current = this.DoStartAsync(cancellationToken));
+            return this.Current = this.DoStartAsync(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

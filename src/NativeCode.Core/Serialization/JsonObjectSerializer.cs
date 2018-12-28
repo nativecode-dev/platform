@@ -3,20 +3,21 @@ namespace NativeCode.Core.Serialization
     using System.Globalization;
     using System.IO;
     using System.Text;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
 
     public class JsonObjectSerializer : IObjectSerializer
     {
         private readonly JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Culture = CultureInfo.CurrentCulture,
-            DateFormatHandling = DateFormatHandling.IsoDateFormat,
-            DateParseHandling = DateParseHandling.DateTimeOffset,
-            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-            NullValueHandling = NullValueHandling.Ignore
-        };
+                                                               {
+                                                                   ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                                                                   Culture = CultureInfo.CurrentCulture,
+                                                                   DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                                                                   DateParseHandling = DateParseHandling.DateTimeOffset,
+                                                                   DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                                                                   NullValueHandling = NullValueHandling.Ignore,
+                                                               };
 
         public T Deserialize<T>(string value)
         {

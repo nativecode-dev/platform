@@ -1,6 +1,6 @@
 namespace NativeCode.Clients.Radarr.Requests.Commands
 {
-    using Responses;
+    using NativeCode.Clients.Radarr.Responses;
 
     public class DownloadedMoviesScan : CommandOptions
     {

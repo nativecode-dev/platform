@@ -1,8 +1,10 @@
 namespace NativeCode.Clients.Sonarr
 {
     using System;
-    using Core.Serialization;
-    using Resources;
+
+    using NativeCode.Clients.Sonarr.Resources;
+    using NativeCode.Core.Serialization;
+
     using RestSharp;
 
     public class SonarrClient : CommonClient
@@ -10,10 +12,10 @@ namespace NativeCode.Clients.Sonarr
         public SonarrClient(IObjectSerializer serializer, Uri baseAddress)
             : base(serializer, ValidateUri(baseAddress))
         {
-            this.Series = new SeriesResource(this.Client, this.Serializer);
+            this.Movie = new MovieResource(this.Client, this.Serializer);
         }
 
-        public SeriesResource Series { get; }
+        public MovieResource Movie { get; }
 
         public void SetApiKey(string apikey)
         {

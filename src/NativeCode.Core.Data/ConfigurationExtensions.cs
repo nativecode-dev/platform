@@ -1,6 +1,7 @@
 namespace NativeCode.Core.Data
 {
     using System;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +14,8 @@ namespace NativeCode.Core.Data
         /// <param name="services">The services.</param>
         /// <param name="factory"></param>
         /// <returns></returns>
-        public static IServiceCollection AddContextSeeder<TContext>(this IServiceCollection services,
+        public static IServiceCollection AddContextSeeder<TContext>(
+            this IServiceCollection services,
             Func<IServiceProvider, DataContextSeeder<TContext>> factory = null)
             where TContext : DbContext
         {

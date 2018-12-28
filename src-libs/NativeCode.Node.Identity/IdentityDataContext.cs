@@ -3,27 +3,30 @@ namespace NativeCode.Node.Identity
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Core.Data.Extensions;
-    using Entities;
+
     using IdentityServer4.EntityFramework.Entities;
     using IdentityServer4.EntityFramework.Extensions;
     using IdentityServer4.EntityFramework.Interfaces;
     using IdentityServer4.EntityFramework.Options;
+
     using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using UserClaim = Entities.UserClaim;
+
+    using NativeCode.Core.Data.Extensions;
+    using NativeCode.Node.Identity.Entities;
+
+    using UserClaim = NativeCode.Node.Identity.Entities.UserClaim;
 
     public class IdentityDataContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
-        IConfigurationDbContext, IDataProtectionKeyContext
+                                       IConfigurationDbContext,
+                                       IDataProtectionKeyContext
     {
         public IdentityDataContext(ConfigurationStoreOptions store, DbContextOptions<IdentityDataContext> options)
             : base(options)
         {
             this.StoreOptions = store;
         }
-
-        protected ConfigurationStoreOptions StoreOptions { get; }
 
         public DbSet<ApiResource> ApiResources { get; set; }
 
@@ -32,6 +35,8 @@ namespace NativeCode.Node.Identity
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public DbSet<IdentityResource> IdentityResources { get; set; }
+
+        protected ConfigurationStoreOptions StoreOptions { get; }
 
         public Task<int> SaveChangesAsync()
         {

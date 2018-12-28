@@ -1,6 +1,6 @@
 namespace NativeCode.Clients.Posteio
 {
-    using Resources;
+    using NativeCode.Clients.Posteio.Resources;
 
     public interface IPosteioClient
     {

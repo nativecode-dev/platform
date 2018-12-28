@@ -1,7 +1,8 @@
 namespace NativeCode.Clients.Radarr
 {
     using System;
-    using Core.Serialization;
+
+    using NativeCode.Core.Serialization;
 
     public class RadarrClientFactory : IClientFactory<RadarrClient>
     {

@@ -5,8 +5,10 @@ namespace NativeCode.Clients.Posteio
     using System.Net;
     using System.Net.Cache;
     using System.Text;
-    using Extensions;
-    using Resources;
+
+    using NativeCode.Clients.Posteio.Extensions;
+    using NativeCode.Clients.Posteio.Resources;
+
     using RestSharp;
     using RestSharp.Authenticators;
 
@@ -16,8 +18,7 @@ namespace NativeCode.Clients.Posteio
 
         private const string PosteioUrlFormat = "admin/api/{0}/";
 
-        public PosteioClient(string hostname, string username, string password,
-            ClientVersion version = ClientVersion.Default)
+        public PosteioClient(string hostname, string username, string password, ClientVersion version = ClientVersion.Default)
             : this(GetPosteioAdminApi(hostname, version), username, password)
         {
         }
@@ -25,14 +26,14 @@ namespace NativeCode.Clients.Posteio
         public PosteioClient(Uri baseAddress, string username, string password)
         {
             var client = new RestClient(baseAddress)
-            {
-                Authenticator = new HttpBasicAuthenticator(username, password),
-                CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable),
-                CookieContainer = new CookieContainer(),
-                Encoding = Encoding.UTF8,
-                FollowRedirects = true,
-                UserAgent = PosteioAgent,
-            };
+                             {
+                                 Authenticator = new HttpBasicAuthenticator(username, password),
+                                 CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable),
+                                 CookieContainer = new CookieContainer(),
+                                 Encoding = Encoding.UTF8,
+                                 FollowRedirects = true,
+                                 UserAgent = PosteioAgent,
+                             };
 
             this.Domains = new DomainResource(client);
             this.Mailboxes = new MailboxResource(client);
@@ -45,9 +46,9 @@ namespace NativeCode.Clients.Posteio
         protected internal static Uri GetPosteioAdminApi(string hostname, ClientVersion version)
         {
             var builder = new UriBuilder(Uri.UriSchemeHttps, hostname)
-            {
-                Path = string.Format(CultureInfo.CurrentCulture, PosteioUrlFormat, version.AsPathString())
-            };
+                              {
+                                  Path = string.Format(CultureInfo.CurrentCulture, PosteioUrlFormat, version.AsPathString()),
+                              };
 
             return builder.Uri;
         }

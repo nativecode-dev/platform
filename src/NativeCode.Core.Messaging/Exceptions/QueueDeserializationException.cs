@@ -8,11 +8,13 @@ namespace NativeCode.Core.Messaging.Exceptions
         {
         }
 
-        public QueueDeserializationException(string message) : base(message)
+        public QueueDeserializationException(string message)
+            : base(message)
         {
         }
 
-        public QueueDeserializationException(string message, Exception innerException) : base(message, innerException)
+        public QueueDeserializationException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
@@ -34,19 +36,23 @@ namespace NativeCode.Core.Messaging.Exceptions
 
     public class QueueDeserializationException<T> : QueueDeserializationException
     {
-        public QueueDeserializationException() : base(typeof(T), null)
+        public QueueDeserializationException()
+            : base(typeof(T), null)
         {
         }
 
-        public QueueDeserializationException(string message) : base(message)
+        public QueueDeserializationException(string message)
+            : base(message)
         {
         }
 
-        public QueueDeserializationException(string message, Exception innerException) : base(message, innerException)
+        public QueueDeserializationException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
-        public QueueDeserializationException(Exception innerException) : base(typeof(T), innerException)
+        public QueueDeserializationException(Exception innerException)
+            : base(typeof(T), innerException)
         {
         }
     }

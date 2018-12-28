@@ -5,8 +5,10 @@ namespace NativeCode.Node.Media.Data.Services.Storage
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
-    using Data.Storage;
+
     using JetBrains.Annotations;
+
+    using NativeCode.Node.Media.Data.Data.Storage;
 
     public interface IFileService
     {
@@ -19,7 +21,11 @@ namespace NativeCode.Node.Media.Data.Services.Storage
 
         Task<IEnumerable<MountPathFile>> ImportFiles(MountPath mount, CancellationToken cancellationToken = default);
 
-        Task RenameFile(Guid mountPathId, [NotNull] string filepath, [NotNull] string filename, [NotNull] FileInfo fileinfo,
+        Task RenameFile(
+            Guid mountPathId,
+            [NotNull] string filepath,
+            [NotNull] string filename,
+            [NotNull] FileInfo fileinfo,
             CancellationToken cancellationToken = default);
 
         Task UpdateFile(Guid mountPathId, [NotNull] FileInfo fileinfo, CancellationToken cancellationToken = default);

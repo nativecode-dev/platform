@@ -5,12 +5,14 @@ namespace NativeCode.Node.Media.Services.Storage
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Core.Enums;
-    using Data;
-    using Data.Data.Storage;
-    using Data.Services.Storage;
+
     using Microsoft.EntityFrameworkCore;
+
     using NativeCode.Core.Data.Exceptions;
+    using NativeCode.Node.Media.Core.Enums;
+    using NativeCode.Node.Media.Data;
+    using NativeCode.Node.Media.Data.Data.Storage;
+    using NativeCode.Node.Media.Data.Services.Storage;
 
     public class MountService : IMountService
     {
@@ -27,23 +29,16 @@ namespace NativeCode.Node.Media.Services.Storage
         public async Task<Mount> CreateMount(string name, MountType type, CancellationToken cancellationToken = default)
         {
             var mount = await this.Context.Mounts.SingleOrDefaultAsync(m => m.Name == name, cancellationToken)
-                .ConfigureAwait(false);
+                            .ConfigureAwait(false);
 
             if (mount != null)
             {
                 throw new EntityExistsException<Mount>(name);
             }
 
-            var entity = new Mount
-            {
-                Name = name,
-                Type = type,
-            };
+            var entity = new Mount { Name = name, Type = type, };
 
-            entity.Paths.Add(new MountPath
-            {
-                Path = RootPath,
-            });
+            entity.Paths.Add(new MountPath { Path = RootPath, });
 
             this.Context.Mounts.Add(entity);
 
@@ -57,23 +52,18 @@ namespace NativeCode.Node.Media.Services.Storage
         }
 
         /// <inheritdoc />
-        public async Task<MountPath> CreateMountPath(Guid mountId, string filepath,
-            CancellationToken cancellationToken = default)
+        public async Task<MountPath> CreateMountPath(Guid mountId, string filepath, CancellationToken cancellationToken = default)
         {
             var mount = await this.Context.Mounts.Include(m => m.Paths)
-                .SingleAsync(m => m.Id == mountId, cancellationToken)
-                .ConfigureAwait(false);
+                            .SingleAsync(m => m.Id == mountId, cancellationToken)
+                            .ConfigureAwait(false);
 
             if (mount.Paths.Any(mp => mp.Path == filepath))
             {
                 throw new EntityExistsException<MountPath>(filepath);
             }
 
-            var path = new MountPath
-            {
-                Path = filepath,
-                Mount = mount,
-            };
+            var path = new MountPath { Path = filepath, Mount = mount, };
 
             mount.Paths.Add(path);
 
@@ -86,7 +76,8 @@ namespace NativeCode.Node.Media.Services.Storage
         /// <inheritdoc />
         public async Task DeleteMount(Guid mountId, CancellationToken cancellationToken = default)
         {
-            var mount = await this.GetMount(mountId, cancellationToken).ConfigureAwait(false);
+            var mount = await this.GetMount(mountId, cancellationToken)
+                            .ConfigureAwait(false);
 
             this.Context.Mounts.Remove(mount);
         }
@@ -95,12 +86,11 @@ namespace NativeCode.Node.Media.Services.Storage
         /// <inheritdoc />
         public async Task<IEnumerable<Mount>> GetLocalMounts(CancellationToken cancellationToken)
         {
-            return await this.Context.Mounts
-                .Include(m => m.Credentials)
-                .Include(m => m.Paths)
-                .Where(m => m.Type == MountType.Local)
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+            return await this.Context.Mounts.Include(m => m.Credentials)
+                       .Include(m => m.Paths)
+                       .Where(m => m.Type == MountType.Local)
+                       .ToListAsync(cancellationToken)
+                       .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -118,8 +108,7 @@ namespace NativeCode.Node.Media.Services.Storage
         /// <inheritdoc />
         public Task<MountPath> GetMountPath(Guid mountId, string filepath, CancellationToken cancellationToken = default)
         {
-            return this.Context.Mounts
-                .SelectMany(m => m.Paths)
+            return this.Context.Mounts.SelectMany(m => m.Paths)
                 .Include(mp => mp.Mount)
                 .SingleAsync(mp => mp.MountId == mountId && mp.Path == filepath, cancellationToken);
         }
@@ -133,33 +122,30 @@ namespace NativeCode.Node.Media.Services.Storage
         /// <inheritdoc />
         public async Task<IEnumerable<Mount>> GetMounts(CancellationToken cancellationToken = default)
         {
-            return await this.Context.Mounts
-                .Include(m => m.Credentials)
-                .Include(m => m.Paths)
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+            return await this.Context.Mounts.Include(m => m.Credentials)
+                       .Include(m => m.Paths)
+                       .ToListAsync(cancellationToken)
+                       .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<Mount>> GetNfsMounts(CancellationToken cancellationToken)
         {
-            return await this.Context.Mounts
-                .Include(m => m.Credentials)
-                .Include(m => m.Paths)
-                .Where(m => m.Type == MountType.Nfs)
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+            return await this.Context.Mounts.Include(m => m.Credentials)
+                       .Include(m => m.Paths)
+                       .Where(m => m.Type == MountType.Nfs)
+                       .ToListAsync(cancellationToken)
+                       .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<Mount>> GetSmbMounts(CancellationToken cancellationToken)
         {
-            return await this.Context.Mounts
-                .Include(m => m.Credentials)
-                .Include(m => m.Paths)
-                .Where(m => m.Type == MountType.Smb)
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+            return await this.Context.Mounts.Include(m => m.Credentials)
+                       .Include(m => m.Paths)
+                       .Where(m => m.Type == MountType.Smb)
+                       .ToListAsync(cancellationToken)
+                       .ConfigureAwait(false);
         }
     }
 }

@@ -6,6 +6,6 @@ namespace NativeCode.Core.Syncing
 
         Add,
 
-        Remove
+        Remove,
     }
 }

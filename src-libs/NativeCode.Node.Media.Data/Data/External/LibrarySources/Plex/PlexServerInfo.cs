@@ -2,6 +2,7 @@ namespace NativeCode.Node.Media.Data.Data.External.LibrarySources.Plex
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+
     using NativeCode.Core.Data;
 
     public class PlexServerInfo : Entity<Guid>

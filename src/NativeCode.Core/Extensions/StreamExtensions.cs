@@ -4,7 +4,8 @@ namespace NativeCode.Core.Extensions
 
     public static class StreamExtensions
     {
-        public static TStream Rewind<TStream>(this TStream stream) where TStream : Stream
+        public static TStream Rewind<TStream>(this TStream stream)
+            where TStream : Stream
         {
             stream.Position = 0;
 

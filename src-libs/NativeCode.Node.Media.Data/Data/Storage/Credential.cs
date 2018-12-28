@@ -2,9 +2,9 @@ namespace NativeCode.Node.Media.Data.Data.Storage
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using Core;
-    using Core.Enums;
+
     using NativeCode.Core.Data;
+    using NativeCode.Node.Media.Core.Enums;
 
     public class Credential : Entity<Guid>
     {

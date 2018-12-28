@@ -2,21 +2,25 @@ namespace NativeCode.Core.Data.Exceptions
 {
     using System;
 
-    public class EntityExistsException<TEntity> : EntityException<TEntity> where TEntity : IEntity
+    public class EntityExistsException<TEntity> : EntityException<TEntity>
+        where TEntity : IEntity
     {
         public EntityExistsException()
         {
         }
 
-        public EntityExistsException(string message) : base(CreateExceptionMessage(message))
+        public EntityExistsException(string message)
+            : base(CreateExceptionMessage(message))
         {
         }
 
-        public EntityExistsException(Exception innerException) : base(CreateExceptionMessage(innerException.Message), innerException)
+        public EntityExistsException(Exception innerException)
+            : base(CreateExceptionMessage(innerException.Message), innerException)
         {
         }
 
-        public EntityExistsException(string message, Exception innerException) : base(CreateExceptionMessage(message), innerException)
+        public EntityExistsException(string message, Exception innerException)
+            : base(CreateExceptionMessage(message), innerException)
         {
         }
 

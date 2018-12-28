@@ -2,21 +2,25 @@ namespace NativeCode.Core.Data.Exceptions
 {
     using System;
 
-    public class EntityNotFoundException<TEntity> : EntityException<TEntity> where TEntity : IEntity
+    public class EntityNotFoundException<TEntity> : EntityException<TEntity>
+        where TEntity : IEntity
     {
         public EntityNotFoundException()
         {
         }
 
-        public EntityNotFoundException(string message) : base(CreateExceptionMessage(message))
+        public EntityNotFoundException(string message)
+            : base(CreateExceptionMessage(message))
         {
         }
 
-        public EntityNotFoundException(Exception innerException) : base(CreateExceptionMessage(innerException.Message), innerException)
+        public EntityNotFoundException(Exception innerException)
+            : base(CreateExceptionMessage(innerException.Message), innerException)
         {
         }
 
-        public EntityNotFoundException(string message, Exception innerException) : base(CreateExceptionMessage(message), innerException)
+        public EntityNotFoundException(string message, Exception innerException)
+            : base(CreateExceptionMessage(message), innerException)
         {
         }
 
