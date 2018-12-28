@@ -2,6 +2,7 @@ namespace node_watcher
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -23,11 +24,11 @@ namespace node_watcher
 
         internal const string Version = "v1";
 
-        private static void Main(string[] args)
+        private static Task Main(string[] args)
         {
-            CreateHostBuilder(args)
+            return CreateHostBuilder(args)
                 .Build()
-                .Run();
+                .RunAsync();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)

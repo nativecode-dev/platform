@@ -2,13 +2,13 @@ namespace node_processor
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using NativeCode.Clients;
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Sonarr;
-    using NativeCode.Core.Configuration;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Messaging.Extensions;
     using NativeCode.Core.Messaging.Options;
@@ -27,11 +27,11 @@ namespace node_processor
 
         internal const string Version = "v1";
 
-        private static void Main(string[] args)
+        private static Task Main(string[] args)
         {
-            CreateHostBuilder(args)
+            return CreateHostBuilder(args)
                 .Build()
-                .Run();
+                .RunAsync();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)

@@ -1,6 +1,7 @@
 namespace node
 {
     using System.IO;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using NativeCode.Core.Web;
     using NativeCode.Node.Core;
@@ -16,13 +17,13 @@ namespace node
 
         internal const string Version = "v1";
 
-        public static void Main(string[] args)
+        public static Task Main(string[] args)
         {
-            CreateWebHostBuilder(args)
+            return CreateWebHostBuilder(args)
                 .ConfigureServices((context, options) => options.AddSerilog(context.Configuration, AppName))
                 .Build()
                 .MigrateDatabase<MediaDataContext>("Development")
-                .Run();
+                .RunAsync();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)

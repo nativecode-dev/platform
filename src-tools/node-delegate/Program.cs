@@ -1,6 +1,7 @@
 namespace node_delegate
 {
     using System.IO;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.WebHosting;
@@ -14,12 +15,12 @@ namespace node_delegate
 
         internal const string Version = "v1";
 
-        public static void Main(string[] args)
+        public static Task Main(string[] args)
         {
-            CreateWebHostBuilder(args)
+            return CreateWebHostBuilder(args)
                 .ConfigureServices((context, options) => options.AddSerilog(context.Configuration, AppName))
                 .Build()
-                .Run();
+                .RunAsync();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)

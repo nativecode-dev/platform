@@ -27,14 +27,14 @@ namespace identity
 
         internal const string Version = "v1";
 
-        public static void Main(string[] args)
+        public static Task Main(string[] args)
         {
-            CreateWebHostBuilder(args)
+            return CreateWebHostBuilder(args)
                 .ConfigureServices((context, options) => options.AddSerilog(context.Configuration, AppName))
                 .Build()
                 .MigrateDatabase<IdentityDataContext>("Development", "Production")
                 .UseDataSeeder<IdentityDataContext>(Seed)
-                .Run();
+                .RunAsync();
         }
 
         private static async Task Seed(IDataContextSeeder<IdentityDataContext> seeder, IServiceScope scope)
