@@ -7,8 +7,10 @@ namespace NativeCode.Node.Media.Services.Storage
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Data.Storage;
-    using Extensions;
+    using Data;
+    using Data.Data.Storage;
+    using Data.Extensions;
+    using Data.Services.Storage;
     using Microsoft.EntityFrameworkCore;
 
     public class FileService : IFileService

@@ -7,6 +7,7 @@ namespace node
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Media;
+    using NativeCode.Node.Media.Data;
     using Serilog;
 
     public class Program

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -16,17 +16,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Api.Analyzers" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NativeCode.Node.Media\NativeCode.Node.Media.csproj" />
+    <ProjectReference Include="..\NativeCode.Node.Media.Core\NativeCode.Node.Media.Core.csproj" />
+    <ProjectReference Include="..\NativeCode.Node.Media.Data\NativeCode.Node.Media.Data.csproj" />
   </ItemGroup>
 
 </Project>

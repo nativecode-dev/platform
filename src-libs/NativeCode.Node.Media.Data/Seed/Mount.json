@@ -1,0 +1,20 @@
+[
+  {
+    "Host": "nas01.in.nativecode.com",
+    "Id": "DFB9A8FB-320A-4D09-A70F-68184CD10723",
+    "MountType": "Smb",
+    "Name": "NAS01"
+  },
+  {
+    "Host": "qnap.in.nativecode.com",
+    "Id": "CD7CEBDB-BBB5-4133-A7C4-FA3C700D110C",
+    "MountType": "Smb",
+    "Name": "QNAP"
+  },
+  {
+    "Host": "storage.in.nativecode.com",
+    "Id": "4DB231D2-A895-4128-A1A6-295C0FCFED91",
+    "MountType": "Smb",
+    "Name": "STORAGE"
+  }
+]

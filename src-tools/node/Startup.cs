@@ -20,6 +20,7 @@ namespace node
     using NativeCode.Core.Web;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Media;
+    using NativeCode.Node.Media.Data;
     using NativeCode.Node.Media.Services;
 
     public class Startup : AspNetStartup<NodeOptions>

@@ -4,8 +4,9 @@ namespace NativeCode.Node.Media.Services.Storage
     using System.Collections.Concurrent;
     using System.IO;
     using System.Threading.Tasks;
-    using Data.Storage;
-    using Extensions;
+    using Data.Data.Storage;
+    using Data.Extensions;
+    using Data.Services.Storage;
     using Microsoft.Extensions.Logging;
     using NativeCode.Core.Reliability;
     using Nito.AsyncEx;

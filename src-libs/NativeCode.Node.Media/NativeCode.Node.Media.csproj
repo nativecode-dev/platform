@@ -16,30 +16,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Seed\Mount.json" />
-    <None Remove="Seed\MountPath.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Seed\Mount.json" />
-    <EmbeddedResource Include="Seed\MountPath.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NativeCode.Core.Data\NativeCode.Core.Data.csproj" />
-    <ProjectReference Include="..\..\src\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
-    <ProjectReference Include="..\..\src\NativeCode.Core\NativeCode.Core.csproj" />
-    <ProjectReference Include="..\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
+    <ProjectReference Include="..\NativeCode.Node.Media.Core\NativeCode.Node.Media.Core.csproj" />
+    <ProjectReference Include="..\NativeCode.Node.Media.Data\NativeCode.Node.Media.Data.csproj" />
+    <ProjectReference Include="..\NativeCode.Node.Media.Services\NativeCode.Node.Media.Services.csproj" />
   </ItemGroup>
 
 </Project>

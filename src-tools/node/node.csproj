@@ -39,7 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src-libs\NativeCode.Node.Core.WebHosting\NativeCode.Node.Core.WebHosting.csproj" />
-    <ProjectReference Include="..\..\src-libs\NativeCode.Node.Media.Services\NativeCode.Node.Media.Services.csproj" />
+    <ProjectReference Include="..\..\src-libs\NativeCode.Node.Media.Controllers\NativeCode.Node.Media.Controllers.csproj" />
     <ProjectReference Include="..\..\src-libs\NativeCode.Node.Media\NativeCode.Node.Media.csproj" />
     <ProjectReference Include="..\..\src\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
     <ProjectReference Include="..\..\src\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
