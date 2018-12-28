@@ -108,7 +108,7 @@ namespace node
         public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMediaServices(this.Configuration, options =>
+                .AddMediaServices(options =>
                 {
                     var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
                     options.UseSqlServer(connectionString);

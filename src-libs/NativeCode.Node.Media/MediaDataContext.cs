@@ -1,7 +1,7 @@
 namespace NativeCode.Node.Media
 {
     using Data.Catalog.Movies;
-    using Data.Catalog.Series;
+    using Data.Catalog.Shows;
     using Data.External.LibrarySources.Plex;
     using Data.MediaSources;
     using Data.Storage;

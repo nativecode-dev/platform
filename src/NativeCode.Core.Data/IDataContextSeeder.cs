@@ -11,13 +11,13 @@ namespace NativeCode.Core.Data
         void Clear<TEntity>()
             where TEntity : class;
 
-        Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> select,
+        Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> projection,
             Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class;
 
         Task<bool> SeedAsync<TModel, TEntity>(Assembly assembly, string name,
-            Func<TModel, DbSet<TEntity>, Task<TEntity>> select,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> projection,
             Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class;

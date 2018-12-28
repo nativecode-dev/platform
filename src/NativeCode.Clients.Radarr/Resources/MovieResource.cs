@@ -20,7 +20,7 @@ namespace NativeCode.Clients.Radarr.Resources
             return this.GetCollection<Movie>("movie");
         }
 
-        public Task<Movie> Get(int request)
+        public Task<Movie> GetResource(int request)
         {
             return this.GetSingle<Movie>($"movie/{request}");
         }

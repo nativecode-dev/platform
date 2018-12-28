@@ -25,7 +25,7 @@ namespace NativeCode.Core.Configuration
             using (var client = this.CreateClient())
             {
                 var path = this.Options.HostUri.AbsolutePath;
-                var response = await client.GetRangeAsync(path);
+                var response = await client.GetRangeAsync(path).ConfigureAwait(false);
 
                 foreach (var kvp in response)
                 {

@@ -10,15 +10,15 @@ namespace NativeCode.Node.Media.Data.Catalog
     {
         public string Description { get; set; }
 
-        public List<Image> Images { get; set; } = new List<Image>();
+        public List<Image> Images { get; } = new List<Image>();
 
         public string SortTitle { get; set; }
 
-        public List<Tag> Tags { get; set; } = new List<Tag>();
+        public List<Tag> Tags { get; } = new List<Tag>();
 
         [Required]
         public string Title { get; set; }
 
-        public List<MediaProperty> Properties { get; set; } = new List<MediaProperty>();
+        public List<MediaProperty> Properties { get; } = new List<MediaProperty>();
     }
 }

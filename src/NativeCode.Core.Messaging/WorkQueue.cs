@@ -29,16 +29,18 @@ namespace NativeCode.Core.Messaging
             return this.Inbox.Publish(request);
         }
 
-        public Task Start(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             this.cancellationTokenSource = new CancellationTokenSource();
             cancellationToken.Register(() => this.cancellationTokenSource.Cancel());
-            return Task.WhenAll(this.Consumer.Start(cancellationToken), this.Dispatcher.Start(cancellationToken));
+            return Task.WhenAll(this.Consumer.StartAsync(cancellationToken), this.Dispatcher.StartAsync(cancellationToken));
         }
 
-        public void Stop()
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             this.cancellationTokenSource?.Cancel();
+
+            return Task.CompletedTask;
         }
 
         protected override void ReleaseManaged()

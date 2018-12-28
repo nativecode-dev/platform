@@ -4,6 +4,10 @@ namespace NativeCode.Core.Messaging.Exceptions
 
     public abstract class QueueException : Exception
     {
+        protected QueueException()
+        {
+        }
+
         protected QueueException(string message)
             : base(message)
         {

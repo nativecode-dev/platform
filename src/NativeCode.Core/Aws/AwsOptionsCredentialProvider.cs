@@ -10,13 +10,13 @@ namespace NativeCode.Core.Aws
 
     public class AwsOptionsCredentialProvider : IAwsCredentialProvider
     {
-        public AwsOptionsCredentialProvider(IOptions<AWS> options)
+        public AwsOptionsCredentialProvider(IOptions<AwsOptions> options)
         {
             this.Options = options.Value;
             this.Region = RegionEndpoint.GetBySystemName(this.Options.Region);
         }
 
-        protected AWS Options { get; }
+        protected AwsOptions Options { get; }
 
         public RegionEndpoint Region { get; set; }
 

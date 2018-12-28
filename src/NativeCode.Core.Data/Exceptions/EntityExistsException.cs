@@ -2,9 +2,12 @@ namespace NativeCode.Core.Data.Exceptions
 {
     using System;
 
-    [Serializable]
     public class EntityExistsException<TEntity> : EntityException<TEntity> where TEntity : IEntity
     {
+        public EntityExistsException()
+        {
+        }
+
         public EntityExistsException(string message) : base(CreateExceptionMessage(message))
         {
         }

@@ -1,6 +1,7 @@
 namespace NativeCode.Core.Messaging.Extensions
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using Envelopes;
     using Humanizer;
@@ -18,21 +19,21 @@ namespace NativeCode.Core.Messaging.Extensions
             return ResolveEnvelopeType(type)
                 .Name.Underscore()
                 .Dasherize()
-                .ToLower();
+                .ToLower(CultureInfo.CurrentCulture);
         }
 
-        public static string GetQueueName<T>(this IQueueTopic<T> topic, string identifier = default(string))
+        public static string GetQueueName<T>(this IQueueTopic<T> topic, string identifier = default)
             where T : IQueueMessage
         {
             return typeof(T).GetQueueName(identifier);
         }
 
-        public static string GetQueueName(this Type type, string identifier = default(string))
+        public static string GetQueueName(this Type type, string identifier = default)
         {
             var name = ResolveEnvelopeType(type)
                 .Name.Underscore()
                 .Dasherize()
-                .ToLower();
+                .ToLower(CultureInfo.CurrentCulture);
 
             if (string.IsNullOrWhiteSpace(identifier))
             {
@@ -42,20 +43,20 @@ namespace NativeCode.Core.Messaging.Extensions
             return $"{name}:{identifier}";
         }
 
-        public static string GetRouteName<T>(this IQueueTopic<T> topic, string route = default(string))
+        public static string GetRouteName<T>(this IQueueTopic<T> topic, string route = default)
             where T : IQueueMessage
         {
             return typeof(T).GetRouteName(route);
         }
 
-        public static string GetRouteName(this Type type, string route = default(string))
+        public static string GetRouteName(this Type type, string route = default)
         {
             if (string.IsNullOrWhiteSpace(route))
             {
                 return type.GetQueueName();
             }
 
-            return $"{type.GetQueueName()}@{route}".ToLower();
+            return $"{type.GetQueueName()}@{route}".ToLower(CultureInfo.CurrentCulture);
         }
 
         private static Type ResolveEnvelopeType(Type type)

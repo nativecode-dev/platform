@@ -1,5 +1,6 @@
 namespace NativeCode.Clients.Posteio.Resources
 {
+    using System.Globalization;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
     using Requests;
@@ -32,22 +33,22 @@ namespace NativeCode.Clients.Posteio.Resources
 
         public Task<bool> Delete([NotNull] string email)
         {
-            return this.DeleteResource(string.Format(MailboxUrlFormat, email));
+            return this.DeleteResource(string.Format(CultureInfo.CurrentCulture, MailboxUrlFormat, email));
         }
 
         public Task<Mailbox> Get([NotNull] string email)
         {
-            return this.GetResource(string.Format(MailboxUrlFormat, email));
+            return this.GetResource(string.Format(CultureInfo.CurrentCulture, MailboxUrlFormat, email));
         }
 
-        public Task<ResponsePage<Mailbox>> Query(string query = default(string), int page = 1, int paging = 50)
+        public Task<ResponsePage<Mailbox>> Query(string query = default, int page = 1, int paging = 50)
         {
-            return this.QueryResource(string.Format(MailboxQueryUrlFormat, query, page, paging));
+            return this.QueryResource(string.Format(CultureInfo.CurrentCulture, MailboxQueryUrlFormat, query, page, paging));
         }
 
         public Task<bool> Update([NotNull] UpdateMailbox mailbox)
         {
-            return this.UpdateResource(string.Format(MailboxUrlFormat, mailbox.Email), mailbox);
+            return this.UpdateResource(string.Format(CultureInfo.CurrentCulture, MailboxUrlFormat, mailbox.Email), mailbox);
         }
     }
 }

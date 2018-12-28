@@ -23,8 +23,8 @@ namespace NativeCode.Node.Media.Data.Storage
         [MaxLength(256)]
         public string Name { get; set; }
 
-        public List<MountPath> MountPaths { get; set; } = new List<MountPath>();
+        public List<MountPath> Paths { get; } = new List<MountPath>();
 
-        public MountType MountType { get; set; }
+        public MountType Type { get; set; }
     }
 }

@@ -43,15 +43,15 @@ namespace NativeCode.Core.Data
             return this.Context.SaveChangesAsync();
         }
 
-        public Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> select,
+        public Task<bool> SeedAsync<TModel, TEntity>(string name, Func<TModel, DbSet<TEntity>, Task<TEntity>> projection,
             Func<TModel, DbSet<TEntity>, Task<TEntity>> converter, Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
-            return this.SeedAsync(Assembly.GetEntryAssembly(), name, select, converter, callback);
+            return this.SeedAsync(Assembly.GetEntryAssembly(), name, projection, converter, callback);
         }
 
         public async Task<bool> SeedAsync<TModel, TEntity>(Assembly assembly, string name,
-            Func<TModel, DbSet<TEntity>, Task<TEntity>> select, Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
+            Func<TModel, DbSet<TEntity>, Task<TEntity>> projection, Func<TModel, DbSet<TEntity>, Task<TEntity>> converter,
             Func<TModel, TEntity, Task> callback = null)
             where TEntity : class
         {
@@ -63,16 +63,16 @@ namespace NativeCode.Core.Data
             {
                 try
                 {
-                    var existing = await select(model, dbset);
+                    var existing = await projection(model, dbset).ConfigureAwait(false);
                     this.Logger.LogTrace("{@existing}", existing);
 
                     if (existing == null)
                     {
-                        var entity = await converter.Invoke(model, dbset);
+                        var entity = await converter.Invoke(model, dbset).ConfigureAwait(false);
 
                         if (callback != null)
                         {
-                            await callback.Invoke(model, entity);
+                            await callback.Invoke(model, entity).ConfigureAwait(false);
                         }
 
                         dbset.Add(entity);

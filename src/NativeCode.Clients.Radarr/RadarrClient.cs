@@ -40,7 +40,7 @@ namespace NativeCode.Clients.Radarr
                 return new Uri(uri, "api/");
             }
 
-            if (uri.PathAndQuery.StartsWith("/api") == false)
+            if (uri.PathAndQuery.StartsWith("/api", StringComparison.InvariantCultureIgnoreCase) == false)
             {
                 return new Uri(uri, "api/");
             }

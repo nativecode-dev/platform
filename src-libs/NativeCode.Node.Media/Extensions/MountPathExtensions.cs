@@ -1,6 +1,7 @@
 namespace NativeCode.Node.Media.Extensions
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Data.Storage;
 
     public static class MountPathExtensions
@@ -10,9 +11,10 @@ namespace NativeCode.Node.Media.Extensions
             return new Uri(source.GetMountUrl());
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1055")]
         public static string GetMountUrl(this MountPath source)
         {
-            switch (source.Mount.MountType)
+            switch (source.Mount.Type)
             {
                 case MountType.Nfs:
                     return source.GetNfsMountUrl();

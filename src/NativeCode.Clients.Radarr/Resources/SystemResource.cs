@@ -12,7 +12,7 @@ namespace NativeCode.Clients.Radarr.Resources
         {
         }
 
-        public Task<SystemStatus> Get()
+        public Task<SystemStatus> GetResource()
         {
             return this.GetSingle<SystemStatus>("system/status");
         }

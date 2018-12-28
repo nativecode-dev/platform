@@ -4,6 +4,6 @@ namespace NativeCode.Node.Media.Data.Catalog
 
     public abstract class MediaMetadata : MediaInfo
     {
-        public List<MetadataSource> MetadataSources { get; set; } = new List<MetadataSource>();
+        public List<MetadataSource> MetadataSources { get; } = new List<MetadataSource>();
     }
 }

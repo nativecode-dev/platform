@@ -51,7 +51,6 @@ namespace NativeCode.Core.Data.Extensions
             where T : DbContext
         {
             context.UpdateAuditEntities(
-                user,
                 (entry, auditor) =>
                 {
                     switch (entry.State)
@@ -72,8 +71,7 @@ namespace NativeCode.Core.Data.Extensions
                 });
         }
 
-        public static void UpdateAuditEntities<T>([NotNull] this T context, [NotNull] IIdentity user,
-            [NotNull] Action<EntityEntry, IEntityAuditor> callback)
+        public static void UpdateAuditEntities<T>([NotNull] this T context, [NotNull] Action<EntityEntry, IEntityAuditor> callback)
             where T : DbContext
         {
             foreach (var (entry, auditor) in GetAuditors(context))

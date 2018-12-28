@@ -1,7 +1,7 @@
 namespace NativeCode.Node.Media.Data.MediaSources
 {
     using System;
-    using Catalog.Series;
+    using Catalog.Shows;
 
     public class MediaSourceEpisode : MediaSource
     {

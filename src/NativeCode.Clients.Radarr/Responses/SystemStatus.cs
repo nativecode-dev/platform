@@ -1,6 +1,7 @@
 namespace NativeCode.Clients.Radarr.Responses
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     public class SystemStatus
     {
@@ -38,6 +39,7 @@ namespace NativeCode.Clients.Radarr.Responses
 
         public string StartupPath { get; set; }
 
+        [SuppressMessage("Microsoft.Design", "CA1056")]
         public string UrlBase { get; set; }
 
         public string Version { get; set; }

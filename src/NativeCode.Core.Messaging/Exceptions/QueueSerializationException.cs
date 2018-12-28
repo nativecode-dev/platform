@@ -4,6 +4,19 @@ namespace NativeCode.Core.Messaging.Exceptions
 
     public class QueueSerializationException : QueueException
     {
+        public QueueSerializationException()
+        {
+        }
+
+        public QueueSerializationException(string message) : base(message)
+        {
+        }
+
+        public QueueSerializationException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+
         public QueueSerializationException(Type type)
             : base(CreateExceptionMessage(type))
         {
@@ -23,6 +36,14 @@ namespace NativeCode.Core.Messaging.Exceptions
     public class QueueSerializationException<T> : QueueSerializationException
     {
         public QueueSerializationException() : base(typeof(T))
+        {
+        }
+
+        public QueueSerializationException(string message) : base(message)
+        {
+        }
+
+        public QueueSerializationException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

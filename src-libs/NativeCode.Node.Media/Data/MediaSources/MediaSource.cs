@@ -7,6 +7,6 @@ namespace NativeCode.Node.Media.Data.MediaSources
 
     public abstract class MediaSource : Entity<Guid>
     {
-        public List<MountPathFile> Files { get; set; } = new List<MountPathFile>();
+        public List<MountPathFile> Files { get; } = new List<MountPathFile>();
     }
 }

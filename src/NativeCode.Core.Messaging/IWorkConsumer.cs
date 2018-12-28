@@ -6,8 +6,8 @@ namespace NativeCode.Core.Messaging
     public interface IWorkConsumer<T>
         where T : IQueueMessage
     {
-        Task Start(CancellationToken cancellationToken);
+        Task StartAsync(CancellationToken cancellationToken = default);
 
-        void Stop();
+        void StopAsync(CancellationToken cancellationToken = default);
     }
 }

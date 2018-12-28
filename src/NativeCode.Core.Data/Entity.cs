@@ -17,20 +17,40 @@ namespace NativeCode.Core.Data
 
         void IEntityAuditor.SetDateCreated(DateTimeOffset value)
         {
-            this.DateCreated = value;
+            this.SetDateCreated(value);
         }
 
         void IEntityAuditor.SetDateModified(DateTimeOffset value)
         {
-            this.DateModified = value;
+            this.SetDateModified(value);
         }
 
         void IEntityAuditor.SetUserCreated(IIdentity identity)
         {
-            this.UserCreated = identity.Name;
+            this.SetUserCreated(identity);
         }
 
         void IEntityAuditor.SetUserModified(IIdentity identity)
+        {
+            this.SetUserModified(identity);
+        }
+
+        protected void SetDateCreated(DateTimeOffset value)
+        {
+            this.DateCreated = value;
+        }
+
+        protected void SetDateModified(DateTimeOffset value)
+        {
+            this.DateModified = value;
+        }
+
+        protected void SetUserCreated(IIdentity identity)
+        {
+            this.UserCreated = identity.Name;
+        }
+
+        protected void SetUserModified(IIdentity identity)
         {
             this.UserModified = identity.Name;
         }

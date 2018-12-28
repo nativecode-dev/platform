@@ -13,7 +13,7 @@ namespace NativeCode.Clients.Radarr.Resources
         {
         }
 
-        public Task<IEnumerable<DiskSpace>> Get()
+        public Task<IEnumerable<DiskSpace>> GetResource()
         {
             return this.GetCollection<DiskSpace>("diskspace");
         }

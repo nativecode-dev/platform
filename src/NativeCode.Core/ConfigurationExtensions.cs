@@ -10,7 +10,7 @@ namespace NativeCode.Core
         public static IServiceCollection AddAws(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IAwsCredentialProvider, AwsOptionsCredentialProvider>();
-            services.Configure<AWS>(configuration);
+            services.Configure<AwsOptions>(configuration);
 
             return services;
         }

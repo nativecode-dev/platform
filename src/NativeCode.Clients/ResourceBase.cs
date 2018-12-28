@@ -69,7 +69,7 @@ namespace NativeCode.Clients
                 return this.Serializer.Deserialize<bool>(this.cache[key]);
             }
 
-            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken);
+            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken).ConfigureAwait(false);
             var content = this.Serializer.Serialize(response.IsSuccessful);
 
             this.cache.AddOrUpdate(key, k => content, (k, v) => content);
@@ -130,7 +130,7 @@ namespace NativeCode.Clients
                 return this.Serializer.Deserialize<T>(this.cache[key]);
             }
 
-            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken);
+            var response = await this.Client.ExecuteTaskAsync(request, cancellationToken).ConfigureAwait(false);
 
             this.cache.AddOrUpdate(key, k => response.Content, (k, v) => response.Content);
 

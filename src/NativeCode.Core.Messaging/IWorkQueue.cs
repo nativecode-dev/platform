@@ -14,8 +14,8 @@ namespace NativeCode.Core.Messaging
 
         Task Publish(TRequest message);
 
-        Task Start(CancellationToken cancellationToken);
+        Task StartAsync(CancellationToken cancellationToken = default);
 
-        void Stop();
+        Task StopAsync(CancellationToken cancellationToken = default);
     }
 }

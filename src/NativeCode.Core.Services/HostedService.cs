@@ -20,22 +20,22 @@ namespace NativeCode.Core.Services
             }
 
             this.State = HostServiceState.Running;
-            return (this.Current = this.Start(cancellationToken));
+            return (this.Current = this.DoStartAsync(cancellationToken));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
             if (this.State == HostServiceState.Running)
             {
-                return this.Stop(cancellationToken);
+                return this.DoStopAsync(cancellationToken);
             }
 
             return Task.CompletedTask;
         }
 
-        protected abstract Task Start(CancellationToken cancellationToken);
+        protected abstract Task DoStartAsync(CancellationToken cancellationToken);
 
-        protected abstract Task Stop(CancellationToken cancellationToken);
+        protected abstract Task DoStopAsync(CancellationToken cancellationToken);
     }
 
     public abstract class HostedService<TOptions> : HostedService

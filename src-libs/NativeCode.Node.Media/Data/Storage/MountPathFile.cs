@@ -3,6 +3,7 @@ namespace NativeCode.Node.Media.Data.Storage
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Diagnostics.CodeAnalysis;
     using NativeCode.Core.Data;
 
     public class MountPathFile : Entity<Guid>
@@ -16,6 +17,7 @@ namespace NativeCode.Node.Media.Data.Storage
         public string FilePath { get; set; }
 
         [Required]
+        [SuppressMessage("Microsoft.Performance", "CA1819")]
         public byte[] Hash { get; set; }
 
         [ForeignKey(nameof(MountPathId))]

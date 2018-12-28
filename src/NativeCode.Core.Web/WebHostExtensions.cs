@@ -64,7 +64,7 @@ namespace NativeCode.Core.Web
             {
                 var seeder = scope.ServiceProvider.GetRequiredService<IDataContextSeeder<T>>();
 
-                await seed(seeder, scope);
+                await seed(seeder, scope).ConfigureAwait(false);
 
                 return host;
             }

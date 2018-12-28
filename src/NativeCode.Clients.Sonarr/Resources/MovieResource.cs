@@ -20,7 +20,7 @@ namespace NativeCode.Clients.Sonarr.Resources
             return this.GetCollection<Series>("series");
         }
 
-        public Task<Series> Get(int request)
+        public Task<Series> GetResource(int request)
         {
             return this.GetSingle<Series>($"series/{request}");
         }

@@ -1,6 +1,7 @@
 namespace NativeCode.Core.Extensions
 {
     using System;
+    using System.Globalization;
     using System.Security.Cryptography;
     using System.Text;
 
@@ -8,7 +9,7 @@ namespace NativeCode.Core.Extensions
     {
         public static Guid GetGuid(this string value)
         {
-            using (var provider = new MD5CryptoServiceProvider())
+            using (var provider = new SHA512CryptoServiceProvider())
             {
                 var hash = provider.ComputeHash(Encoding.UTF8.GetBytes(value));
                 return new Guid(hash);
@@ -21,8 +22,7 @@ namespace NativeCode.Core.Extensions
 
             foreach (var b in bytes)
             {
-                sb.Append(b.ToString("x2")
-                    .ToLower());
+                sb.Append(b.ToString("x2", CultureInfo.CurrentCulture).ToUpperInvariant());
             }
 
             return sb.ToString();

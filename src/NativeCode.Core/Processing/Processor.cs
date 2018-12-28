@@ -1,4 +1,4 @@
-﻿namespace NativeCode.Core.Processing
+namespace NativeCode.Core.Processing
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -14,9 +14,9 @@
 
         public async Task<TResults> ProcessAsync(TContext context, CancellationToken cancellationToken)
         {
-            var results = await this.ProcessContext(context, cancellationToken);
+            var results = await this.ProcessContext(context, cancellationToken).ConfigureAwait(false);
 
-            await this.ProcessResults(results, context, cancellationToken);
+            await this.ProcessResults(results, context, cancellationToken).ConfigureAwait(false);
 
             return results;
         }

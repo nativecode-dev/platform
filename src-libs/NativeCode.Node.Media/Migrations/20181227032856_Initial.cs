@@ -1,8 +1,10 @@
 namespace NativeCode.Node.Media.Migrations
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.EntityFrameworkCore.Migrations;
 
+    [SuppressMessage("Microsoft.Performance", "CA1814")]
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

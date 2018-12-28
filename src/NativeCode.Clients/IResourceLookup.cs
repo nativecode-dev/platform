@@ -7,11 +7,11 @@ namespace NativeCode.Clients
     {
         Task<IEnumerable<TResponse>> All();
 
-        Task<TResponse> Get(TLookupRequest request);
+        Task<TResponse> GetResource(TLookupRequest request);
     }
 
     public interface IResourceLookup<TResponse>
     {
-        Task<TResponse> Get();
+        Task<TResponse> GetResource();
     }
 }

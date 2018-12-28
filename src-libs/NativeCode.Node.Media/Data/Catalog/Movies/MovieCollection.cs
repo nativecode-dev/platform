@@ -4,6 +4,6 @@ namespace NativeCode.Node.Media.Data.Catalog.Movies
 
     public class MovieCollection : MediaInfo
     {
-        public List<Movie> Movies { get; set; } = new List<Movie>();
+        public List<Movie> Movies { get; } = new List<Movie>();
     }
 }

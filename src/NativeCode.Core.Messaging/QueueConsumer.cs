@@ -16,7 +16,7 @@ namespace NativeCode.Core.Messaging
 
         protected TaskCompletionSource<bool> Source { get; private set; }
 
-        public virtual Task Start(CancellationToken cancellationToken)
+        public virtual Task StartAsync(CancellationToken cancellationToken)
         {
             if (this.Source != null)
             {
@@ -26,15 +26,18 @@ namespace NativeCode.Core.Messaging
             this.Source = new TaskCompletionSource<bool>();
 
             this.Queue.AsObservable()
-                .Subscribe(async value => await this.ProcessMessage(value), this.ProcessCompleted, cancellationToken);
+                .Subscribe(async value => await this.ProcessMessage(value)
+                    .ConfigureAwait(false), this.ProcessCompleted, cancellationToken);
 
             return this.Source.Task;
         }
 
-        public virtual void Stop()
+        public virtual Task StopAsync()
         {
             this.Source?.SetResult(true);
             this.Source = null;
+
+            return this.Source?.Task;
         }
 
         protected virtual void ProcessCompleted()

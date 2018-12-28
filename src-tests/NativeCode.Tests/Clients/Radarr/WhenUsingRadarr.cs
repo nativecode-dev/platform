@@ -36,7 +36,7 @@ namespace NativeCode.Tests.Clients.Radarr
         {
             // Arrange
             // Act
-            var disks = await this.Client.DiskSpace.Get();
+            var disks = await this.Client.DiskSpace.GetResource();
 
             // Assert
             Assert.NotEmpty(disks);
@@ -58,7 +58,7 @@ namespace NativeCode.Tests.Clients.Radarr
         {
             // Arrange
             // Act
-            var status = await this.Client.System.Get();
+            var status = await this.Client.System.GetResource();
 
             // Assert
             Assert.True(status.IsMonoRuntime);

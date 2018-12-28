@@ -19,7 +19,7 @@ namespace NativeCode.Clients.Radarr.Resources
             return this.GetCollection<Command>("command");
         }
 
-        public Task<Command> Get(int request)
+        public Task<Command> GetResource(int request)
         {
             return this.GetSingle<Command>($"command/{request}");
         }

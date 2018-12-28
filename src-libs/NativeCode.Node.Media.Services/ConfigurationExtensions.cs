@@ -10,8 +10,7 @@ namespace NativeCode.Node.Media.Services
 
     public static class ConfigurationExtensions
     {
-        public static IServiceCollection AddMediaServices(this IServiceCollection services, IConfiguration configuration,
-            Action<DbContextOptionsBuilder> options)
+        public static IServiceCollection AddMediaServices(this IServiceCollection services, Action<DbContextOptionsBuilder> options)
         {
             return services
                 .AddScoped<IFileService, FileService>()

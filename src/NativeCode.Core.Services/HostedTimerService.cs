@@ -17,14 +17,14 @@ namespace NativeCode.Core.Services
 
         public TimeSpan Period { get; set; } = TimeSpan.FromSeconds(10);
 
-        protected override Task Start(CancellationToken cancellationToken)
+        protected override Task DoStartAsync(CancellationToken cancellationToken)
         {
             this.timer.Change(this.Duration, this.Period);
 
             return Task.CompletedTask;
         }
 
-        protected override Task Stop(CancellationToken cancellationToken)
+        protected override Task DoStopAsync(CancellationToken cancellationToken)
         {
             this.timer.Change(Timeout.InfiniteTimeSpan, TimeSpan.Zero);
 

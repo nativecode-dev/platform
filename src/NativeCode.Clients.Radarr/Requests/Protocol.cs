@@ -1,6 +1,6 @@
-﻿namespace NativeCode.Clients.Radarr.Requests
+namespace NativeCode.Clients.Radarr.Requests
 {
-    public class Protocol
+    public static class Protocol
     {
         public const string Torrent = "torrent";
 

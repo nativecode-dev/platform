@@ -48,7 +48,8 @@ namespace NativeCode.Node.Media.Services.Storage
         {
             if (this.monitors.ContainsKey(mountPath.Id) && this.monitors.TryRemove(mountPath.MountId, out var proxy))
             {
-                await proxy.Stop();
+                await proxy.Stop()
+                    .ConfigureAwait(false);
 
                 proxy.Dispose();
             }
@@ -93,7 +94,7 @@ namespace NativeCode.Node.Media.Services.Storage
                     return this.CurrentTask;
                 }
 
-                return this.CurrentTask = Task.Factory.StartNew(() => this.Monitor.EnableRaisingEvents = true);
+                return this.CurrentTask = Task.Factory.Run(() => this.Monitor.EnableRaisingEvents = true);
             }
 
             public Task Stop()

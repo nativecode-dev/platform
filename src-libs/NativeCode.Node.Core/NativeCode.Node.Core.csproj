@@ -21,10 +21,14 @@
     <PackageReference Include="Collector.Serilog.Enrichers.SensitiveInformation.Attributed" Version="1.0.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Serilog" Version="2.7.1" />
     <PackageReference Include="Serilog.Enrichers.AssemblyName" Version="1.0.8" />
     <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
-    <PackageReference Include="Serilog.Exceptions" Version="4.1.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="5.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.1" />

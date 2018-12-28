@@ -8,7 +8,7 @@ namespace NativeCode.Node.Media.Data.Storage
 
     public class MountPath : Entity<Guid>
     {
-        public virtual List<MountPathFile> Files { get; set; } = new List<MountPathFile>();
+        public List<MountPathFile> Files { get; } = new List<MountPathFile>();
 
         [ForeignKey(nameof(MountId))]
         public Mount Mount { get; set; }

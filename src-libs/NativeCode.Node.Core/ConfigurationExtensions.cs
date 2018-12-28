@@ -16,7 +16,7 @@ namespace NativeCode.Node.Core
         {
             services.AddOption<ElasticSearchOptions>(configuration, out var elasticsearch);
 
-            var serilog = CreateSerilogConfig(elasticsearch.Url, name);
+            var serilog = CreateSerilogConfig(new Uri(elasticsearch.Url), name);
             Log.Logger = serilog.ReadFrom.Configuration(configuration)
                 .CreateLogger();
 
@@ -25,7 +25,12 @@ namespace NativeCode.Node.Core
 
         public static LoggerConfiguration CreateSerilogConfig(string elasticSearchUrl, string name)
         {
-            var esconfig = new ElasticsearchSinkOptions(new Uri(elasticSearchUrl))
+            return CreateSerilogConfig(new Uri(elasticSearchUrl), name);
+        }
+
+        public static LoggerConfiguration CreateSerilogConfig(Uri elasticSearchUrl, string name)
+        {
+            var esconfig = new ElasticsearchSinkOptions(elasticSearchUrl)
             {
                 AutoRegisterTemplate = true,
                 IndexFormat = $"log-{name}-{{0:yyyy.MM.dd}}",

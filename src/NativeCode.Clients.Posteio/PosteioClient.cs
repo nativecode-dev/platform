@@ -1,6 +1,7 @@
 namespace NativeCode.Clients.Posteio
 {
     using System;
+    using System.Globalization;
     using System.Net;
     using System.Net.Cache;
     using System.Text;
@@ -45,7 +46,7 @@ namespace NativeCode.Clients.Posteio
         {
             var builder = new UriBuilder(Uri.UriSchemeHttps, hostname)
             {
-                Path = string.Format(PosteioUrlFormat, version.AsPathString())
+                Path = string.Format(CultureInfo.CurrentCulture, PosteioUrlFormat, version.AsPathString())
             };
 
             return builder.Uri;

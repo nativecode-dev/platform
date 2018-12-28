@@ -25,7 +25,8 @@ namespace NativeCode.Clients.Posteio
             request.AddHeader("Content-Type", "application/json");
             request.AddBody(resource);
 
-            var response = await this.client.ExecuteTaskAsync(request);
+            var response = await this.client.ExecuteTaskAsync(request)
+                .ConfigureAwait(false);
             return response.IsSuccessful;
         }
 
@@ -38,7 +39,8 @@ namespace NativeCode.Clients.Posteio
             };
             request.AddHeader("Content-Type", "application/json");
 
-            var response = await this.client.ExecuteTaskAsync(request);
+            var response = await this.client.ExecuteTaskAsync(request)
+                .ConfigureAwait(false);
 
             return response.IsSuccessful;
         }
@@ -52,7 +54,8 @@ namespace NativeCode.Clients.Posteio
             };
             request.AddHeader("Content-Type", "application/json");
 
-            var response = await this.client.ExecuteTaskAsync<TResource>(request);
+            var response = await this.client.ExecuteTaskAsync<TResource>(request)
+                .ConfigureAwait(false);
 
             if (response.IsSuccessful)
             {
@@ -71,7 +74,8 @@ namespace NativeCode.Clients.Posteio
             };
             request.AddHeader("Content-Type", "application/json");
 
-            var response = await this.client.ExecuteTaskAsync(request);
+            var response = await this.client.ExecuteTaskAsync(request)
+                .ConfigureAwait(false);
 
             return response.IsSuccessful;
         }
@@ -85,7 +89,8 @@ namespace NativeCode.Clients.Posteio
             };
             request.AddHeader("Content-Type", "application/json");
 
-            var response = await this.client.ExecuteTaskAsync<ResponsePage<TResource>>(request);
+            var response = await this.client.ExecuteTaskAsync<ResponsePage<TResource>>(request)
+                .ConfigureAwait(false);
 
             if (response.IsSuccessful)
             {
@@ -104,7 +109,8 @@ namespace NativeCode.Clients.Posteio
             };
             request.AddHeader("Content-Type", "application/json");
 
-            var response = await this.client.ExecuteTaskAsync(request);
+            var response = await this.client.ExecuteTaskAsync(request)
+                .ConfigureAwait(false);
 
             return response.IsSuccessful;
         }
@@ -118,7 +124,8 @@ namespace NativeCode.Clients.Posteio
             };
             request.AddHeader("Content-Type", "application/json");
 
-            var response = await this.client.ExecuteTaskAsync<TResource>(request);
+            var response = await this.client.ExecuteTaskAsync<TResource>(request)
+                .ConfigureAwait(false);
 
             if (response.IsSuccessful)
             {

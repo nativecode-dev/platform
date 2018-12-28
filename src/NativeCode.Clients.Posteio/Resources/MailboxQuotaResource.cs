@@ -1,5 +1,6 @@
 namespace NativeCode.Clients.Posteio.Resources
 {
+    using System.Globalization;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
     using Requests;
@@ -17,12 +18,12 @@ namespace NativeCode.Clients.Posteio.Resources
 
         public Task<MailboxQuota> Get([NotNull] string email)
         {
-            return this.GetResource(string.Format(QuotaUrlFormat, email));
+            return this.GetResource(string.Format(CultureInfo.CurrentCulture, QuotaUrlFormat, email));
         }
 
         public Task<bool> Update([NotNull] UpdateQuota quota)
         {
-            return this.UpdateResource(string.Format(QuotaUrlFormat, quota.Email), quota);
+            return this.UpdateResource(string.Format(CultureInfo.CurrentCulture, QuotaUrlFormat, quota.Email), quota);
         }
     }
 }

@@ -3,8 +3,9 @@ namespace NativeCode.Core.Data.Extensions
     using System;
     using System.Collections.Concurrent;
     using Microsoft.Extensions.Logging;
+    using Reliability;
 
-    internal class SqlLoggingProvider : ILoggerProvider
+    internal class SqlLoggingProvider : Disposable, ILoggerProvider
     {
         private static readonly ConcurrentDictionary<Type, SqlLoggingProvider> Providers =
             new ConcurrentDictionary<Type, SqlLoggingProvider>();
@@ -19,10 +20,6 @@ namespace NativeCode.Core.Data.Extensions
         public ILogger CreateLogger(string category)
         {
             return new Logger(category, this);
-        }
-
-        public void Dispose()
-        {
         }
 
         public static void CreateOrModifyLoggerForDbContext(
@@ -99,6 +96,11 @@ namespace NativeCode.Core.Data.Extensions
                 this.Logger = logger;
                 this.Filter = filter;
             }
+        }
+
+        /// <inheritdoc />
+        protected override void ReleaseManaged()
+        {
         }
     }
 }

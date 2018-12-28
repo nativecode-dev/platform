@@ -1,5 +1,6 @@
 namespace NativeCode.Clients.Posteio.Resources
 {
+    using System.Globalization;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
     using Requests;
@@ -29,22 +30,22 @@ namespace NativeCode.Clients.Posteio.Resources
 
         public Task<bool> Delete([NotNull] string domain)
         {
-            return this.DeleteResource(string.Format(DomainUrlFormat, domain));
+            return this.DeleteResource(string.Format(CultureInfo.CurrentCulture, DomainUrlFormat, domain));
         }
 
         public Task<Domain> Get([NotNull] string domain)
         {
-            return this.GetResource(string.Format(DomainUrlFormat, domain));
+            return this.GetResource(string.Format(CultureInfo.CurrentCulture, DomainUrlFormat, domain));
         }
 
-        public Task<ResponsePage<Domain>> Query(string query = default(string), int page = 1, int paging = 50)
+        public Task<ResponsePage<Domain>> Query(string query = default, int page = 1, int paging = 50)
         {
-            return this.QueryResource(string.Format(DomainQueryUrlFormat, query, page, paging));
+            return this.QueryResource(string.Format(CultureInfo.CurrentCulture, DomainQueryUrlFormat, query, page, paging));
         }
 
         public Task<bool> Update([NotNull] UpdateDomain domain)
         {
-            return this.UpdateResource(string.Format(DomainUrlFormat, domain.Name), domain);
+            return this.UpdateResource(string.Format(CultureInfo.CurrentCulture, DomainUrlFormat, domain.Name), domain);
         }
     }
 }

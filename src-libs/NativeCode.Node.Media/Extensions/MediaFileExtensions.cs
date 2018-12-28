@@ -17,7 +17,7 @@ namespace NativeCode.Node.Media.Extensions
         {
             using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var keystream = new MemoryStream())
-            using (var hash = SHA1.Create())
+            using (var hash = SHA512.Create())
             {
                 source.FileName = file.Name;
                 source.FilePath = file.DirectoryName;

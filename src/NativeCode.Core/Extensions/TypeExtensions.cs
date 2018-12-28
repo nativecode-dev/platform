@@ -24,7 +24,7 @@ namespace NativeCode.Core.Extensions
         {
             if (type.GenericTypeArguments.Any() == false)
             {
-                throw new InvalidClosedType(type);
+                throw new InvalidClosedTypeException(type);
             }
 
             return type.GenericTypeArguments;
@@ -81,22 +81,22 @@ namespace NativeCode.Core.Extensions
 
         public static bool IsPlsAssembly([NotNull] this Assembly assembly)
         {
-            return assembly.FullName.StartsWith("PLSos2");
+            return assembly.FullName.StartsWith("PLSos2", StringComparison.InvariantCulture);
         }
 
         public static bool IsPlsType([NotNull] this Type type)
         {
-            return type.Namespace?.StartsWith("PLSos2") ?? false;
+            return type.Namespace?.StartsWith("PLSos2", StringComparison.InvariantCulture) ?? false;
         }
 
         public static bool IsPlxAssembly([NotNull] this Assembly assembly)
         {
-            return assembly.FullName?.StartsWith("PropLogix") ?? false;
+            return assembly.FullName?.StartsWith("PropLogix", StringComparison.InvariantCulture) ?? false;
         }
 
         public static bool IsPlxType([NotNull] this Type type)
         {
-            return type.Namespace?.StartsWith("PropLogix") ?? false;
+            return type.Namespace?.StartsWith("PropLogix", StringComparison.InvariantCulture) ?? false;
         }
 
         public static string ToFullKey([NotNull] this Type source)

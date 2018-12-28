@@ -1,5 +1,6 @@
 namespace NativeCode.Clients.Posteio.Resources
 {
+    using System.Globalization;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
     using Requests;
@@ -17,12 +18,12 @@ namespace NativeCode.Clients.Posteio.Resources
 
         public Task<SieveScript> Get([NotNull] string email)
         {
-            return this.GetResource(string.Format(SieveUrlFormat, email));
+            return this.GetResource(string.Format(CultureInfo.CurrentCulture, SieveUrlFormat, email));
         }
 
         public Task<bool> Update([NotNull] UpdateSieve sieve)
         {
-            return this.UpdateResource(string.Format(SieveUrlFormat, sieve.Email), sieve);
+            return this.UpdateResource(string.Format(CultureInfo.CurrentCulture, SieveUrlFormat, sieve.Email), sieve);
         }
     }
 }

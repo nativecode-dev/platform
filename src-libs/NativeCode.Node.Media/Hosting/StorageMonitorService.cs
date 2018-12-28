@@ -33,11 +33,11 @@ namespace NativeCode.Node.Media.Hosting
         /// <inheritdoc />
         protected override void ReleaseManaged()
         {
-            AsyncContext.Run(() => this.Stop(CancellationToken.None));
+            AsyncContext.Run(() => this.DoStopAsync(CancellationToken.None));
         }
 
         /// <inheritdoc />
-        protected override async Task Start(CancellationToken cancellationToken)
+        protected override async Task DoStartAsync(CancellationToken cancellationToken)
         {
             if (this.Options.Enabled == false)
             {
@@ -48,15 +48,15 @@ namespace NativeCode.Node.Media.Hosting
 
             foreach (var mount in this.Options.Mounts)
             {
-                var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken);
+                var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken).ConfigureAwait(false);
                 tasks.Add(this.Monitors.StartMonitor(path));
             }
 
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        protected override async Task Stop(CancellationToken cancellationToken)
+        protected override async Task DoStopAsync(CancellationToken cancellationToken)
         {
             if (this.Options.Enabled == false)
             {
@@ -67,11 +67,11 @@ namespace NativeCode.Node.Media.Hosting
 
             foreach (var mount in this.Options.Mounts)
             {
-                var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken);
+                var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken).ConfigureAwait(false);
                 tasks.Add(this.Monitors.StopMonitor(path));
             }
 
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks).ConfigureAwait(false);
         }
     }
 }

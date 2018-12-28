@@ -26,7 +26,7 @@ namespace NativeCode.Clients.Posteio.Responses
         public bool RedirectOnly { get; set; }
 
         [JsonProperty("redirect_to")]
-        public List<string> RedirectTo { get; set; } = new List<string>();
+        public List<string> RedirectTo { get; } = new List<string>();
 
         [JsonProperty("super_admin")]
         public bool SuperAdmin { get; set; }
