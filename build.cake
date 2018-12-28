@@ -1,6 +1,6 @@
-#addin nuget:?package=Cake.Figlet
-#addin nuget:?package=Cake.FileHelpers
-#addin nuget:?package=Cake.Npx
+#addin nuget:?package=Cake.Figlet&version=1.2.0
+#addin nuget:?package=Cake.FileHelpers&version=3.1.0
+#addin nuget:?package=Cake.Npx&version=1.3.0
 
 // See: https://medium.com/@michael.wolfenden/simplified-versioning-and-publishing-for-net-libraries-a28e5e740fa6
 
