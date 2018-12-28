@@ -6,6 +6,7 @@
     <PackageVersion></PackageVersion>
     <Authors>NativeCode</Authors>
     <Company>NativeCode</Company>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

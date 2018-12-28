@@ -16,15 +16,15 @@ namespace NativeCode.Node.Media.Hosting
         public StorageMonitorService(
             IOptions<StorageMonitorOptions> options,
             ILogger<StorageMonitorService> logger,
-            IFileMonitorService fileMonitors,
+            IMonitorService monitors,
             IMountService mountService) : base(options)
         {
-            this.FileMonitors = fileMonitors;
+            this.Monitors = monitors;
             this.Logger = logger;
             this.MountService = mountService;
         }
 
-        protected IFileMonitorService FileMonitors { get; }
+        protected IMonitorService Monitors { get; }
 
         protected ILogger<StorageMonitorService> Logger { get; }
 
@@ -49,7 +49,7 @@ namespace NativeCode.Node.Media.Hosting
             foreach (var mount in this.Options.Mounts)
             {
                 var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken);
-                tasks.Add(this.FileMonitors.StartMonitor(path));
+                tasks.Add(this.Monitors.StartMonitor(path));
             }
 
             await Task.WhenAll(tasks);
@@ -68,7 +68,7 @@ namespace NativeCode.Node.Media.Hosting
             foreach (var mount in this.Options.Mounts)
             {
                 var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken);
-                tasks.Add(this.FileMonitors.StopMonitor(path));
+                tasks.Add(this.Monitors.StopMonitor(path));
             }
 
             await Task.WhenAll(tasks);

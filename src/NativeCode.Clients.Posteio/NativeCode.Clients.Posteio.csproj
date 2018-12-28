@@ -7,6 +7,7 @@
     <Authors>NativeCode</Authors>
     <Company>NativeCode</Company>
     <Description>Client to access Poste.io mail server API. Offers compatibility with the Free and Pro versions up to v2.0.0.</Description>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

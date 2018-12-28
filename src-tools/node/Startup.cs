@@ -107,11 +107,13 @@ namespace node
 
         public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMediaServices(this.Configuration, options =>
-            {
-                var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
-                options.UseSqlServer(connectionString);
-            });
+            services
+                .AddMediaServices(this.Configuration, options =>
+                {
+                    var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
+                    options.UseSqlServer(connectionString);
+                })
+                .AddMediaStorageMonitor(this.Configuration);
 
             services.AddHangfire(x => x.UseRedisStorage("redis"));
 

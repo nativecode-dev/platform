@@ -11,17 +11,20 @@ namespace NativeCode.Node.Media.Services
     public static class ConfigurationExtensions
     {
         public static IServiceCollection AddMediaServices(this IServiceCollection services, IConfiguration configuration,
-            Action<DbContextOptionsBuilder> dboptions)
+            Action<DbContextOptionsBuilder> options)
         {
-            services.AddOption<StorageMonitorOptions>(configuration);
-            services.AddDbContext<MediaDataContext>(dboptions);
+            return services
+                .AddScoped<IFileService, FileService>()
+                .AddScoped<IMountService, MountService>()
+                .AddDbContext<MediaDataContext>(options);
+        }
 
-            services.AddScoped<IFileMonitorService, FileMonitorService>();
-            services.AddScoped<IFileStorageService, FileStorageService>();
-            services.AddScoped<IMountService, MountService>();
-            services.AddHostedService<StorageMonitorService>();
-
-            return services;
+        public static IServiceCollection AddMediaStorageMonitor(this IServiceCollection services, IConfiguration configuration)
+        {
+            return services
+                .AddOption<StorageMonitorOptions>(configuration)
+                .AddScoped<IMonitorService, MonitorService>()
+                .AddHostedService<StorageMonitorService>();
         }
     }
 }
