@@ -5,8 +5,11 @@ namespace NativeCode.Node.Media.Controllers
     using System.Threading.Tasks;
     using AutoMapper;
     using Data.Services.Storage;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Models;
+    using Models.Data.Storage;
+    using Models.Views.Mounts;
+    using NativeCode.Core.Data.Exceptions;
 
     [ApiController]
     [Route("[controller]")]
@@ -22,44 +25,137 @@ namespace NativeCode.Node.Media.Controllers
 
         protected IMountService MountService { get; }
 
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeleteMountRequest), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(DeleteMountRequest request)
+        {
+            try
+            {
+                await this.MountService.DeleteMount(request.Id)
+                    .ConfigureAwait(true);
+
+                return this.Ok();
+            }
+            catch (EntityException)
+            {
+                return this.NotFound(request);
+            }
+        }
+
         [HttpGet]
-        public async Task<IEnumerable<MountInfo>> Get()
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(IEnumerable<MountInfo>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Get()
         {
-            var mounts = await this.MountService.GetMounts()
-                .ConfigureAwait(false);
-            return this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
-        }
+            try
+            {
+                var mounts = await this.MountService.GetMounts()
+                    .ConfigureAwait(false);
 
-        [HttpGet("local")]
-        public async Task<IEnumerable<MountInfo>> GetLocal()
-        {
-            var mounts = await this.MountService.GetLocalMounts()
-                .ConfigureAwait(false);
-            return this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
-        }
-
-        [HttpGet("nfs")]
-        public async Task<IEnumerable<MountInfo>> GetNfs()
-        {
-            var mounts = await this.MountService.GetNfsMounts()
-                .ConfigureAwait(false);
-            return this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
-        }
-
-        [HttpGet("smb")]
-        public async Task<IEnumerable<MountInfo>> GetSmb()
-        {
-            var mounts = await this.MountService.GetSmbMounts()
-                .ConfigureAwait(false);
-            return this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
+                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+            }
+            catch (EntityException)
+            {
+                return this.NotFound();
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<MountInfo> Get(Guid id)
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(MountInfo), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Get(Guid id)
         {
-            var mount = await this.MountService.GetMount(id)
-                .ConfigureAwait(false);
-            return this.Mapper.Map<MountInfo>(mount);
+            try
+            {
+                var mount = await this.MountService.GetMount(id)
+                    .ConfigureAwait(false);
+
+                return this.Ok(this.Mapper.Map<MountInfo>(mount));
+            }
+            catch (EntityException)
+            {
+                return this.NotFound();
+            }
+        }
+
+        [HttpGet("local")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(IEnumerable<MountInfo>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetLocal()
+        {
+            try
+            {
+                var mounts = await this.MountService.GetLocalMounts()
+                    .ConfigureAwait(false);
+
+                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+            }
+            catch (EntityException)
+            {
+                return this.NotFound();
+            }
+        }
+
+        [HttpGet("nfs")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(IEnumerable<MountInfo>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetNfs()
+        {
+            try
+            {
+                var mounts = await this.MountService.GetNfsMounts()
+                    .ConfigureAwait(false);
+
+                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+            }
+            catch (EntityException)
+            {
+                return this.NotFound();
+            }
+        }
+
+        [HttpGet("smb")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(IEnumerable<MountInfo>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetSmb()
+        {
+            try
+            {
+                var mounts = await this.MountService.GetSmbMounts()
+                    .ConfigureAwait(false);
+
+                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+            }
+            catch (EntityException)
+            {
+                return this.NotFound();
+            }
+        }
+
+        [HttpPost]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(MountInfo), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CreateMountRequest), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Post(CreateMountRequest request)
+        {
+            try
+            {
+                var mount = await this.MountService.CreateMount(request.Name, request.Type)
+                    .ConfigureAwait(true);
+
+                return this.Ok(this.Mapper.Map<MountInfo>(mount));
+            }
+            catch (EntityException)
+            {
+                return this.NotFound(request);
+            }
         }
     }
 }

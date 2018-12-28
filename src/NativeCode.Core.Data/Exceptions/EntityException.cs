@@ -2,7 +2,7 @@ namespace NativeCode.Core.Data.Exceptions
 {
     using System;
 
-    public class EntityException<TEntity> : Exception where TEntity : IEntity
+    public abstract class EntityException : Exception
     {
         protected EntityException()
         {
@@ -13,6 +13,21 @@ namespace NativeCode.Core.Data.Exceptions
         }
 
         protected EntityException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
+
+    public class EntityException<TEntity> : EntityException where TEntity : IEntity
+    {
+        public EntityException()
+        {
+        }
+
+        public EntityException(string message) : base(message)
+        {
+        }
+
+        public EntityException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

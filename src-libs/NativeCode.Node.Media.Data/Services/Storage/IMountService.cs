@@ -11,7 +11,7 @@ namespace NativeCode.Node.Media.Data.Services.Storage
     public interface IMountService
     {
         [NotNull]
-        Task<Mount> CreateMount(MountType type, [NotNull] string name, CancellationToken cancellationToken = default);
+        Task<Mount> CreateMount([NotNull] string name, MountType type, CancellationToken cancellationToken = default);
 
         [NotNull]
         Task<MountPath> CreateMountPath(Guid mountId, CancellationToken cancellationToken = default);
@@ -19,6 +19,8 @@ namespace NativeCode.Node.Media.Data.Services.Storage
         [NotNull]
         Task<MountPath> CreateMountPath(Guid mountId, [NotNull] string filepath,
             CancellationToken cancellationToken = default);
+
+        Task DeleteMount(Guid mountId, CancellationToken cancellationToken = default);
 
         [NotNull]
         Task<IEnumerable<Mount>> GetLocalMounts(CancellationToken cancellationToken = default);

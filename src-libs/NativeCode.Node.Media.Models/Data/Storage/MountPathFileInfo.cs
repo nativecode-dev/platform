@@ -1,9 +1,9 @@
-namespace NativeCode.Node.Media.Models
+namespace NativeCode.Node.Media.Models.Data.Storage
 {
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
 
-    public class MountPathFileInfo
+    public class MountPathFileInfo : DataModel
     {
         [Required]
         [MaxLength(1024)]

@@ -24,7 +24,7 @@ namespace NativeCode.Node.Media.Services.Storage
         public MediaDataContext Context { get; }
 
         /// <inheritdoc />
-        public async Task<Mount> CreateMount(MountType type, string name, CancellationToken cancellationToken = default)
+        public async Task<Mount> CreateMount(string name, MountType type, CancellationToken cancellationToken = default)
         {
             var mount = await this.Context.Mounts.SingleOrDefaultAsync(m => m.Name == name, cancellationToken)
                 .ConfigureAwait(false);
@@ -81,6 +81,14 @@ namespace NativeCode.Node.Media.Services.Storage
                 .ConfigureAwait(false);
 
             return path;
+        }
+
+        /// <inheritdoc />
+        public async Task DeleteMount(Guid mountId, CancellationToken cancellationToken = default)
+        {
+            var mount = await this.GetMount(mountId, cancellationToken).ConfigureAwait(false);
+
+            this.Context.Mounts.Remove(mount);
         }
 
         /// <inheritdoc />

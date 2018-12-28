@@ -1,12 +1,11 @@
-﻿namespace NativeCode.Node.Media.Models
+﻿namespace NativeCode.Node.Media.Models.Data.Storage
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Core;
     using Core.Enums;
     using JetBrains.Annotations;
 
-    public class MountInfo
+    public class MountInfo : DataModel
     {
         [CanBeNull]
         public CredentialInfo Credentials { get; set; }

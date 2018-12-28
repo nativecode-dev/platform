@@ -1,10 +1,9 @@
-﻿namespace NativeCode.Node.Media.Models
+﻿namespace NativeCode.Node.Media.Models.Data.Storage
 {
     using System.ComponentModel.DataAnnotations;
-    using Core;
     using Core.Enums;
 
-    public class CredentialInfo
+    public class CredentialInfo : DataModel
     {
         public string Description { get; set; }
 
