@@ -30,22 +30,22 @@ slack: &slack
 pipeline:
   idp: &idp
     <<: *prod
-    dockerfile: src-tools/identity/Dockerfile
+    dockerfile: src/identity/Dockerfile
     repo: nativecode/identity
 
   node: &node
     <<: *prod
-    dockerfile: src-tools/node/Dockerfile
+    dockerfile: src/node/Dockerfile
     repo: nativecode/node
 
   processor: &processor
     <<: *prod
-    dockerfile: src-tools/node-processor/Dockerfile
+    dockerfile: src/node-processor/Dockerfile
     repo: nativecode/node-processor
 
   watcher: &watcher
     <<: *prod
-    dockerfile: src-tools/node-watcher/Dockerfile
+    dockerfile: src/node-watcher/Dockerfile
     repo: nativecode/node-watcher
 
   release-idp: &release-idp
