@@ -1,6 +1,6 @@
 namespace NativeCode.Core
 {
-    using Aws;
+    using Credentials;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Options;

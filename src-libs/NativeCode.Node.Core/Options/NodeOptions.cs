@@ -19,7 +19,5 @@ namespace NativeCode.Node.Core.Options
         public TimeSpan? ClockSkew { get; set; }
 
         public string Name { get; set; }
-
-        public string RedisHost { get; set; } = "redis";
     }
 }

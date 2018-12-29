@@ -70,6 +70,7 @@ namespace NativeCode.Node.Core.WebHosting
         public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOption<TOptions>(this.Configuration);
+            services.AddOption<RedisOptions>(this.Configuration, out var redis);
             services.AddSerilog(this.Configuration, this.AppName);
 
             Log.Logger.Information(
@@ -83,14 +84,14 @@ namespace NativeCode.Node.Core.WebHosting
                     this.Options.ClientId,
                     ClientSecret = this.Options.ClientSecret.ToSecretString(),
                     this.Options.ClockSkew,
-                    this.Options.RedisHost,
+                    Redis = redis.Host,
                     this.Options.Name,
                 });
 
             services.AddDistributedRedisCache(
                 options =>
                 {
-                    options.Configuration = this.Options.RedisHost;
+                    options.Configuration = redis.Host;
                     options.InstanceName = this.AppName;
                 });
 

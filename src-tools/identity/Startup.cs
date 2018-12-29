@@ -63,7 +63,7 @@ namespace identity
 
         public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddOption<AppOptions>(this.Configuration, out var app);
+            services.AddOption<AppOptions>(this.Configuration);
             services.AddOption<RedisOptions>(this.Configuration, out var redis);
 
             services.AddIdentityConverters();
@@ -204,7 +204,7 @@ namespace identity
                     {
                         options.Db = redis.RedisOperationalStore;
                         options.KeyPrefix = redis.RedisOperationalStoreKey;
-                        options.RedisConnectionString = redis.RedisConnection;
+                        options.RedisConnectionString = redis.Host;
                         this.Logger.LogTrace("{@options}", options);
                     });
 

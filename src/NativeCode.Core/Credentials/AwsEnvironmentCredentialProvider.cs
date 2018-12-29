@@ -1,4 +1,4 @@
-namespace NativeCode.Core.Aws
+namespace NativeCode.Core.Credentials
 {
     using System;
     using System.Threading;
@@ -29,7 +29,12 @@ namespace NativeCode.Core.Aws
             return AsyncContext.Run(() => this.GetCredentialsAsync(CancellationToken.None));
         }
 
-        public Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken = default)
+        public Task<AWSCredentials> GetCredentialsAsync()
+        {
+            return this.GetCredentialsAsync(CancellationToken.None);
+        }
+
+        public Task<AWSCredentials> GetCredentialsAsync(CancellationToken cancellationToken)
         {
             var accessKey = Environment.GetEnvironmentVariable(AwsAccessKey);
             var secretKey = Environment.GetEnvironmentVariable(AwsSecretKey);

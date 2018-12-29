@@ -31,6 +31,7 @@ namespace node_watcher
                     {
                         services.AddOption<NodeOptions>(context.Configuration, out var node);
                         services.AddOption<RabbitOptions>(context.Configuration, out var rabbit);
+                        services.AddOption<RedisOptions>(context.Configuration, out var redis);
                         services.AddOption<IrcWatcherOptions>(context.Configuration, out var irc);
                         services.AddSerilog(context.Configuration, Name);
 
@@ -39,7 +40,7 @@ namespace node_watcher
                             new
                             {
                                 node.Name,
-                                node.RedisHost,
+                                redis.Host,
                                 RabbitHost = rabbit.Host,
                                 RabbitUser = rabbit.User,
                                 IrcHost = irc.Host,
@@ -49,7 +50,7 @@ namespace node_watcher
                         services.AddDistributedRedisCache(
                             options =>
                             {
-                                options.Configuration = node.RedisHost;
+                                options.Configuration = redis.Host;
                                 options.InstanceName = AppName;
                             });
                     })
