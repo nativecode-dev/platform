@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="IrcDotNet" Version="0.7.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-beta.61">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xFFmpeg.NET" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Clients\NativeCode.Clients.Posteio\NativeCode.Clients.Posteio.csproj" />
+    <ProjectReference Include="..\..\Clients\NativeCode.Clients.Radarr\NativeCode.Clients.Radarr.csproj" />
+    <ProjectReference Include="..\..\Clients\NativeCode.Clients.Sonarr\NativeCode.Clients.Sonarr.csproj" />
+    <ProjectReference Include="..\..\Core\NativeCode.Core.Services\NativeCode.Core.Services.csproj" />
+    <ProjectReference Include="..\..\Core\NativeCode.Core\NativeCode.Core.csproj" />
+    <ProjectReference Include="..\NativeCode.Node.Messages\NativeCode.Node.Messages.csproj" />
+  </ItemGroup>
+
+</Project>

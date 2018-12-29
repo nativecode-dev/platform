@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>438419f6-f99a-4b43-b844-fc0eea1cdea0</UserSecretsId>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
+    <PackageReference Include="IdentityServer4.Contrib.RedisStore" Version="2.0.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Extensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="12.0.9" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-beta.61">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Core.WebHosting\NativeCode.Node.Core.WebHosting.csproj" />
+    <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
+    <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Identity\NativeCode.Node.Identity.csproj" />
+    <ProjectReference Include="..\..\src-libs\Core\NativeCode.Core.Configuration\NativeCode.Core.Configuration.csproj" />
+    <ProjectReference Include="..\..\src-libs\Core\NativeCode.Core.Data\NativeCode.Core.Data.csproj" />
+    <ProjectReference Include="..\..\src-libs\Core\NativeCode.Core.Mvc\NativeCode.Core.Mvc.csproj" />
+    <ProjectReference Include="..\..\src-libs\Core\NativeCode.Core.Web\NativeCode.Core.Web.csproj" />
+    <ProjectReference Include="..\..\src-libs\Core\NativeCode.Core\NativeCode.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Error\" />
+  </ItemGroup>
+
+</Project>
