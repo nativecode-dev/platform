@@ -1,21 +1,10 @@
 namespace NativeCode.Core.Extensions
 {
-    using System;
     using System.Globalization;
-    using System.Security.Cryptography;
     using System.Text;
 
     public static class StringExtensions
     {
-        public static Guid GetGuid(this string value)
-        {
-            using (var provider = new SHA512CryptoServiceProvider())
-            {
-                var hash = provider.ComputeHash(Encoding.UTF8.GetBytes(value));
-                return new Guid(hash);
-            }
-        }
-
         public static string ToHexString(byte[] bytes)
         {
             var sb = new StringBuilder();
