@@ -35,7 +35,7 @@ namespace NativeCode.Node.Core
             {
                 AutoRegisterTemplate = true,
                 AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                IndexFormat = string.Format(CultureInfo.CurrentCulture, "log-{0}-{{0:yyyy.MM.dd}}", name),
+                IndexFormat = string.Format(CultureInfo.CurrentCulture, "log-{0}-{{0:yyyy.MM.dd}}", name).ToLower(CultureInfo.CurrentCulture),
                 MinimumLogEventLevel = LogEventLevel.Verbose,
             };
 
