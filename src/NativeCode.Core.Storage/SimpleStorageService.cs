@@ -30,7 +30,10 @@ namespace NativeCode.Core.Storage
             {
                 using (var transfer = new TransferUtility(this.Client))
                 {
-                    var request = new TransferUtilityOpenStreamRequest {BucketName = bucket, Key = key, };
+                    var request = new TransferUtilityOpenStreamRequest
+                    {
+                        BucketName = bucket, Key = key,
+                    };
 
                     return transfer.OpenStreamAsync(request);
                 }

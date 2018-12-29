@@ -14,13 +14,13 @@ namespace NativeCode.Core.Messaging
             this.Serializer = serializer;
         }
 
-        protected ILogger<T> Logger { get; }
-
-        protected IQueueSerializer Serializer { get; }
-
         public string QueueName { get; protected set; }
 
         public string Route { get; protected set; }
+
+        protected ILogger<T> Logger { get; }
+
+        protected IQueueSerializer Serializer { get; }
 
         public abstract void Acknowledge(ulong deliveryTag);
 

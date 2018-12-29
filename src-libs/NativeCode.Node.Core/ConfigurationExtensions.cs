@@ -39,7 +39,8 @@ namespace NativeCode.Node.Core
                 MinimumLogEventLevel = LogEventLevel.Verbose,
             };
 
-            return new LoggerConfiguration().Enrich.FromLogContext()
+            return new LoggerConfiguration()
+                .Enrich.FromLogContext()
                 .Enrich.WithAssemblyName()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithProcessId()

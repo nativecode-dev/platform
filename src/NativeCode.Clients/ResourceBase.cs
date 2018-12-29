@@ -25,7 +25,10 @@ namespace NativeCode.Clients
 
         protected virtual IRestRequest CreateRequest(string path, Method method)
         {
-            return new RestRequest(path, method) {JsonSerializer = new RestSerializer(this.Serializer)};
+            return new RestRequest(path, method)
+            {
+                JsonSerializer = new RestSerializer(this.Serializer),
+            };
         }
 
         protected virtual IRestRequest CreateRequest<T>(string path, Method method, T body)

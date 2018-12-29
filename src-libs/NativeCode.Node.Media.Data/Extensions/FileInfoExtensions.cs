@@ -8,7 +8,10 @@ namespace NativeCode.Node.Media.Data.Extensions
     {
         public static MountPathFile CreateMountPathFile(this FileInfo fileinfo, Guid mountPathId)
         {
-            var mountfile = new MountPathFile {MountPathId = mountPathId, };
+            var mountfile = new MountPathFile
+            {
+                MountPathId = mountPathId,
+            };
 
             mountfile.SetFileInfo(fileinfo);
 

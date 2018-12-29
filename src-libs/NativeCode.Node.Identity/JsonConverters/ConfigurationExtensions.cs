@@ -17,7 +17,10 @@ namespace NativeCode.Node.Identity.JsonConverters
                     var logger = provider.GetRequiredService<ILogger<IDataContextSeeder<IdentityDataContext>>>();
                     var mapper = provider.GetRequiredService<IMapper>();
                     var resolver = provider.GetRequiredService<IdentityContractResolver>();
-                    var settings = new JsonSerializerSettings {ContractResolver = resolver};
+                    var settings = new JsonSerializerSettings
+                    {
+                        ContractResolver = resolver,
+                    };
 
                     return new DataContextSeeder<IdentityDataContext>(context, settings, mapper, logger);
                 });

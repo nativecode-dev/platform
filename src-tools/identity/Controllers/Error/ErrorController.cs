@@ -21,7 +21,10 @@ namespace identity.Controllers.Error
 
             if (error != null)
             {
-                var model = new ErrorViewModel {Error = error, };
+                var model = new ErrorViewModel
+                {
+                    Error = error,
+                };
 
                 return this.View(model);
             }

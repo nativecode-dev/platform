@@ -16,9 +16,9 @@ namespace NativeCode.Core.Aws
             this.Region = RegionEndpoint.GetBySystemName(this.Options.Region);
         }
 
-        protected AwsOptions Options { get; }
-
         public RegionEndpoint Region { get; set; }
+
+        protected AwsOptions Options { get; }
 
         public AWSCredentials GetCredentials()
         {

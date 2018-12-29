@@ -34,9 +34,15 @@ namespace NativeCode.Node.Media.Services.Storage
                 throw new EntityExistsException<Mount>(name);
             }
 
-            var entity = new Mount {Name = name, Type = type, };
+            var entity = new Mount
+            {
+                Name = name, Type = type,
+            };
 
-            entity.Paths.Add(new MountPath {Path = RootPath, });
+            entity.Paths.Add(new MountPath
+            {
+                Path = RootPath,
+            });
 
             this.Context.Mounts.Add(entity);
 
@@ -61,7 +67,10 @@ namespace NativeCode.Node.Media.Services.Storage
                 throw new EntityExistsException<MountPath>(filepath);
             }
 
-            var path = new MountPath {Path = filepath, Mount = mount, };
+            var path = new MountPath
+            {
+                Path = filepath, Mount = mount,
+            };
 
             mount.Paths.Add(path);
 
@@ -80,7 +89,6 @@ namespace NativeCode.Node.Media.Services.Storage
             this.Context.Mounts.Remove(mount);
         }
 
-        /// <inheritdoc />
         /// <inheritdoc />
         public async Task<IEnumerable<Mount>> GetLocalMounts(CancellationToken cancellationToken)
         {

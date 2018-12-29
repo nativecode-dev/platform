@@ -18,7 +18,10 @@ namespace NativeCode.Clients.Radarr.Resources
 
         public Task<IEnumerable<Movie>> Find(QueryCalendar request)
         {
-            var builder = new UriBuilder(this.Client.BaseUrl) {Path = "calendar"};
+            var builder = new UriBuilder(this.Client.BaseUrl)
+            {
+                Path = "calendar",
+            };
 
             if (request.End.HasValue)
             {

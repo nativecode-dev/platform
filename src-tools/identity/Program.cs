@@ -81,7 +81,12 @@ namespace identity
                     using (var inner = scope.ServiceProvider.CreateScope())
                     using (var users = inner.ServiceProvider.GetRequiredService<UserManager<User>>())
                     {
-                        var user = new User {Email = model.Email, EmailConfirmed = model.EmailConfirmed, UserName = model.UserName, };
+                        var user = new User
+                        {
+                            Email = model.Email,
+                            EmailConfirmed = model.EmailConfirmed,
+                            UserName = model.UserName,
+                        };
 
                         var result = await users.CreateAsync(user, model.Password);
 

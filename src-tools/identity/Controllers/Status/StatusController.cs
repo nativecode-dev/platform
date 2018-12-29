@@ -1,4 +1,4 @@
-﻿namespace identity.Controllers.Status
+namespace identity.Controllers.Status
 {
     using System;
     using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,11 @@
         [HttpGet("info")]
         public IActionResult Info()
         {
-            return this.View(new StatusInfoViewModel {MachineName = Environment.MachineName, Options = this.Options, });
+            return this.View(new StatusInfoViewModel
+            {
+                MachineName = Environment.MachineName,
+                Options = this.Options,
+            });
         }
     }
 }

@@ -4,6 +4,7 @@ namespace NativeCode.Node.Identity.Controllers
     using System.Net;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using SeedModels;
@@ -23,7 +24,7 @@ namespace NativeCode.Node.Identity.Controllers
         protected IMapper Mapper { get; }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<UserInfo>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserInfo>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
         {
             var users = await this.Context.Users.ToListAsync();

@@ -66,7 +66,10 @@ namespace NativeCode.Node.Media.Services.Storage
 
                 var uri = this.MountPath.GetMountUri();
 
-                this.Monitor = new FileSystemWatcher {IncludeSubdirectories = true, Path = uri.LocalPath, };
+                this.Monitor = new FileSystemWatcher
+                {
+                    IncludeSubdirectories = true, Path = uri.LocalPath,
+                };
 
                 this.Monitor.Changed += this.MonitorOnChanged;
                 this.Monitor.Created += this.MonitorOnCreated;

@@ -12,6 +12,7 @@ namespace node
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -82,7 +83,13 @@ namespace node
                 .UseForwardedHeaders()
                 .UseHangfireDashboard(
                     "/jobs",
-                    new DashboardOptions {AppPath = "/", Authorization = new[] {new DashboardAuthorizationFilter()}, })
+                    new DashboardOptions
+                    {
+                        AppPath = "/", Authorization = new[]
+                        {
+                            new DashboardAuthorizationFilter(),
+                        },
+                    })
                 .UseHangfireServer(
                     new BackgroundJobServerOptions
                     {
@@ -96,7 +103,7 @@ namespace node
                     {
                         var response = context.HttpContext.Response;
 
-                        if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
+                        if (response.StatusCode == StatusCodes.Status401Unauthorized)
                         {
                             response.Redirect("/account/login");
                         }

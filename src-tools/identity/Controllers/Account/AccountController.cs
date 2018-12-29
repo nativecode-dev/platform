@@ -41,7 +41,10 @@ namespace identity.Controllers.Account
         [HttpGet("AccessDenied")]
         public IActionResult Denied([FromQuery] string returnUrl)
         {
-            var model = new DeniedViewModel {ReturnUrl = returnUrl, };
+            var model = new DeniedViewModel
+            {
+                ReturnUrl = returnUrl,
+            };
 
             return this.View(model);
         }
@@ -50,7 +53,10 @@ namespace identity.Controllers.Account
         [HttpGet("Login")]
         public IActionResult Login([FromQuery] string returnUrl)
         {
-            var model = new LoginViewModel {ReturnUrl = returnUrl, };
+            var model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+            };
 
             return this.View(model);
         }
@@ -72,7 +78,10 @@ namespace identity.Controllers.Account
                 return this.Redirect("~/");
             }
 
-            var user = new User {UserName = model.Login, };
+            var user = new User
+            {
+                UserName = model.Login,
+            };
 
             this.Logger.LogInformation($"Attemping login: {model.Login}");
 

@@ -24,20 +24,20 @@ namespace NativeCode.Node.Identity
             this.StoreOptions = store;
         }
 
-        protected ConfigurationStoreOptions StoreOptions { get; }
-
         public DbSet<ApiResource> ApiResources { get; set; }
 
         public DbSet<Client> Clients { get; set; }
 
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+
         public DbSet<IdentityResource> IdentityResources { get; set; }
+
+        protected ConfigurationStoreOptions StoreOptions { get; }
 
         public Task<int> SaveChangesAsync()
         {
             return this.SaveChangesAsync(true, CancellationToken.None);
         }
-
-        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -33,11 +33,11 @@ namespace NativeCode.Clients
             this.Serializer = serializer;
         }
 
+        public Uri BaseAddress { get; }
+
         protected IRestClient Client { get; }
 
         protected IObjectSerializer Serializer { get; }
-
-        public Uri BaseAddress { get; }
 
         public void SetBasicAuth(string username, string password)
         {

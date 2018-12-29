@@ -10,6 +10,7 @@ namespace node_delegate
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.Extensions.Configuration;
@@ -83,19 +84,7 @@ namespace node_delegate
             app.UseCors()
                 .UseForwardedHeaders()
                 .UseMvcWithDefaultRoute()
-                .UseStaticFiles()
-                .UseStatusCodePages(
-                    context =>
-                    {
-                        var response = context.HttpContext.Response;
-
-                        if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
-                        {
-                            response.Redirect("/account/login");
-                        }
-
-                        return Task.CompletedTask;
-                    });
+                .UseStaticFiles();
 
             return app;
         }

@@ -24,7 +24,10 @@ namespace NativeCode.Node.Core.WebHosting
             context.OperationDescription.Operation.Responses.Add(
                 new KeyValuePair<string, SwaggerResponse>(
                     "401",
-                    new SwaggerResponse {Description = HttpStatusCode.Unauthorized.ToString(), }));
+                    new SwaggerResponse
+                    {
+                        Description = HttpStatusCode.Unauthorized.ToString(),
+                    }));
 
             return Task.FromResult(true);
         }

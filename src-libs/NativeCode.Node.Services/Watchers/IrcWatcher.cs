@@ -25,9 +25,19 @@ namespace NativeCode.Node.Services.Watchers
         private static readonly Regex AnnouncePattern = new Regex(
             @"(New Torrent|Size|Category|Uploader|Link):\s+\((?:\s+)([\w\s\.\-\:\/\?\=\[\]\{\}<>\+]+)(?:\s+)\)");
 
-        private static readonly IEnumerable<string> MovieCategories = new List<string> {"Blu-Ray", "Movie Boxsets", "Movies", };
+        private static readonly IEnumerable<string> MovieCategories = new List<string>
+        {
+            "Blu-Ray",
+            "Movie Boxsets",
+            "Movies",
+        };
 
-        private static readonly IEnumerable<string> ShowCategories = new List<string> {"HD Boxsets", "TV Boxsets", "TV-HD", };
+        private static readonly IEnumerable<string> ShowCategories = new List<string>
+        {
+            "HD Boxsets",
+            "TV Boxsets",
+            "TV-HD",
+        };
 
         private readonly IDictionary<string, Action<string, IrcRelease>> propertyMap;
 
@@ -49,10 +59,18 @@ namespace NativeCode.Node.Services.Watchers
 
             this.propertyMap = new Dictionary<string, Action<string, IrcRelease>>
             {
-                {"New Torrent", (property, release) => release.Name = property},
-                {"Size", (property, release) => release.Size = property},
-                {"Category", (property, release) => release.Category = property},
-                {"Uploader", (property, release) => release.Uploader = property},
+                {
+                    "New Torrent", (property, release) => release.Name = property
+                },
+                {
+                    "Size", (property, release) => release.Size = property
+                },
+                {
+                    "Category", (property, release) => release.Category = property
+                },
+                {
+                    "Uploader", (property, release) => release.Uploader = property
+                },
                 {
                     "Link",
                     (property, release) =>
@@ -79,7 +97,12 @@ namespace NativeCode.Node.Services.Watchers
         {
             var username = this.GetUserName();
 
-            var registration = new IrcUserRegistrationInfo {NickName = username, RealName = username, UserName = username, };
+            var registration = new IrcUserRegistrationInfo
+            {
+                NickName = username,
+                RealName = username,
+                UserName = username,
+            };
 
             this.Client.Connect(this.Options.Host, this.Options.UseSsl, registration);
             this.Logger.LogInformation($"Connected to {this.Options.Host} as {username}");
