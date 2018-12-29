@@ -3,6 +3,7 @@ namespace NativeCode.Clients
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Threading;
     using System.Threading.Tasks;
     using Core.Extensions;
@@ -55,13 +56,12 @@ namespace NativeCode.Clients
         protected virtual Task<bool> Delete(string path)
         {
             var request = this.CreateRequest(path, Method.DELETE);
-            return this.Execute(request);
+            return this.Execute(request, CancellationToken.None);
         }
 
-        protected virtual async Task<bool> Execute(IRestRequest request, CancellationToken cancellationToken = default)
+        protected virtual async Task<bool> Execute(IRestRequest request, CancellationToken cancellationToken)
         {
-            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid()
-                .ToString();
+            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".ToString(CultureInfo.CurrentCulture);
 
             if (this.cache.ContainsKey(key))
             {
@@ -80,49 +80,48 @@ namespace NativeCode.Clients
         protected virtual Task<IEnumerable<TResponse>> GetCollection<TResponse>(string path)
         {
             var request = this.CreateRequest(path, Method.GET);
-            return this.Returns<IEnumerable<TResponse>>(request);
+            return this.Returns<IEnumerable<TResponse>>(request, CancellationToken.None);
         }
 
         protected virtual Task<IResourcePage<TResponse>> GetCollectionPage<TResponse>(string path)
         {
             var request = this.CreateRequest(path, Method.GET);
-            return this.Returns<IResourcePage<TResponse>>(request);
+            return this.Returns<IResourcePage<TResponse>>(request, CancellationToken.None);
         }
 
         protected virtual Task<TResponse> GetSingle<TResponse>(string path)
         {
             var request = this.CreateRequest(path, Method.GET);
-            return this.Returns<TResponse>(request);
+            return this.Returns<TResponse>(request, CancellationToken.None);
         }
 
         protected virtual Task<bool> Post<TRequest>(string path, TRequest value)
         {
             var request = this.CreateRequest(path, Method.POST, value);
-            return this.Execute(request);
+            return this.Execute(request, CancellationToken.None);
         }
 
         protected virtual Task<TResponse> PostResponse<TRequest, TResponse>(string path, TRequest value)
         {
             var request = this.CreateRequest(path, Method.POST, value);
-            return this.Returns<TResponse>(request);
+            return this.Returns<TResponse>(request, CancellationToken.None);
         }
 
         protected virtual Task<bool> Put<TRequest>(string path, TRequest value)
         {
             var request = this.CreateRequest(path, Method.PUT, value);
-            return this.Execute(request);
+            return this.Execute(request, CancellationToken.None);
         }
 
         protected virtual Task<TResponse> PutResponse<TRequest, TResponse>(string path, TRequest value)
         {
             var request = this.CreateRequest(path, Method.PUT, value);
-            return this.Returns<TResponse>(request);
+            return this.Returns<TResponse>(request, CancellationToken.None);
         }
 
-        protected virtual async Task<T> Returns<T>(IRestRequest request, CancellationToken cancellationToken = default)
+        protected virtual async Task<T> Returns<T>(IRestRequest request, CancellationToken cancellationToken)
         {
-            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".GetGuid()
-                .ToString();
+            var key = $"{request.Method}.{request.Resource.Replace("/", "-")}".ToString(CultureInfo.CurrentCulture);
 
             if (this.cache.ContainsKey(key))
             {
