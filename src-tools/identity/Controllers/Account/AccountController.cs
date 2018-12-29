@@ -1,16 +1,13 @@
 namespace identity.Controllers.Account
 {
     using System.Threading.Tasks;
-
     using IdentityServer4.Events;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-
     using NativeCode.Node.Identity.Entities;
 
     [Route("[controller]")]
@@ -44,7 +41,7 @@ namespace identity.Controllers.Account
         [HttpGet("AccessDenied")]
         public IActionResult Denied([FromQuery] string returnUrl)
         {
-            var model = new DeniedViewModel { ReturnUrl = returnUrl, };
+            var model = new DeniedViewModel {ReturnUrl = returnUrl, };
 
             return this.View(model);
         }
@@ -53,7 +50,7 @@ namespace identity.Controllers.Account
         [HttpGet("Login")]
         public IActionResult Login([FromQuery] string returnUrl)
         {
-            var model = new LoginViewModel { ReturnUrl = returnUrl, };
+            var model = new LoginViewModel {ReturnUrl = returnUrl, };
 
             return this.View(model);
         }
@@ -75,7 +72,7 @@ namespace identity.Controllers.Account
                 return this.Redirect("~/");
             }
 
-            var user = new User { UserName = model.Login, };
+            var user = new User {UserName = model.Login, };
 
             this.Logger.LogInformation($"Attemping login: {model.Login}");
 
@@ -84,9 +81,9 @@ namespace identity.Controllers.Account
             this.Logger.LogInformation(
                 "{@result}",
                 new
-                    {
-                        result.IsLockedOut, result.IsNotAllowed, result.RequiresTwoFactor, result.Succeeded,
-                    });
+                {
+                    result.IsLockedOut, result.IsNotAllowed, result.RequiresTwoFactor, result.Succeeded,
+                });
 
             if (result.Succeeded)
             {

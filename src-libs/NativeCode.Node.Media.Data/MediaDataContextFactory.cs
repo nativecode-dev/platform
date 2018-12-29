@@ -2,7 +2,6 @@ namespace NativeCode.Node.Media.Data
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
-
     using NativeCode.Core;
     using NativeCode.Core.Configuration;
     using NativeCode.Core.Data;

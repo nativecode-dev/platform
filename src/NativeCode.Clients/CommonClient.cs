@@ -4,10 +4,8 @@ namespace NativeCode.Clients
     using System.Net;
     using System.Net.Cache;
     using System.Text;
-
-    using NativeCode.Core;
-    using NativeCode.Core.Serialization;
-
+    using Core;
+    using Core.Serialization;
     using RestSharp;
     using RestSharp.Authenticators;
 
@@ -23,23 +21,23 @@ namespace NativeCode.Clients
             this.BaseAddress = address;
 
             this.Client = new RestClient(this.BaseAddress)
-                              {
-                                  AutomaticDecompression = true,
-                                  CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable),
-                                  CookieContainer = new CookieContainer(),
-                                  Encoding = Encoding.UTF8,
-                                  FollowRedirects = true,
-                                  UserAgent = GetUserAgentString(this.GetType()),
-                              };
+            {
+                AutomaticDecompression = true,
+                CachePolicy = new RequestCachePolicy(RequestCacheLevel.CacheIfAvailable),
+                CookieContainer = new CookieContainer(),
+                Encoding = Encoding.UTF8,
+                FollowRedirects = true,
+                UserAgent = GetUserAgentString(this.GetType()),
+            };
 
             this.Serializer = serializer;
         }
 
-        public Uri BaseAddress { get; }
-
         protected IRestClient Client { get; }
 
         protected IObjectSerializer Serializer { get; }
+
+        public Uri BaseAddress { get; }
 
         public void SetBasicAuth(string username, string password)
         {

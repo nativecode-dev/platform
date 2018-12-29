@@ -4,11 +4,9 @@ namespace NativeCode.Node.Media.Data.Services.Storage
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-
+    using Core.Enums;
+    using Data.Storage;
     using JetBrains.Annotations;
-
-    using NativeCode.Node.Media.Core.Enums;
-    using NativeCode.Node.Media.Data.Data.Storage;
 
     public interface IMountService
     {

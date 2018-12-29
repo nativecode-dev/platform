@@ -3,19 +3,18 @@ namespace NativeCode.Node.Media.Data.Extensions
     using System;
     using System.IO;
     using System.Security.Cryptography;
-
+    using Data.Storage;
     using NativeCode.Core.Extensions;
-    using NativeCode.Node.Media.Data.Data.Storage;
 
     public static class MediaFileExtensions
     {
         /// <remarks>
-        /// In large files, we will copy the first and last 24MB.
+        ///     In large files, we will copy the first and last 24MB.
         /// </remarks>
         public const int MaxSegmentLength = 1024 * 1024 * 24;
 
         /// <remarks>
-        /// Files greater than 100MB will use our hashing algorithm.
+        ///     Files greater than 100MB will use our hashing algorithm.
         /// </remarks>
         public const long MaxStreamLength = 1024 * 1024 * 100;
 

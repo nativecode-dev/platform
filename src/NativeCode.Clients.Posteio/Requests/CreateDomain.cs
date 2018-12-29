@@ -1,7 +1,6 @@
 namespace NativeCode.Clients.Posteio.Requests
 {
     using System.ComponentModel.DataAnnotations;
-
     using Newtonsoft.Json;
 
     public class CreateDomain

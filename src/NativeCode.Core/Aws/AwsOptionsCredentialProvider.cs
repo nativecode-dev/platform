@@ -2,15 +2,11 @@ namespace NativeCode.Core.Aws
 {
     using System.Threading;
     using System.Threading.Tasks;
-
     using Amazon;
     using Amazon.Runtime;
-
     using Microsoft.Extensions.Options;
-
-    using NativeCode.Core.Options;
-
     using Nito.AsyncEx;
+    using Options;
 
     public class AwsOptionsCredentialProvider : IAwsCredentialProvider
     {
@@ -20,9 +16,9 @@ namespace NativeCode.Core.Aws
             this.Region = RegionEndpoint.GetBySystemName(this.Options.Region);
         }
 
-        public RegionEndpoint Region { get; set; }
-
         protected AwsOptions Options { get; }
+
+        public RegionEndpoint Region { get; set; }
 
         public AWSCredentials GetCredentials()
         {

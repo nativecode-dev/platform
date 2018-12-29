@@ -1,8 +1,7 @@
 namespace NativeCode.Node.Media.Models.Views.Mounts
 {
     using System.ComponentModel.DataAnnotations;
-
-    using NativeCode.Node.Media.Core.Enums;
+    using Core.Enums;
 
     public class CreateMountRequest : ViewModelRequest
     {

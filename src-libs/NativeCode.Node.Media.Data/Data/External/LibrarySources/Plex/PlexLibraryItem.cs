@@ -2,9 +2,8 @@ namespace NativeCode.Node.Media.Data.Data.External.LibrarySources.Plex
 {
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using Core.Enums;
     using NativeCode.Core.Data;
-    using NativeCode.Node.Media.Core.Enums;
 
     public class PlexLibraryItem : Entity<Guid>
     {

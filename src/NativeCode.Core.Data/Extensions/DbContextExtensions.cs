@@ -6,9 +6,7 @@ namespace NativeCode.Core.Data.Extensions
     using System.Linq;
     using System.Security.Principal;
     using System.Threading;
-
     using JetBrains.Annotations;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.EntityFrameworkCore.Infrastructure;

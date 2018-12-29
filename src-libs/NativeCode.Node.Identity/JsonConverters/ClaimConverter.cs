@@ -3,7 +3,6 @@ namespace NativeCode.Node.Identity.JsonConverters
     using System;
     using System.Collections.ObjectModel;
     using System.Security.Claims;
-
     using Newtonsoft.Json;
 
     public class ClaimConverter : JsonConverter

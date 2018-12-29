@@ -1,7 +1,6 @@
 ﻿namespace node_delegate.Options
 {
     using System;
-
     using Docker.DotNet;
 
     public class DockerClientOptions

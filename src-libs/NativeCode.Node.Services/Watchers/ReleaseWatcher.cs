@@ -3,16 +3,12 @@ namespace NativeCode.Node.Services.Watchers
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-
     using AutoMapper;
-
+    using Core.Messaging;
+    using Core.Services;
+    using Messages;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-
-    using NativeCode.Core.Messaging;
-    using NativeCode.Core.Services;
-    using NativeCode.Node.Messages;
-
     using Nito.AsyncEx;
 
     public abstract class ReleaseWatcher<T> : HostedService<ReleaseWatcherOptions>, IObserver<T>

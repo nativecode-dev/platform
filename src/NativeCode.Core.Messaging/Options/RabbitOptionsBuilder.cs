@@ -15,7 +15,7 @@ namespace NativeCode.Core.Messaging.Options
         public string VirtualHost { get; set; }
 
         /// <summary>
-        /// Set the virtual host, the default if not specified is '/'
+        ///     Set the virtual host, the default if not specified is '/'
         /// </summary>
         /// <param name="virtualHost"></param>
         /// <returns></returns>
@@ -50,14 +50,14 @@ namespace NativeCode.Core.Messaging.Options
             }
 
             return new RabbitOptions
-                       {
-                           Host = this.Host,
-                           Port = this.Port,
-                           DispatchConsumersAsync = true,
-                           VirtualHost = this.VirtualHost,
-                           User = this.Username,
-                           Password = this.Password,
-                       };
+            {
+                Host = this.Host,
+                Port = this.Port,
+                DispatchConsumersAsync = true,
+                VirtualHost = this.VirtualHost,
+                User = this.Username,
+                Password = this.Password,
+            };
         }
     }
 }

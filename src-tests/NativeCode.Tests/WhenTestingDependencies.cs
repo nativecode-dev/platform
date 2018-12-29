@@ -1,9 +1,7 @@
 namespace NativeCode.Tests
 {
     using System;
-
     using Microsoft.Extensions.DependencyInjection;
-
     using NativeCode.Core.Serialization;
 
     public abstract class WhenTestingDependencies : WhenTesting

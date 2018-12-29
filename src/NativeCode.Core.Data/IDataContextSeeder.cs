@@ -3,7 +3,6 @@ namespace NativeCode.Core.Data
     using System;
     using System.Reflection;
     using System.Threading.Tasks;
-
     using Microsoft.EntityFrameworkCore;
 
     public interface IDataContextSeeder<T>

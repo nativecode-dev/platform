@@ -2,11 +2,9 @@ namespace NativeCode.Core.Services
 {
     using System.Threading;
     using System.Threading.Tasks;
-
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Options;
-
-    using NativeCode.Core.Reliability;
+    using Reliability;
 
     public abstract class HostedService : Disposable, IHostedService
     {

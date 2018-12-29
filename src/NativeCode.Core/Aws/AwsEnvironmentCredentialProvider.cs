@@ -3,10 +3,8 @@ namespace NativeCode.Core.Aws
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-
     using Amazon;
     using Amazon.Runtime;
-
     using Nito.AsyncEx;
 
     public class AwsEnvironmentCredentialProvider : IAwsCredentialProvider

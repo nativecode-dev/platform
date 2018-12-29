@@ -1,7 +1,6 @@
 namespace NativeCode.Node.Media.Data.Data.Catalog
 {
     using System;
-
     using NativeCode.Core.Data;
 
     public class ReleaseInfo : Entity<Guid>

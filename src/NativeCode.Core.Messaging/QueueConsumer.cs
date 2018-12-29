@@ -28,7 +28,7 @@ namespace NativeCode.Core.Messaging
             this.Queue.AsObservable()
                 .Subscribe(
                     async value => await this.ProcessMessage(value)
-                                       .ConfigureAwait(false),
+                        .ConfigureAwait(false),
                     this.ProcessCompleted,
                     cancellationToken);
 

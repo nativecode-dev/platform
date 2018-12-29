@@ -1,10 +1,8 @@
 namespace NativeCode.Clients.Sonarr
 {
     using System;
-
-    using NativeCode.Clients.Sonarr.Resources;
-    using NativeCode.Core.Serialization;
-
+    using Core.Serialization;
+    using Resources;
     using RestSharp;
 
     public class SonarrClient : CommonClient

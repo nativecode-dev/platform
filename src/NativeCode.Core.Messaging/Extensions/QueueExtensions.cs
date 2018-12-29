@@ -3,10 +3,8 @@ namespace NativeCode.Core.Messaging.Extensions
     using System;
     using System.Globalization;
     using System.Linq;
-
+    using Envelopes;
     using Humanizer;
-
-    using NativeCode.Core.Messaging.Envelopes;
 
     public static class QueueExtensions
     {

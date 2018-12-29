@@ -2,8 +2,7 @@
 {
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-
-    using NativeCode.Node.Services.Watchers;
+    using Watchers;
 
     public static class ConfigurationExtensions
     {

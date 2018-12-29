@@ -4,15 +4,12 @@ namespace identity
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-
     using IdentityServer4.EntityFramework.Mappers;
     using IdentityServer4.Models;
-
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-
     using NativeCode.Core.Data;
     using NativeCode.Core.Web;
     using NativeCode.Node.Core;
@@ -20,7 +17,6 @@ namespace identity
     using NativeCode.Node.Identity;
     using NativeCode.Node.Identity.Entities;
     using NativeCode.Node.Identity.SeedModels;
-
     using Serilog;
 
     public class Program
@@ -81,22 +77,22 @@ namespace identity
                 $"NativeCode.Node.Identity.Seeding.{environment}.User.json",
                 (model, dbset) => dbset.SingleOrDefaultAsync(x => x.Email == model.Email),
                 async (model, dbset) =>
+                {
+                    using (var inner = scope.ServiceProvider.CreateScope())
+                    using (var users = inner.ServiceProvider.GetRequiredService<UserManager<User>>())
                     {
-                        using (var inner = scope.ServiceProvider.CreateScope())
-                        using (var users = inner.ServiceProvider.GetRequiredService<UserManager<User>>())
+                        var user = new User {Email = model.Email, EmailConfirmed = model.EmailConfirmed, UserName = model.UserName, };
+
+                        var result = await users.CreateAsync(user, model.Password);
+
+                        if (result.Succeeded == false)
                         {
-                            var user = new User { Email = model.Email, EmailConfirmed = model.EmailConfirmed, UserName = model.UserName, };
-
-                            var result = await users.CreateAsync(user, model.Password);
-
-                            if (result.Succeeded == false)
-                            {
-                                throw new AggregateException(result.Errors.Select(x => new InvalidOperationException(x.Description)));
-                            }
-
-                            return await dbset.FindAsync(user.Id);
+                            throw new AggregateException(result.Errors.Select(x => new InvalidOperationException(x.Description)));
                         }
-                    });
+
+                        return await dbset.FindAsync(user.Id);
+                    }
+                });
         }
     }
 }

@@ -1,9 +1,8 @@
 namespace NativeCode.Node.Media.Data.Extensions
 {
     using System;
-
-    using NativeCode.Node.Media.Core.Enums;
-    using NativeCode.Node.Media.Data.Data.Storage;
+    using Core.Enums;
+    using Data.Storage;
 
     public static class MountPathExtensions
     {

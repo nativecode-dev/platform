@@ -2,7 +2,6 @@ namespace NativeCode.Core.Data
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
     using System.Security.Principal;
 
     public abstract class Entity : IEntityAuditor

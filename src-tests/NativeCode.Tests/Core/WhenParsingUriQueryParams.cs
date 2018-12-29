@@ -1,9 +1,7 @@
 namespace NativeCode.Tests.Core
 {
     using System;
-
     using NativeCode.Core.Extensions;
-
     using Xunit;
 
     public class WhenParsingUriQueryParams : WhenTesting
@@ -11,6 +9,10 @@ namespace NativeCode.Tests.Core
         private static readonly Uri NoQueryParams = new Uri("http://localhost");
 
         private static readonly Uri SimpleQueryParams = new Uri("http://localhost/?name1=value1&name2=value2");
+
+        protected override void ReleaseManaged()
+        {
+        }
 
         [Fact]
         public void ShouldReturnEmptyDictionary()
@@ -33,10 +35,6 @@ namespace NativeCode.Tests.Core
             // Assert
             Assert.Equal(2, parameters.Keys.Count);
             Assert.Equal(2, parameters.Values.Count);
-        }
-
-        protected override void ReleaseManaged()
-        {
         }
     }
 }

@@ -2,12 +2,10 @@ namespace NativeCode.Core.Data
 {
     using System;
     using System.IO;
-
+    using Core.Extensions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
     using Microsoft.Extensions.Configuration;
-
-    using NativeCode.Core.Extensions;
 
     public abstract class DataContextFactory<TContext> : IDesignTimeDbContextFactory<TContext>
         where TContext : DbContext

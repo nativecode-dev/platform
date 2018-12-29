@@ -2,11 +2,9 @@ namespace NativeCode.Core.Data
 {
     using System;
     using System.Threading.Tasks;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
     using Nito.AsyncEx;
 
     public static class HostBuilderExtensions

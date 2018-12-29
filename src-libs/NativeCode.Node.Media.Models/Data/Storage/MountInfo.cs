@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using Core.Enums;
     using JetBrains.Annotations;
-
-    using NativeCode.Node.Media.Core.Enums;
 
     public class MountInfo : DataModel
     {

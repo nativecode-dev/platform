@@ -2,12 +2,9 @@ namespace NativeCode.Clients.Posteio.Resources
 {
     using System.Globalization;
     using System.Threading.Tasks;
-
     using JetBrains.Annotations;
-
-    using NativeCode.Clients.Posteio.Requests;
-    using NativeCode.Clients.Posteio.Responses;
-
+    using Requests;
+    using Responses;
     using RestSharp;
 
     public class SieveResource : ClientResource<SieveScript, CreateSieve, UpdateSieve>

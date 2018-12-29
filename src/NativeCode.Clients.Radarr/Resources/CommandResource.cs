@@ -2,11 +2,9 @@ namespace NativeCode.Clients.Radarr.Resources
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using NativeCode.Clients.Radarr.Requests.Commands;
-    using NativeCode.Clients.Radarr.Responses;
-    using NativeCode.Core.Serialization;
-
+    using Core.Serialization;
+    using Requests.Commands;
+    using Responses;
     using RestSharp;
 
     public class CommandResource : ResourceBase, IResourceLookup<int, Command>

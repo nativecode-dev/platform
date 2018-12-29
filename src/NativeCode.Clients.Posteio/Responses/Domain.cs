@@ -2,7 +2,6 @@ namespace NativeCode.Clients.Posteio.Responses
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-
     using Newtonsoft.Json;
 
     public class Domain

@@ -2,7 +2,6 @@ namespace NativeCode.Node.Core.WebHosting
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
-
     using NativeCode.Core;
     using NativeCode.Core.Configuration;
 
@@ -12,15 +11,15 @@ namespace NativeCode.Node.Core.WebHosting
         {
             return host.ConfigureAppConfiguration(
                 (context, builder) =>
-                    {
-                        var environment = context.HostingEnvironment.EnvironmentName;
-                        var configs = KeyValueServerConfig.Standard(owner, name, environment);
+                {
+                    var environment = context.HostingEnvironment.EnvironmentName;
+                    var configs = KeyValueServerConfig.Standard(owner, name, environment);
 
-                        builder.AddJsonFile("appsettings.json", false, true);
-                        builder.AddJsonFile($"appsettings.{environment}.json", true, true);
-                        builder.AddEtcdConfig(configs);
-                        builder.AddEnvironmentVariables();
-                    });
+                    builder.AddJsonFile("appsettings.json", false, true);
+                    builder.AddJsonFile($"appsettings.{environment}.json", true, true);
+                    builder.AddEtcdConfig(configs);
+                    builder.AddEnvironmentVariables();
+                });
         }
     }
 }

@@ -2,9 +2,7 @@ namespace NativeCode.Tests.Clients.Radarr
 {
     using System.Linq;
     using System.Threading.Tasks;
-
     using NativeCode.Clients.Radarr.Requests.Commands;
-
     using Xunit;
 
     public class WhenUsingRadarrCommands : WhenTestingRadarr

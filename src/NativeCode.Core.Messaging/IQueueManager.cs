@@ -3,7 +3,7 @@ namespace NativeCode.Core.Messaging
     using System;
 
     /// <summary>
-    /// Provides an entry-point for creating queue topics.
+    ///     Provides an entry-point for creating queue topics.
     /// </summary>
     public interface IQueueManager : IDisposable
     {

@@ -4,11 +4,9 @@ namespace node
     using System.Diagnostics;
     using System.Net;
     using System.Threading.Tasks;
-
+    using Filters;
     using Hangfire;
-
     using IdentityServer4.AccessTokenValidation;
-
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authorization;
@@ -19,13 +17,10 @@ namespace node
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-
     using NativeCode.Core.Web;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Media;
     using NativeCode.Node.Media.Data;
-
-    using node.Filters;
 
     public class Startup : AspNetStartup<NodeOptions>
     {
@@ -48,25 +43,25 @@ namespace node
         {
             services.AddMediaServices(
                     options =>
-                        {
-                            var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
-                            options.UseSqlServer(connectionString);
-                        })
+                    {
+                        var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
+                        options.UseSqlServer(connectionString);
+                    })
                 .AddMediaStorageMonitor(this.Configuration);
 
             services.AddHangfire(x => x.UseRedisStorage("redis"));
 
             services.AddAuthorization(
                 options =>
-                    {
-                        options.AddPolicy(
-                            this.Options.ApiScope,
-                            configure =>
-                                {
-                                    configure.RequireAuthenticatedUser();
-                                    configure.RequireScope(this.Options.ApiScope);
-                                });
-                    });
+                {
+                    options.AddPolicy(
+                        this.Options.ApiScope,
+                        configure =>
+                        {
+                            configure.RequireAuthenticatedUser();
+                            configure.RequireScope(this.Options.ApiScope);
+                        });
+                });
 
             return base.ConfigureServices(services);
         }
@@ -87,27 +82,27 @@ namespace node
                 .UseForwardedHeaders()
                 .UseHangfireDashboard(
                     "/jobs",
-                    new DashboardOptions { AppPath = "/", Authorization = new[] { new DashboardAuthorizationFilter() }, })
+                    new DashboardOptions {AppPath = "/", Authorization = new[] {new DashboardAuthorizationFilter()}, })
                 .UseHangfireServer(
                     new BackgroundJobServerOptions
-                        {
-                            ServerName = $"{Environment.MachineName}:{this.Options.Name}:{Process.GetCurrentProcess().Id}",
-                            WorkerCount = this.Options.WorkerCount,
-                        })
+                    {
+                        ServerName = $"{Environment.MachineName}:{this.Options.Name}:{Process.GetCurrentProcess().Id}",
+                        WorkerCount = this.Options.WorkerCount,
+                    })
                 .UseMvc()
                 .UseStaticFiles()
                 .UseStatusCodePages(
                     context =>
+                    {
+                        var response = context.HttpContext.Response;
+
+                        if (response.StatusCode == (int) HttpStatusCode.Unauthorized)
                         {
-                            var response = context.HttpContext.Response;
+                            response.Redirect("/account/login");
+                        }
 
-                            if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
-                            {
-                                response.Redirect("/account/login");
-                            }
-
-                            return Task.CompletedTask;
-                        });
+                        return Task.CompletedTask;
+                    });
 
             return app;
         }
@@ -123,24 +118,24 @@ namespace node
                 .AddViews()
                 .AddMvcOptions(
                     options =>
-                        {
-                            var policy = ScopePolicy.Create(this.Options.ApiScope);
-                            options.Filters.Add(new AuthorizeFilter(policy));
-                        });
+                    {
+                        var policy = ScopePolicy.Create(this.Options.ApiScope);
+                        options.Filters.Add(new AuthorizeFilter(policy));
+                    });
         }
 
         protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
         {
             return services.AddAuthentication(
                 options =>
-                    {
-                        options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    });
+                {
+                    options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                });
         }
     }
 }

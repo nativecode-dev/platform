@@ -1,9 +1,7 @@
 namespace NativeCode.Node.Identity.JsonConverters
 {
     using System;
-
     using IdentityServer4.Models;
-
     using Newtonsoft.Json;
 
     public class ScopeConverter : JsonConverter

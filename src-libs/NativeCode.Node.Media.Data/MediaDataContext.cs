@@ -1,14 +1,13 @@
 namespace NativeCode.Node.Media.Data
 {
+    using Data.Catalog.Movies;
+    using Data.Catalog.Shows;
+    using Data.External.LibrarySources.Plex;
+    using Data.MediaSources;
+    using Data.Storage;
     using Microsoft.EntityFrameworkCore;
-
     using NativeCode.Core.Data;
     using NativeCode.Core.Data.Extensions;
-    using NativeCode.Node.Media.Data.Data.Catalog.Movies;
-    using NativeCode.Node.Media.Data.Data.Catalog.Shows;
-    using NativeCode.Node.Media.Data.Data.External.LibrarySources.Plex;
-    using NativeCode.Node.Media.Data.Data.MediaSources;
-    using NativeCode.Node.Media.Data.Data.Storage;
 
     public class MediaDataContext : DataContext<MediaDataContext>
     {

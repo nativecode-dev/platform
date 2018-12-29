@@ -3,14 +3,11 @@ namespace NativeCode.Core.Storage
     using System;
     using System.IO;
     using System.Threading.Tasks;
-
     using Amazon.S3;
     using Amazon.S3.Transfer;
-
+    using Aws;
     using Microsoft.Extensions.Logging;
-
-    using NativeCode.Core.Aws;
-    using NativeCode.Core.Reliability;
+    using Reliability;
 
     public class SimpleStorageService : Disposable, IStorageService
     {
@@ -33,7 +30,7 @@ namespace NativeCode.Core.Storage
             {
                 using (var transfer = new TransferUtility(this.Client))
                 {
-                    var request = new TransferUtilityOpenStreamRequest { BucketName = bucket, Key = key, };
+                    var request = new TransferUtilityOpenStreamRequest {BucketName = bucket, Key = key, };
 
                     return transfer.OpenStreamAsync(request);
                 }

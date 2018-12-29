@@ -3,17 +3,14 @@ namespace NativeCode.Core.Data.Extensions
     using System;
     using System.Collections.Generic;
     using System.IO;
-
     using JetBrains.Annotations;
-
     using Microsoft.EntityFrameworkCore;
-
     using Newtonsoft.Json;
 
     public static class SeedDataExtensions
     {
         /// <summary>
-        /// Loads seed data from a JSON file.
+        ///     Loads seed data from a JSON file.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="builder"></param>
@@ -38,7 +35,7 @@ namespace NativeCode.Core.Data.Extensions
         }
 
         /// <summary>
-        /// Loads seed data from an assembly manifest file.
+        ///     Loads seed data from an assembly manifest file.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="builder"></param>
@@ -62,7 +59,7 @@ namespace NativeCode.Core.Data.Extensions
         }
 
         /// <summary>
-        /// Loads seed data from an assembly manifest file.
+        ///     Loads seed data from an assembly manifest file.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="builder"></param>
@@ -75,7 +72,7 @@ namespace NativeCode.Core.Data.Extensions
         }
 
         /// <summary>
-        /// Loads seed data from a stream instance.
+        ///     Loads seed data from a stream instance.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="builder"></param>

@@ -5,14 +5,10 @@ namespace NativeCode.Core.Data
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
-
     using AutoMapper;
-
+    using Core.Extensions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-
-    using NativeCode.Core.Extensions;
-
     using Newtonsoft.Json;
 
     public class DataContextSeeder<T> : IDataContextSeeder<T>
@@ -73,13 +69,13 @@ namespace NativeCode.Core.Data
                 try
                 {
                     var existing = await projection(model, dbset)
-                                       .ConfigureAwait(false);
+                        .ConfigureAwait(false);
                     this.Logger.LogTrace("{@existing}", existing);
 
                     if (existing == null)
                     {
                         var entity = await converter.Invoke(model, dbset)
-                                         .ConfigureAwait(false);
+                            .ConfigureAwait(false);
 
                         if (callback != null)
                         {

@@ -1,14 +1,13 @@
 namespace NativeCode.Core.Data
 {
     using System;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class ConfigurationExtensions
     {
         /// <summary>
-        /// Adds the context seeder.
+        ///     Adds the context seeder.
         /// </summary>
         /// <typeparam name="TContext">The type of the context.</typeparam>
         /// <param name="services">The services.</param>

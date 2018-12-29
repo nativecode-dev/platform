@@ -1,13 +1,9 @@
 namespace NativeCode.Core.Configuration
 {
     using System.Threading.Tasks;
-
     using dotnet_etcd;
-
     using Microsoft.Extensions.Configuration;
-
     using Nito.AsyncEx;
-
     using Serilog;
 
     public class EtcdConfigurationProvider : ConfigurationProvider
@@ -30,7 +26,7 @@ namespace NativeCode.Core.Configuration
             {
                 var path = this.Options.HostUri.AbsolutePath;
                 var response = await client.GetRangeAsync(path)
-                                   .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
                 foreach (var kvp in response)
                 {

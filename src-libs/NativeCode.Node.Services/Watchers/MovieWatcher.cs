@@ -2,17 +2,14 @@ namespace NativeCode.Node.Services.Watchers
 {
     using System;
     using System.Threading.Tasks;
-
     using AutoMapper;
-
+    using Clients;
+    using Clients.Radarr;
+    using Clients.Radarr.Requests;
+    using Core.Messaging;
+    using Messages;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-
-    using NativeCode.Clients;
-    using NativeCode.Clients.Radarr;
-    using NativeCode.Clients.Radarr.Requests;
-    using NativeCode.Core.Messaging;
-    using NativeCode.Node.Messages;
 
     public class MovieWatcher : ReleaseWatcher<MovieRelease>
     {

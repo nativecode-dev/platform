@@ -5,10 +5,8 @@ namespace NativeCode.Clients
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using NativeCode.Core.Extensions;
-    using NativeCode.Core.Serialization;
-
+    using Core.Extensions;
+    using Core.Serialization;
     using RestSharp;
 
     public abstract class ResourceBase : IResource
@@ -27,7 +25,7 @@ namespace NativeCode.Clients
 
         protected virtual IRestRequest CreateRequest(string path, Method method)
         {
-            return new RestRequest(path, method) { JsonSerializer = new RestSerializer(this.Serializer) };
+            return new RestRequest(path, method) {JsonSerializer = new RestSerializer(this.Serializer)};
         }
 
         protected virtual IRestRequest CreateRequest<T>(string path, Method method, T body)
@@ -68,7 +66,7 @@ namespace NativeCode.Clients
             }
 
             var response = await this.Client.ExecuteTaskAsync(request, cancellationToken)
-                               .ConfigureAwait(false);
+                .ConfigureAwait(false);
             var content = this.Serializer.Serialize(response.IsSuccessful);
 
             this.cache.AddOrUpdate(key, k => content, (k, v) => content);
@@ -129,7 +127,7 @@ namespace NativeCode.Clients
             }
 
             var response = await this.Client.ExecuteTaskAsync(request, cancellationToken)
-                               .ConfigureAwait(false);
+                .ConfigureAwait(false);
 
             this.cache.AddOrUpdate(key, k => response.Content, (k, v) => response.Content);
 

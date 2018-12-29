@@ -2,31 +2,29 @@ namespace NativeCode.Core.Messaging
 {
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-
-    using NativeCode.Core.Messaging.Options;
-    using NativeCode.Core.Reliability;
-
+    using Options;
     using RabbitMQ.Client;
+    using Reliability;
 
     /// <summary>
-    /// NOTE: This should be registered as a singleton per-application. RabbitMQ has
-    /// its own connection pooling and shares a single socket via channels
-    /// <see cref="RabbitMQ.Client.IModel" />. Rabbit actually runs two background threads, but that is
-    /// an implementation detail.
+    ///     NOTE: This should be registered as a singleton per-application. RabbitMQ has
+    ///     its own connection pooling and shares a single socket via channels
+    ///     <see cref="RabbitMQ.Client.IModel" />. Rabbit actually runs two background threads, but that is
+    ///     an implementation detail.
     /// </summary>
     public class RabbitQueueManager : Disposable, IQueueManager
     {
         public RabbitQueueManager(IQueueSerializer serializer, IOptions<RabbitOptions> options, ILoggerFactory logFactory)
         {
             var factory = new ConnectionFactory
-                              {
-                                  DispatchConsumersAsync = options.Value.DispatchConsumersAsync,
-                                  HostName = options.Value.Host,
-                                  Password = options.Value.Password,
-                                  Port = options.Value.Port,
-                                  UserName = options.Value.User,
-                                  VirtualHost = options.Value.VirtualHost,
-                              };
+            {
+                DispatchConsumersAsync = options.Value.DispatchConsumersAsync,
+                HostName = options.Value.Host,
+                Password = options.Value.Password,
+                Port = options.Value.Port,
+                UserName = options.Value.User,
+                VirtualHost = options.Value.VirtualHost,
+            };
 
             this.Connection = factory.CreateConnection();
             this.Options = options.Value;

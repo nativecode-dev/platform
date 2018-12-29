@@ -2,12 +2,9 @@ namespace node_delegate
 {
     using System.IO;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Hosting;
-
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.WebHosting;
-
     using Serilog;
 
     public class Program

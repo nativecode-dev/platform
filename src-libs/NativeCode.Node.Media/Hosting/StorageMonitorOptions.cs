@@ -1,4 +1,4 @@
-namespace NativeCode.Node.Media.Data.Hosting
+namespace NativeCode.Node.Media.Hosting
 {
     using System.Collections.Generic;
 

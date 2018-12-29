@@ -2,7 +2,6 @@ namespace NativeCode.Node.Media.Data.Data.Catalog.Movies
 {
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
-
     using JetBrains.Annotations;
 
     public class Movie : MediaMetadata

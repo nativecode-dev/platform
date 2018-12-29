@@ -3,16 +3,13 @@ namespace NativeCode.Node.Media.Controllers
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using AutoMapper;
-
+    using Data.Services.Storage;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-
+    using Models.Data.Storage;
+    using Models.Views.Mounts;
     using NativeCode.Core.Data.Exceptions;
-    using NativeCode.Node.Media.Data.Services.Storage;
-    using NativeCode.Node.Media.Models.Data.Storage;
-    using NativeCode.Node.Media.Models.Views.Mounts;
 
     [ApiController]
     [Route("[controller]")]
@@ -56,9 +53,11 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetMounts()
-                                 .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
-                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+                var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
+
+                return this.Ok(model);
             }
             catch (EntityException)
             {
@@ -75,9 +74,11 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mount = await this.MountService.GetMount(id)
-                                .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
-                return this.Ok(this.Mapper.Map<MountInfo>(mount));
+                var model = this.Mapper.Map<MountInfo>(mount);
+
+                return this.Ok(model);
             }
             catch (EntityException)
             {
@@ -94,9 +95,11 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetLocalMounts()
-                                 .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
-                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+                var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
+
+                return this.Ok(model);
             }
             catch (EntityException)
             {
@@ -113,9 +116,11 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetNfsMounts()
-                                 .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
-                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+                var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
+
+                return this.Ok(model);
             }
             catch (EntityException)
             {
@@ -132,9 +137,11 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetSmbMounts()
-                                 .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
-                return this.Ok(this.Mapper.Map<IEnumerable<MountInfo>>(mounts));
+                var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
+
+                return this.Ok(model);
             }
             catch (EntityException)
             {
@@ -151,9 +158,11 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mount = await this.MountService.CreateMount(request.Name, request.Type)
-                                .ConfigureAwait(true);
+                    .ConfigureAwait(true);
 
-                return this.Ok(this.Mapper.Map<MountInfo>(mount));
+                var model = this.Mapper.Map<MountInfo>(mount);
+
+                return this.Ok(model);
             }
             catch (EntityException)
             {

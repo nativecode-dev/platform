@@ -3,9 +3,7 @@ namespace NativeCode.Core.Data.Extensions
     using System;
     using System.Collections.Concurrent;
     using System.Linq.Expressions;
-
     using JetBrains.Annotations;
-
     using Microsoft.EntityFrameworkCore;
 
     public static class ModelBuilderExtensions

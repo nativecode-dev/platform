@@ -2,13 +2,10 @@ namespace NativeCode.Node.Core
 {
     using System;
     using System.Globalization;
-
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-
     using NativeCode.Core.Extensions;
-    using NativeCode.Node.Core.Options;
-
+    using Options;
     using Serilog;
     using Serilog.Events;
     using Serilog.Exceptions;
@@ -35,12 +32,12 @@ namespace NativeCode.Node.Core
         public static LoggerConfiguration CreateSerilogConfig(Uri elasticSearchUrl, string name)
         {
             var esconfig = new ElasticsearchSinkOptions(elasticSearchUrl)
-                               {
-                                   AutoRegisterTemplate = true,
-                                   AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                                   IndexFormat = string.Format(CultureInfo.CurrentCulture, "log-{0}-{{0:yyyy.MM.dd}}", name),
-                                   MinimumLogEventLevel = LogEventLevel.Verbose,
-                               };
+            {
+                AutoRegisterTemplate = true,
+                AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                IndexFormat = string.Format(CultureInfo.CurrentCulture, "log-{0}-{{0:yyyy.MM.dd}}", name),
+                MinimumLogEventLevel = LogEventLevel.Verbose,
+            };
 
             return new LoggerConfiguration().Enrich.FromLogContext()
                 .Enrich.WithAssemblyName()

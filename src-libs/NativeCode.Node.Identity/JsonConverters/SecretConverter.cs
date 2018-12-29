@@ -1,11 +1,8 @@
 namespace NativeCode.Node.Identity.JsonConverters
 {
     using System;
-
     using IdentityServer4.Models;
-
     using Microsoft.Extensions.Configuration;
-
     using Newtonsoft.Json;
 
     public class SecretConverter : JsonConverter

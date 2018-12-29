@@ -3,9 +3,8 @@ namespace NativeCode.Node.Media.Data.Data.Catalog
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using Images;
     using NativeCode.Core.Data;
-    using NativeCode.Node.Media.Data.Data.Catalog.Images;
 
     public abstract class MediaInfo : Entity<Guid>
     {

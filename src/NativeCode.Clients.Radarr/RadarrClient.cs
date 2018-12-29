@@ -1,10 +1,8 @@
 namespace NativeCode.Clients.Radarr
 {
     using System;
-
-    using NativeCode.Clients.Radarr.Resources;
-    using NativeCode.Core.Serialization;
-
+    using Core.Serialization;
+    using Resources;
     using RestSharp;
 
     public class RadarrClient : CommonClient

@@ -1,8 +1,7 @@
 namespace NativeCode.Clients.Sonarr
 {
     using System;
-
-    using NativeCode.Core.Serialization;
+    using Core.Serialization;
 
     public class SonarrClientFactory : IClientFactory<SonarrClient>
     {

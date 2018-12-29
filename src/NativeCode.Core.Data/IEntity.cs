@@ -4,30 +4,30 @@ namespace NativeCode.Core.Data
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// Provides a contract to define standard entity properties.
+    ///     Provides a contract to define standard entity properties.
     /// </summary>
     public interface IEntity
     {
         /// <summary>
-        /// Gets the date created.
+        ///     Gets the date created.
         /// </summary>
         [DataType(DataType.DateTime)]
         DateTimeOffset DateCreated { get; }
 
         /// <summary>
-        /// Gets the date modified.
+        ///     Gets the date modified.
         /// </summary>
         [DataType(DataType.DateTime)]
         DateTimeOffset? DateModified { get; }
 
         /// <summary>
-        /// Gets the user created.
+        ///     Gets the user created.
         /// </summary>
         [MaxLength(64)]
         string UserCreated { get; }
 
         /// <summary>
-        /// Gets the user modified.
+        ///     Gets the user modified.
         /// </summary>
         [MaxLength(64)]
         string UserModified { get; }
@@ -35,7 +35,7 @@ namespace NativeCode.Core.Data
 
     /// <inheritdoc />
     /// <summary>
-    /// Provides a contract to define standard entity properties.
+    ///     Provides a contract to define standard entity properties.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <seealso cref="T:NativeCode.Core.Data.IEntity" />
@@ -43,7 +43,7 @@ namespace NativeCode.Core.Data
         where TKey : struct
     {
         /// <summary>
-        /// Gets or sets the identifier.
+        ///     Gets or sets the identifier.
         /// </summary>
         [Key]
         TKey Id { get; set; }

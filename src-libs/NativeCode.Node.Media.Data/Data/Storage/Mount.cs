@@ -4,11 +4,9 @@ namespace NativeCode.Node.Media.Data.Data.Storage
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using Core.Enums;
     using JetBrains.Annotations;
-
     using NativeCode.Core.Data;
-    using NativeCode.Node.Media.Core.Enums;
 
     public class Mount : Entity<Guid>
     {

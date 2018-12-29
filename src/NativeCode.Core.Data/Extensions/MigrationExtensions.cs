@@ -2,9 +2,7 @@ namespace NativeCode.Core.Data.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using JetBrains.Annotations;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.EntityFrameworkCore.Migrations;
@@ -14,7 +12,7 @@ namespace NativeCode.Core.Data.Extensions
     public static class MigrationExtensions
     {
         /// <summary>
-        /// Determines whether the <see cref="DbContext"/> has migrations.
+        ///     Determines whether the <see cref="DbContext" /> has migrations.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="context"></param>
@@ -27,16 +25,16 @@ namespace NativeCode.Core.Data.Extensions
         }
 
         /// <summary>
-        /// Performs migrations when before the request pipeline is setup.
+        ///     Performs migrations when before the request pipeline is setup.
         /// </summary>
         /// <remarks>
-        /// NOTE: I know adding the migrations to the startup is NOT the recommended practice. However,
-        /// until EFCore fixes their story for deploying migrations, we have to use the startup (or at least
-        /// it's the least intrusive). The full "dotnet" tools are not available in a published add, ergo
-        /// you cannot invoke "dotnet ef" because the EF tools are not deployed. - MP
-        /// <see cref="https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/migrations?view=aspnetcore-2.1&tabs=netcore-cli"/>
-        /// <see cref="https://github.com/aspnet/EntityFrameworkCore/issues/9033#issuecomment-317063370"/>
-        /// <see cref="https://github.com/dotnet/dotnet-docker-samples/issues/89"/>.
+        ///     NOTE: I know adding the migrations to the startup is NOT the recommended practice. However,
+        ///     until EFCore fixes their story for deploying migrations, we have to use the startup (or at least
+        ///     it's the least intrusive). The full "dotnet" tools are not available in a published add, ergo
+        ///     you cannot invoke "dotnet ef" because the EF tools are not deployed. - MP
+        ///     <see cref="https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/migrations?view=aspnetcore-2.1&tabs=netcore-cli" />
+        ///     <see cref="https://github.com/aspnet/EntityFrameworkCore/issues/9033#issuecomment-317063370" />
+        ///     <see cref="https://github.com/dotnet/dotnet-docker-samples/issues/89" />.
         /// </remarks>
         /// <typeparam name="T"></typeparam>
         /// <param name="host"></param>
@@ -62,7 +60,7 @@ namespace NativeCode.Core.Data.Extensions
         }
 
         /// <summary>
-        /// Migrate the database.
+        ///     Migrate the database.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="host"></param>
@@ -74,7 +72,7 @@ namespace NativeCode.Core.Data.Extensions
         }
 
         /// <summary>
-        /// Gets the available migrations to run.
+        ///     Gets the available migrations to run.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="context"></param>

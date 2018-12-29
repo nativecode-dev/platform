@@ -3,10 +3,8 @@ namespace NativeCode.Core.Data
     using System.Diagnostics.CodeAnalysis;
     using System.Threading;
     using System.Threading.Tasks;
-
+    using Extensions;
     using Microsoft.EntityFrameworkCore;
-
-    using NativeCode.Core.Data.Extensions;
 
     public abstract class DataContext<T> : DbContext
         where T : DbContext

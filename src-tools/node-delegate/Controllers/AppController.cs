@@ -1,11 +1,9 @@
 namespace node_delegate.Controllers
 {
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Mvc;
-
-    using node_delegate.Models;
-    using node_delegate.Services;
+    using Models;
+    using Services;
 
     [ApiController]
     [Route("[controller]")]

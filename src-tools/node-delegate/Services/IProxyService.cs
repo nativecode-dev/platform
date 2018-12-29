@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using JetBrains.Annotations;
-
-    using node_delegate.Models;
+    using Models;
 
     public interface IProxyService
     {

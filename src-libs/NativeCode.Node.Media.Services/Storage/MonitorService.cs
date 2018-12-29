@@ -4,14 +4,11 @@ namespace NativeCode.Node.Media.Services.Storage
     using System.Collections.Concurrent;
     using System.IO;
     using System.Threading.Tasks;
-
+    using Data.Data.Storage;
+    using Data.Extensions;
+    using Data.Services.Storage;
     using Microsoft.Extensions.Logging;
-
     using NativeCode.Core.Reliability;
-    using NativeCode.Node.Media.Data.Data.Storage;
-    using NativeCode.Node.Media.Data.Extensions;
-    using NativeCode.Node.Media.Data.Services.Storage;
-
     using Nito.AsyncEx;
 
     public class MonitorService : IMonitorService
@@ -69,7 +66,7 @@ namespace NativeCode.Node.Media.Services.Storage
 
                 var uri = this.MountPath.GetMountUri();
 
-                this.Monitor = new FileSystemWatcher { IncludeSubdirectories = true, Path = uri.LocalPath, };
+                this.Monitor = new FileSystemWatcher {IncludeSubdirectories = true, Path = uri.LocalPath, };
 
                 this.Monitor.Changed += this.MonitorOnChanged;
                 this.Monitor.Created += this.MonitorOnCreated;

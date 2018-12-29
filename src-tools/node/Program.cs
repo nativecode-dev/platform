@@ -2,14 +2,11 @@ namespace node
 {
     using System.IO;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Hosting;
-
     using NativeCode.Core.Web;
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Media.Data;
-
     using Serilog;
 
     public class Program

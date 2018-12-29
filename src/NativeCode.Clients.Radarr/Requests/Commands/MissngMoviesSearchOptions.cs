@@ -1,6 +1,6 @@
 namespace NativeCode.Clients.Radarr.Requests.Commands
 {
-    using NativeCode.Clients.Radarr.Responses;
+    using Responses;
 
     public class MissngMoviesSearchOptions : CommandOptions
     {

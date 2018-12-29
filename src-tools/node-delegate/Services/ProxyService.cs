@@ -3,15 +3,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
     using AutoMapper;
-
     using Docker.DotNet;
-
     using Microsoft.Extensions.Options;
-
-    using node_delegate.Models;
-    using node_delegate.Options;
+    using Models;
+    using Options;
 
     public class ProxyService : IProxyService
     {

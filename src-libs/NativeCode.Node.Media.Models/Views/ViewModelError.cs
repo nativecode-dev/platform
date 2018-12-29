@@ -13,13 +13,13 @@ namespace NativeCode.Node.Media.Models.Views
         public static ViewModelError FromException(Exception exception)
         {
             return new ViewModelError
-                       {
-                           Message = exception.Message,
-                           ExceptionSource = exception.Source,
-                           ExceptionStackTrace = exception.StackTrace,
-                           ExceptionType = exception.GetType()
-                               .FullName,
-                       };
+            {
+                Message = exception.Message,
+                ExceptionSource = exception.Source,
+                ExceptionStackTrace = exception.StackTrace,
+                ExceptionType = exception.GetType()
+                    .FullName,
+            };
         }
     }
 }

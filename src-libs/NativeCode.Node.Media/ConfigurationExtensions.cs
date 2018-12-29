@@ -1,16 +1,14 @@
 namespace NativeCode.Node.Media
 {
     using System;
-
+    using Data;
+    using Data.Services.Storage;
+    using Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-
     using NativeCode.Core.Extensions;
-    using NativeCode.Node.Media.Data;
-    using NativeCode.Node.Media.Data.Hosting;
-    using NativeCode.Node.Media.Data.Services.Storage;
-    using NativeCode.Node.Media.Services.Storage;
+    using Services.Storage;
 
     public static class ConfigurationExtensions
     {

@@ -1,9 +1,7 @@
 namespace NativeCode.Node.Core.WebHosting
 {
     using System;
-
     using IdentityServer4.AccessTokenValidation;
-
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
@@ -13,13 +11,10 @@ namespace NativeCode.Node.Core.WebHosting
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-
     using NativeCode.Core.Extensions;
-    using NativeCode.Node.Core.Options;
-
     using NSwag;
     using NSwag.SwaggerGeneration.Processors.Security;
-
+    using Options;
     using Serilog;
 
     public abstract class AspNetStartup<TOptions> : IStartup
@@ -62,13 +57,13 @@ namespace NativeCode.Node.Core.WebHosting
             app.UseMvc();
             app.UseSwagger(
                 config =>
+                {
+                    config.PostProcess = (settings, c) =>
                     {
-                        config.PostProcess = (settings, c) =>
-                            {
-                                settings.Schemes.Clear();
-                                settings.Schemes.Add(SwaggerSchema.Https);
-                            };
-                    });
+                        settings.Schemes.Clear();
+                        settings.Schemes.Add(SwaggerSchema.Https);
+                    };
+                });
             app.UseSwaggerUi3();
         }
 
@@ -80,24 +75,24 @@ namespace NativeCode.Node.Core.WebHosting
             Log.Logger.Information(
                 "Startup: {@node}",
                 new
-                    {
-                        this.Options.ApiName,
-                        this.Options.ApiScope,
-                        ApiSecret = this.Options.ApiSecret.ToSecretString(),
-                        this.Options.Authority,
-                        this.Options.ClientId,
-                        ClientSecret = this.Options.ClientSecret.ToSecretString(),
-                        this.Options.ClockSkew,
-                        this.Options.RedisHost,
-                        this.Options.Name,
-                    });
+                {
+                    this.Options.ApiName,
+                    this.Options.ApiScope,
+                    ApiSecret = this.Options.ApiSecret.ToSecretString(),
+                    this.Options.Authority,
+                    this.Options.ClientId,
+                    ClientSecret = this.Options.ClientSecret.ToSecretString(),
+                    this.Options.ClockSkew,
+                    this.Options.RedisHost,
+                    this.Options.Name,
+                });
 
             services.AddDistributedRedisCache(
                 options =>
-                    {
-                        options.Configuration = this.Options.RedisHost;
-                        options.InstanceName = this.AppName;
-                    });
+                {
+                    options.Configuration = this.Options.RedisHost;
+                    options.InstanceName = this.AppName;
+                });
 
             services.AddSerilog(this.Configuration, this.AppName);
 
@@ -109,10 +104,10 @@ namespace NativeCode.Node.Core.WebHosting
                 .AddJsonFormatters()
                 .AddMvcOptions(
                     options =>
-                        {
-                            var policy = ScopePolicy.Create(this.Options.ApiScope);
-                            options.Filters.Add(new AuthorizeFilter(policy));
-                        })
+                    {
+                        var policy = ScopePolicy.Create(this.Options.ApiScope);
+                        options.Filters.Add(new AuthorizeFilter(policy));
+                    })
                 .AddAuthorization(options => options.AddPolicy(this.Options.ApiScope, configure => configure.RequireAuthenticatedUser()))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -121,33 +116,36 @@ namespace NativeCode.Node.Core.WebHosting
             this.CreateAuthenticationBuilder(services)
                 .AddIdentityServerAuthentication(
                     options =>
-                        {
-                            options.ApiName = this.Options.ApiName;
-                            options.ApiSecret = this.Options.ApiSecret;
-                            options.Authority = this.Options.Authority;
-                            options.RequireHttpsMetadata = false;
-                            options.JwtValidationClockSkew = this.Options.ClockSkew;
-                        });
+                    {
+                        options.ApiName = this.Options.ApiName;
+                        options.ApiSecret = this.Options.ApiSecret;
+                        options.Authority = this.Options.Authority;
+                        options.RequireHttpsMetadata = false;
+                        options.JwtValidationClockSkew = this.Options.ClockSkew;
+                    });
 
             services.AddSwaggerDocument(
                 options =>
-                    {
-                        options.DocumentName = this.AppVersion;
-                        options.Title = this.AppName;
-                        options.DocumentProcessors.Add(
-                            new SecurityDefinitionAppender(
-                                IdentityServerAuthenticationDefaults.AuthenticationScheme,
-                                new SwaggerSecurityScheme
-                                    {
-                                        Type = SwaggerSecuritySchemeType.ApiKey,
-                                        Name = "Authorization",
-                                        Description = IdentityServerAuthenticationDefaults.AuthenticationScheme,
-                                        In = SwaggerSecurityApiKeyLocation.Header,
-                                    }));
+                {
+                    options.DocumentName = this.AppVersion;
+                    options.Title = this.AppName;
 
-                        options.OperationProcessors.Add(
-                            new OperationSecurityScopeProcessor(IdentityServerAuthenticationDefaults.AuthenticationScheme));
-                    });
+                    options.DocumentProcessors.Add(
+                        new SecurityDefinitionAppender(
+                            IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                            new SwaggerSecurityScheme
+                            {
+                                Type = SwaggerSecuritySchemeType.ApiKey,
+                                Name = "Authorization",
+                                Description = IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                                In = SwaggerSecurityApiKeyLocation.Header,
+                            }));
+
+                    var scheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                    options.OperationProcessors.Add(new OperationSecurityScopeProcessor(scheme));
+
+                    options.OperationProcessors.Add(new UnauthorizedOperationProcessor());
+                });
 
             return services.BuildServiceProvider();
         }

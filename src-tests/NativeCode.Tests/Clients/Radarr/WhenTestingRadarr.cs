@@ -1,9 +1,7 @@
 namespace NativeCode.Tests.Clients.Radarr
 {
     using System;
-
     using Microsoft.Extensions.DependencyInjection;
-
     using NativeCode.Clients;
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Radarr.Extensions;

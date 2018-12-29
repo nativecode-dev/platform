@@ -2,9 +2,8 @@ namespace NativeCode.Node.Media.Data.Data.Catalog.Images
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-
+    using Core.Enums;
     using NativeCode.Core.Data;
-    using NativeCode.Node.Media.Core.Enums;
 
     public class Image : Entity<Guid>
     {

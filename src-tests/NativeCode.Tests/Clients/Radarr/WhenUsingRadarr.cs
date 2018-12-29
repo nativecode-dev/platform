@@ -3,10 +3,8 @@ namespace NativeCode.Tests.Clients.Radarr
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
     using NativeCode.Clients.Radarr;
     using NativeCode.Clients.Radarr.Requests;
-
     using Xunit;
 
     public class WhenUsingSonarr : WhenTestingRadarr
@@ -70,7 +68,7 @@ namespace NativeCode.Tests.Clients.Radarr
         public async Task ShouldGetUpcomingMovies()
         {
             // Arrange
-            var query = new QueryCalendar { Start = DateTimeOffset.Parse("04/20/2018") };
+            var query = new QueryCalendar {Start = DateTimeOffset.Parse("04/20/2018")};
 
             // Act
             var movies = await this.Client.Calendar.Find(query);

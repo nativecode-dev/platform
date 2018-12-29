@@ -1,10 +1,9 @@
 namespace NativeCode.Core
 {
+    using Aws;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-
-    using NativeCode.Core.Aws;
-    using NativeCode.Core.Options;
+    using Options;
 
     public static class ConfigurationExtensions
     {

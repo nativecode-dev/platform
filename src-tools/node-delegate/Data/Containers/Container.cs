@@ -2,9 +2,7 @@ namespace node_delegate.Data.Containers
 {
     using System;
     using System.Collections.Generic;
-
     using Docker.DotNet.Models;
-
     using NativeCode.Core.Data;
 
     public class Container : Entity<Guid>

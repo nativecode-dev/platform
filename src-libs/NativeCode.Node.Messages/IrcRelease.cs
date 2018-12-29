@@ -1,6 +1,6 @@
 ﻿namespace NativeCode.Node.Messages
 {
-    using NativeCode.Core.Messaging;
+    using Core.Messaging;
 
     public class IrcRelease : QueueMessage
     {

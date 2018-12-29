@@ -1,16 +1,13 @@
-namespace NativeCode.Node.Media.Data.Hosting
+namespace NativeCode.Node.Media.Hosting
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-
+    using Data.Services.Storage;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-
     using NativeCode.Core.Services;
-    using NativeCode.Node.Media.Data.Services.Storage;
-
     using Nito.AsyncEx;
 
     public class StorageMonitorService : HostedService<StorageMonitorOptions>
@@ -47,7 +44,7 @@ namespace NativeCode.Node.Media.Data.Hosting
             foreach (var mount in this.Options.Mounts)
             {
                 var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken)
-                               .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
                 tasks.Add(this.Monitors.StartMonitor(path));
             }
@@ -69,7 +66,7 @@ namespace NativeCode.Node.Media.Data.Hosting
             foreach (var mount in this.Options.Mounts)
             {
                 var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken)
-                               .ConfigureAwait(false);
+                    .ConfigureAwait(false);
                 tasks.Add(this.Monitors.StopMonitor(path));
             }
 

@@ -7,14 +7,12 @@ namespace NativeCode.Node.Media.Services.Storage
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-
+    using Data;
+    using Data.Data.Storage;
+    using Data.Extensions;
+    using Data.Services.Storage;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-
-    using NativeCode.Node.Media.Data;
-    using NativeCode.Node.Media.Data.Data.Storage;
-    using NativeCode.Node.Media.Data.Extensions;
-    using NativeCode.Node.Media.Data.Services.Storage;
 
     public class FileService : IFileService
     {
@@ -37,7 +35,7 @@ namespace NativeCode.Node.Media.Services.Storage
             Debug.Assert(fileinfo.Directory != null, "Should never be null.");
 
             var mountpath = await this.Mounts.GetMountPathById(mountPathId, cancellationToken)
-                                .ConfigureAwait(false);
+                .ConfigureAwait(false);
             var mountfile = fileinfo.CreateMountPathFile(mountPathId);
 
             mountpath.Files.Add(mountfile);
@@ -57,10 +55,10 @@ namespace NativeCode.Node.Media.Services.Storage
         public async Task<IEnumerable<MountPathFile>> GetFiles(Guid mountPathId, CancellationToken cancellationToken)
         {
             return await this.Context.Mounts.SelectMany(m => m.Paths)
-                       .SelectMany(mp => mp.Files)
-                       .Where(mpf => mpf.MountPathId == mountPathId)
-                       .ToListAsync(cancellationToken)
-                       .ConfigureAwait(false);
+                .SelectMany(mp => mp.Files)
+                .Where(mpf => mpf.MountPathId == mountPathId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -78,7 +76,7 @@ namespace NativeCode.Node.Media.Services.Storage
             CancellationToken cancellationToken)
         {
             var mountfile = await this.GetMountPathFile(mountPathId, filename, cancellationToken)
-                                .ConfigureAwait(false);
+                .ConfigureAwait(false);
 
             mountfile.SetFileInfo(fileinfo);
 
@@ -90,7 +88,7 @@ namespace NativeCode.Node.Media.Services.Storage
         public async Task UpdateFile(Guid mountPathId, FileInfo fileinfo, CancellationToken cancellationToken)
         {
             var mountfile = await this.GetMountPathFile(mountPathId, fileinfo.Name, cancellationToken)
-                                .ConfigureAwait(false);
+                .ConfigureAwait(false);
 
             if (mountfile == null)
             {

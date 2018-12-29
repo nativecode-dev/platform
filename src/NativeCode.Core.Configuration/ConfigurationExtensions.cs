@@ -1,7 +1,6 @@
 namespace NativeCode.Core.Configuration
 {
     using System;
-
     using Microsoft.Extensions.Configuration;
 
     public static class ConfigurationExtensions

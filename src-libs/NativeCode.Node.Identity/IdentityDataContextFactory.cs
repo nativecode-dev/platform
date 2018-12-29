@@ -1,13 +1,11 @@
 namespace NativeCode.Node.Identity
 {
+    using Core;
+    using Core.Configuration;
+    using Core.Data;
     using IdentityServer4.EntityFramework.Options;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
-
-    using NativeCode.Core;
-    using NativeCode.Core.Configuration;
-    using NativeCode.Core.Data;
 
     public class IdentityDataContextFactory : DataContextFactory<IdentityDataContext>
     {

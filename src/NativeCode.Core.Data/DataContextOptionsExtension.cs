@@ -2,16 +2,15 @@ namespace NativeCode.Core.Data
 {
     using System.Collections.Generic;
     using System.Globalization;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
-    /// Context extension for additional properties.
+    ///     Context extension for additional properties.
     /// </summary>
     /// <remarks>
-    /// Most likely will need refactoring into a DataContextOptions type.
+    ///     Most likely will need refactoring into a DataContextOptions type.
     /// </remarks>
     public class DataContextOptionsExtension : IDbContextOptionsExtensionWithDebugInfo
     {

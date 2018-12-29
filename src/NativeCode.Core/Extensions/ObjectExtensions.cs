@@ -1,7 +1,6 @@
 ﻿namespace NativeCode.Core.Extensions
 {
     using System.Text;
-
     using Newtonsoft.Json;
 
     public static class ObjectExtensions

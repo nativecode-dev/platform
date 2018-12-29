@@ -3,11 +3,9 @@ namespace NativeCode.Clients.Sonarr.Resources
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using NativeCode.Clients.Sonarr.Requests;
-    using NativeCode.Clients.Sonarr.Responses;
-    using NativeCode.Core.Serialization;
-
+    using Core.Serialization;
+    using Requests;
+    using Responses;
     using RestSharp;
 
     public class MovieResource : ResourceBase, IResourceLookup<int, Series>

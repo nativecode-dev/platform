@@ -3,7 +3,6 @@ namespace NativeCode.Core.Extensions
     using System.IO;
     using System.Linq;
     using System.Reflection;
-
     using Newtonsoft.Json;
 
     public static class AssemblyExtensions
@@ -47,10 +46,10 @@ namespace NativeCode.Core.Extensions
         public static string GetVersion(this Assembly assembly)
         {
             var versions = new[]
-                               {
-                                   assembly.GetAssemblyFileVersion(), assembly.GetAssemblyInformationalVersion(),
-                                   assembly.GetAssemblyVersion(),
-                               };
+            {
+                assembly.GetAssemblyFileVersion(), assembly.GetAssemblyInformationalVersion(),
+                assembly.GetAssemblyVersion(),
+            };
 
             return versions.FirstOrDefault(version => string.IsNullOrWhiteSpace(version) == false);
         }
