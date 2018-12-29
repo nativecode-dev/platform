@@ -1,14 +1,17 @@
 namespace NativeCode.Integrations.Amazon.Storage
 {
+    using System;
     using Core.Storage;
 
     public class SimpleStorageServiceContext : RemoteFileStoreContext
     {
-        public SimpleStorageServiceContext()
+        public SimpleStorageServiceContext(Uri location)
         {
+            this.Host = location.DnsSafeHost;
+            this.BucketName = location.Segments[0];
         }
 
-        public SimpleStorageServiceContext(RemoteFileStoreContext clone)
+        protected SimpleStorageServiceContext(RemoteFileStoreContext clone)
             : base(clone)
         {
         }

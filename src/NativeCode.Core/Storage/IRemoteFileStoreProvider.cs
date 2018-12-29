@@ -16,8 +16,6 @@ namespace NativeCode.Core.Storage
 
         RemoteFileStoreContext CreateContext(Uri location);
 
-        RemoteFileStoreContext CreateContext(RemoteFileStoreContext context);
-
         [NotNull]
         Task<Stream> RetrieveAsync([NotNull] RemoteFileStoreContext context, CancellationToken cancellationToken);
 

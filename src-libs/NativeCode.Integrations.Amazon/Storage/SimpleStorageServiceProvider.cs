@@ -26,13 +26,7 @@ namespace NativeCode.Integrations.Amazon.Storage
         /// <inheritdoc />
         public RemoteFileStoreContext CreateContext(Uri location)
         {
-            return new SimpleStorageServiceContext();
-        }
-
-        /// <inheritdoc />
-        public RemoteFileStoreContext CreateContext(RemoteFileStoreContext context)
-        {
-            return context.Clone();
+            return new SimpleStorageServiceContext(location);
         }
 
         /// <inheritdoc />
