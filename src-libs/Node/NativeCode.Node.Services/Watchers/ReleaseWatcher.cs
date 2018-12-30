@@ -62,7 +62,7 @@ namespace NativeCode.Node.Services.Watchers
         {
             try
             {
-                this.Logger.LogInformation($"Pushing: [{message.GetType().Name}] {{@message}}", message);
+                this.Logger.LogInformation($"Pushing: [{message.GetType().Name}] {{@pushing}}", message);
 
                 var success = await this.PushRelease(message);
 
@@ -70,12 +70,12 @@ namespace NativeCode.Node.Services.Watchers
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
                     message.TargetMachine = Environment.MachineName;
-                    this.Logger.LogInformation($"Pushed: [{message.GetType().Name}] {{@message}}", message);
+                    this.Logger.LogInformation($"Pushed: [{message.GetType().Name}] {{@pushed}}", message);
                 }
                 else
                 {
                     this.Queue.Requeue(message.DeliveryTag);
-                    this.Logger.LogInformation($"Requeued: [{message.GetType().Name}] {{@message}}", message);
+                    this.Logger.LogInformation($"Requeued: [{message.GetType().Name}] {{@requeue}}", message);
                 }
             }
             catch (Exception ex)

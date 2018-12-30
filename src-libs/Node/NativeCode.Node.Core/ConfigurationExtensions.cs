@@ -31,6 +31,8 @@ namespace NativeCode.Node.Core
 
         public static LoggerConfiguration CreateSerilogConfig(Uri elasticSearchUrl, string name)
         {
+            // NOTE: Setting the IndexFormat requires that the name of the
+            // index is all lower-case. This is a requirement for Kibana.
             var esconfig = new ElasticsearchSinkOptions(elasticSearchUrl)
             {
                 AutoRegisterTemplate = true,
