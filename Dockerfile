@@ -4,6 +4,7 @@
 FROM microsoft/dotnet:aspnetcore-runtime as identity
 RUN set -ex \
     && pwd \
+    && ls -lah \
     && ls -lah / \
     ;
 COPY .artifacts/identity /app
