@@ -23,53 +23,55 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
-  artifacts: &artifacts
-    <<: *dockerhub
-    repo: nativecode/platform-artifacts
-    tags: ["latest", "${DRONE_BUILD_NUMBER}"]
+  build: &build
+    image: microsoft/dotnet:sdk
+    commands:
+      - curl --silent --location https://deb.nodesource.com/setup_8.x | bash - \
+      - apt-get install nodejs -y \
+      - mkdir tools \
+      - cp templates/tools-csproj.template tools/tools.csproj \
+      - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION \
+      - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release" \
+    environment:
+      CAKE_VERSION: "0.30.0"
 
   identity: &identity
     <<: *dockerhub
-    dockerfile: src/identity/Dockerfile
-    context: src/identity
     repo: nativecode/platform-identity
     tags: ["${DRONE_BRANCH}"]
+    target: identity
     when:
       branch: [develop, master]
 
   node: &node
     <<: *dockerhub
-    dockerfile: src/node/Dockerfile
-    context: src/node
     repo: nativecode/platform-node
     tags: ["${DRONE_BRANCH}"]
+    target: node
     when:
       branch: [develop, master]
 
   node-delegate: &node-delegate
     <<: *dockerhub
-    dockerfile: src/node-delegate/Dockerfile
-    context: src/node-delegate
     repo: nativecode/platform-node-delegate
     tags: ["${DRONE_BRANCH}"]
+    target: delegate
     when:
       branch: [develop, master]
 
   node-processor: &node-processor
     <<: *dockerhub
-    dockerfile: src/node-processor/Dockerfile
-    context: src/node-processor
     repo: nativecode/platform-node-processor
     tags: ["${DRONE_BRANCH}"]
+    target: processor
     when:
       branch: [develop, master]
 
   node-watcher: &node-watcher
     <<: *dockerhub
-    dockerfile: src/node-watcher/Dockerfile
-    context: src/node-watcher
     repo: nativecode/platform-node-watcher
     tags: ["${DRONE_BRANCH}"]
+    target: watcher
     when:
       branch: [develop, master]
 
