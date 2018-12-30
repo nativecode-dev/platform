@@ -157,7 +157,7 @@ namespace NativeCode.Node.Services.Watchers
                 var stripped = Strip(message);
                 var matches = AnnouncePattern.Matches(stripped);
 
-                var release = new IrcRelease();
+                var announced = new IrcRelease();
 
                 foreach (Match match in matches)
                 {
@@ -168,35 +168,35 @@ namespace NativeCode.Node.Services.Watchers
                         .Value.Trim();
 
                     var map = this.propertyMap[property];
-                    map(value, release);
+                    map(value, announced);
                 }
 
-                if (string.IsNullOrWhiteSpace(release.Name))
+                if (string.IsNullOrWhiteSpace(announced.Name))
                 {
-                    this.Logger.LogError($"Found non-parsable name: {message} {{@release}}", release);
+                    this.Logger.LogError($"Found non-parsable name: {message} {{@announced}}", announced);
 
                     return;
                 }
 
-                var cached = await this.Cache.GetAsync(release.Link);
+                var cached = await this.Cache.GetAsync(announced.Link);
 
                 if (cached != null)
                 {
                     return;
                 }
 
-                this.Cache.Set(release.Link, release.ToJsonBytes());
+                this.Cache.Set(announced.Link, announced.ToJsonBytes());
 
-                if (MovieCategories.Contains(release.Category))
+                if (MovieCategories.Contains(announced.Category))
                 {
-                    await this.Movies.Publish(this.Mapper.Map<MovieRelease>(release));
+                    await this.Movies.Publish(this.Mapper.Map<MovieRelease>(announced));
                 }
-                else if (ShowCategories.Contains(release.Category))
+                else if (ShowCategories.Contains(announced.Category))
                 {
-                    await this.Shows.Publish(this.Mapper.Map<SeriesRelease>(release));
+                    await this.Shows.Publish(this.Mapper.Map<SeriesRelease>(announced));
                 }
 
-                this.Logger.LogInformation("Announced: {@release}", release);
+                this.Logger.LogInformation("Announced: {@announced}", announced);
             }
             catch (Exception ex)
             {
