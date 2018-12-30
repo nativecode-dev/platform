@@ -39,65 +39,63 @@ pipeline:
     environment:
       CAKE_VERSION: "0.30.0"
 
-  publish-identity:
-    auto_tag: true
-    image: plugins/docker
-    secrets: [docker_username, docker_password]
+  publish_identity:
+    <<: *dockerhub
     repo: nativecode/platform-identity
     target: identity
     when:
       branch: [develop, master]
 
-  publish-node:
+  publish_node:
     <<: *dockerhub
     repo: nativecode/platform-node
     target: node
     when:
       branch: [develop, master]
 
-  publish-delegate:
+  publish_delegate:
     <<: *dockerhub
     repo: nativecode/platform-node-delegate
     target: delegate
     when:
       branch: [develop, master]
 
-  publish-processor:
+  publish_processor:
     <<: *dockerhub
     repo: nativecode/platform-node-processor
     target: processor
     when:
       branch: [develop, master]
 
-  publish-watcher:
+  publish_watcher:
     <<: *dockerhub
     repo: nativecode/platform-node-watcher
     target: watcher
     when:
       branch: [develop, master]
 
-  release-identity:
+  release_identity:
     <<: *rancher
     docker_image: "nativecode/platform-identity:${DRONE_BRANCH}"
     service: "platform/identity"
     when:
       branch: master
 
-  release-node:
+  release_node:
     <<: *rancher
     docker_image: "nativecode/platform-node:${DRONE_BRANCH}"
     service: "platform/node"
     when:
       branch: master
 
-  release-processor:
+  release_processor:
     <<: *rancher
     docker_image: "nativecode/platform-node-processor:${DRONE_BRANCH}"
     service: "platform/node-processor"
     when:
       branch: master
 
-  release-watcher:
+  release_watcher:
     <<: *rancher
     docker_image: "nativecode/platform-node-watcher:${DRONE_BRANCH}"
     service: "platform/node-watcher"
