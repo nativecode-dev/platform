@@ -50,24 +50,23 @@ namespace NativeCode.Node.Core.WebHosting
 
         protected TOptions Options { get; } = new TOptions();
 
-        public virtual void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app)
         {
-            this.ConfigureMiddleware(app);
-
-            app.UseMvc();
-            app.UseSwagger(
-                config =>
-                {
-                    config.PostProcess = (settings, c) =>
-                    {
-                        settings.Schemes.Clear();
-                        settings.Schemes.Add(SwaggerSchema.Https);
-                    };
-                });
-            app.UseSwaggerUi3();
+            this.ConfigureApp(
+                app.UseMvc()
+                    .UseSwagger(
+                        config =>
+                        {
+                            config.PostProcess = (settings, c) =>
+                            {
+                                settings.Schemes.Clear();
+                                settings.Schemes.Add(SwaggerSchema.Https);
+                            };
+                        })
+                    .UseSwaggerUi3());
         }
 
-        public virtual IServiceProvider ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOption<TOptions>(this.Configuration);
             services.AddOption<RedisOptions>(this.Configuration, out var redis);
@@ -148,10 +147,13 @@ namespace NativeCode.Node.Core.WebHosting
                     options.OperationProcessors.Add(new UnauthorizedOperationProcessor());
                 });
 
-            return services.BuildServiceProvider();
+            return this.ConfigureAppServices(services)
+                .BuildServiceProvider();
         }
 
-        protected abstract IApplicationBuilder ConfigureMiddleware(IApplicationBuilder app);
+        protected abstract IApplicationBuilder ConfigureApp(IApplicationBuilder app);
+
+        protected abstract IServiceCollection ConfigureAppServices(IServiceCollection services);
 
         protected abstract IMvcCoreBuilder ConfigureMvc(IMvcCoreBuilder builder);
 

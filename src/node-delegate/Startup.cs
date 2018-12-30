@@ -37,7 +37,27 @@ namespace node_delegate
 
         protected override string AppVersion => "v1";
 
-        public override IServiceProvider ConfigureServices(IServiceCollection services)
+        protected override IApplicationBuilder ConfigureApp(IApplicationBuilder app)
+        {
+            if (this.HostingEnvironment.IsProduction())
+            {
+                app.UseHsts();
+            }
+            else
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+            }
+
+            app.UseCors()
+                .UseForwardedHeaders()
+                .UseMvcWithDefaultRoute()
+                .UseStaticFiles();
+
+            return app;
+        }
+
+        protected override IServiceCollection ConfigureAppServices(IServiceCollection services)
         {
             services.AddAuthorization(
                 options =>
@@ -63,27 +83,7 @@ namespace node_delegate
                     options.Version = null;
                 });
 
-            return base.ConfigureServices(services);
-        }
-
-        protected override IApplicationBuilder ConfigureMiddleware(IApplicationBuilder app)
-        {
-            if (this.HostingEnvironment.IsProduction())
-            {
-                app.UseHsts();
-            }
-            else
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-
-            app.UseCors()
-                .UseForwardedHeaders()
-                .UseMvcWithDefaultRoute()
-                .UseStaticFiles();
-
-            return app;
+            return services;
         }
 
         protected override IMvcCoreBuilder ConfigureMvc(IMvcCoreBuilder builder)

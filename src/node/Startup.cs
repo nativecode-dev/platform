@@ -43,35 +43,7 @@ namespace node
 
         protected override string AppVersion => "v1";
 
-        public override IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            services.AddOption<RedisOptions>(this.Configuration, out var redis);
-
-            services.AddMediaServices(options =>
-                {
-                    var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
-                    options.UseSqlServer(connectionString);
-                })
-                .AddMediaStorageMonitor(this.Configuration);
-
-            var addresses = Dns.GetHostAddresses(redis.Host);
-            services.AddHangfire(x => x.UseRedisStorage(addresses.First().ToString()));
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(
-                    this.Options.ApiScope,
-                    configure =>
-                    {
-                        configure.RequireAuthenticatedUser();
-                        configure.RequireScope(this.Options.ApiScope);
-                    });
-            });
-
-            return base.ConfigureServices(services);
-        }
-
-        protected override IApplicationBuilder ConfigureMiddleware(IApplicationBuilder app)
+        protected override IApplicationBuilder ConfigureApp(IApplicationBuilder app)
         {
             if (this.HostingEnvironment.IsProduction())
             {
@@ -89,7 +61,8 @@ namespace node
                     "/jobs",
                     new DashboardOptions
                     {
-                        AppPath = "/", Authorization = new[]
+                        AppPath = "/",
+                        Authorization = new[]
                         {
                             new DashboardAuthorizationFilter(),
                         },
@@ -100,6 +73,7 @@ namespace node
                         ServerName = $"{Environment.MachineName}:{this.Options.Name}:{Process.GetCurrentProcess().Id}",
                         WorkerCount = this.Options.WorkerCount,
                     })
+                .UseHealthChecks("/health")
                 .UseMvc()
                 .UseStaticFiles()
                 .UseStatusCodePages(
@@ -116,6 +90,38 @@ namespace node
                     });
 
             return app;
+        }
+
+        protected override IServiceCollection ConfigureAppServices(IServiceCollection services)
+        {
+            services.AddOption<RedisOptions>(this.Configuration, out var redis);
+
+            services.AddHealthChecks()
+                .AddDbContextCheck<MediaDataContext>();
+
+            services.AddMediaServices(options =>
+                {
+                    var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
+                    options.UseSqlServer(connectionString);
+                })
+                .AddMediaStorageMonitor(this.Configuration);
+
+            var addresses = Dns.GetHostAddresses(redis.Host);
+            services.AddHangfire(x => x.UseRedisStorage(addresses.First()
+                .ToString()));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    this.Options.ApiScope,
+                    configure =>
+                    {
+                        configure.RequireAuthenticatedUser();
+                        configure.RequireScope(this.Options.ApiScope);
+                    });
+            });
+
+            return services;
         }
 
         protected override IMvcCoreBuilder ConfigureMvc(IMvcCoreBuilder builder)

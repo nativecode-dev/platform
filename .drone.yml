@@ -1,11 +1,16 @@
-workspace:
-  base: /platform
-  path: /
-
+--- #------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# Templates
 dockerhub: &dockerhub
   auto_tag: true
   image: plugins/docker
-  secrets: [docker_username, docker_password]
+  secrets:
+    - docker_username
+    - docker_password
+  when:
+    branch:
+      - develop
+      - master
 
 rancher: &rancher
   image: peloton/drone-rancher
@@ -26,6 +31,9 @@ slack: &slack
     - source: webhook_slack_builds
       target: plugin_webhook
 
+#------------------------------------------------------------------------------
+# Pipeline
+#------------------------------------------------------------------------------
 pipeline:
   build:
     image: microsoft/dotnet:sdk
@@ -43,36 +51,26 @@ pipeline:
     <<: *dockerhub
     repo: nativecode/platform-identity
     target: identity
-    when:
-      branch: [develop, master]
 
   publish_node:
     <<: *dockerhub
     repo: nativecode/platform-node
     target: node
-    when:
-      branch: [develop, master]
 
   publish_delegate:
     <<: *dockerhub
     repo: nativecode/platform-node-delegate
     target: delegate
-    when:
-      branch: [develop, master]
 
   publish_processor:
     <<: *dockerhub
     repo: nativecode/platform-node-processor
     target: processor
-    when:
-      branch: [develop, master]
 
   publish_watcher:
     <<: *dockerhub
     repo: nativecode/platform-node-watcher
     target: watcher
-    when:
-      branch: [develop, master]
 
   release_identity:
     <<: *rancher
