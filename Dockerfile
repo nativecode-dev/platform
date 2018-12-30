@@ -4,9 +4,7 @@
 FROM microsoft/dotnet:aspnetcore-runtime as identity
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
-RUN ls -lah /.artifacts
-RUN ls -lah /platform
-COPY /platform/.artifacts/published/identity /app
+COPY /platform/src/.artifacts/published/identity /app
 ENTRYPOINT ["dotnet", "identity.dll"]
 
 # -----------------------------------------------------------------------------
@@ -15,7 +13,7 @@ ENTRYPOINT ["dotnet", "identity.dll"]
 FROM microsoft/dotnet:aspnetcore-runtime as node
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
-COPY /platform/.artifacts/published/node /app
+COPY /platform/src/.artifacts/published/node /app
 ENTRYPOINT ["dotnet", "node.dll"]
 
 # -----------------------------------------------------------------------------
@@ -24,7 +22,7 @@ ENTRYPOINT ["dotnet", "node.dll"]
 FROM microsoft/dotnet:aspnetcore-runtime as delegate
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
-COPY /platform/.artifacts/published/node-delegate /app
+COPY /platform/src/.artifacts/published/node-delegate /app
 ENTRYPOINT ["dotnet", "node-delegate.dll"]
 
 # -----------------------------------------------------------------------------
@@ -33,7 +31,7 @@ ENTRYPOINT ["dotnet", "node-delegate.dll"]
 FROM microsoft/dotnet:aspnetcore-runtime as processor
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
-COPY /platform/.artifacts/published/node-processor /app
+COPY /platform/src/.artifacts/published/node-processor /app
 ENTRYPOINT ["dotnet", "node-processor.dll"]
 
 # -----------------------------------------------------------------------------
@@ -42,5 +40,5 @@ ENTRYPOINT ["dotnet", "node-processor.dll"]
 FROM microsoft/dotnet:aspnetcore-runtime as watcher
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
-COPY /platform/.artifacts/published/node-watcher /app
+COPY /platform/src/.artifacts/published/node-watcher /app
 ENTRYPOINT ["dotnet", "node-watcher.dll"]
