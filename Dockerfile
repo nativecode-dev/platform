@@ -2,6 +2,7 @@
 # STAGE: Identity
 # -----------------------------------------------------------------------------
 FROM microsoft/dotnet:aspnetcore-runtime as identity
+RUN ls -lah /
 COPY .artifacts/published/identity /app
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app

@@ -47,22 +47,6 @@ pipeline:
     environment:
       CAKE_VERSION: "0.30.0"
 
-  rebuild-cache:
-    image: drillster/drone-volume-cache
-    rebuild: true
-    mount:
-      - ./.artifacts
-    volumes:
-      - /tmp/cache:/cache
-
-  restore-cache:
-    image: drillster/drone-volume-cache
-    restore: true
-    mount:
-      - ./artifacts
-    volumes:
-      - /tmp/cache:/cache
-
   publish_identity:
     <<: *dockerhub
     repo: nativecode/platform-identity
