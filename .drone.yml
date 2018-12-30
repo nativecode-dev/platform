@@ -30,6 +30,8 @@ pipeline:
 
   identity: &identity
     <<: *dockerhub
+    dockerfile: src/identity/Dockerfile
+    context: src/identity
     repo: nativecode/platform-identity
     tags: ["${DRONE_BRANCH}"]
     when:
@@ -37,6 +39,8 @@ pipeline:
 
   node: &node
     <<: *dockerhub
+    dockerfile: src/node/Dockerfile
+    context: src/node
     repo: nativecode/platform-node
     tags: ["${DRONE_BRANCH}"]
     when:
@@ -44,6 +48,8 @@ pipeline:
 
   node-delegate: &node-delegate
     <<: *dockerhub
+    dockerfile: src/node-delegate/Dockerfile
+    context: src/node-delegate
     repo: nativecode/platform-node-delegate
     tags: ["${DRONE_BRANCH}"]
     when:
@@ -51,6 +57,8 @@ pipeline:
 
   node-processor: &node-processor
     <<: *dockerhub
+    dockerfile: src/node-processor/Dockerfile
+    context: src/node-processor
     repo: nativecode/platform-node-processor
     tags: ["${DRONE_BRANCH}"]
     when:
@@ -58,6 +66,8 @@ pipeline:
 
   node-watcher: &node-watcher
     <<: *dockerhub
+    dockerfile: src/node-watcher/Dockerfile
+    context: src/node-watcher
     repo: nativecode/platform-node-watcher
     tags: ["${DRONE_BRANCH}"]
     when:
