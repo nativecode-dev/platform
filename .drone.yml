@@ -1,6 +1,6 @@
 workspace:
-  base: /.artifacts
-  path: src/github.com/nativecode-dev/platform/.artifacts
+  base: /platform
+  path: src/github.com/nativecode-dev/platform
 
 dockerhub: &dockerhub
   dockerfile: Dockerfile
