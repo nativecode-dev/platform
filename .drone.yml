@@ -44,21 +44,11 @@ pipeline:
       - cp templates/tools-csproj.template tools/tools.csproj
       - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
       - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
-      - pwd
-      - ls -lah .artifacts/published
     environment:
       CAKE_VERSION: "0.30.0"
 
   publish_identity:
-    auto_tag: true
-    image: plugins/docker
-    secrets:
-      - docker_username
-      - docker_password
-    when:
-      branch:
-        - develop
-        - master
+    <<: *dockerhub
     repo: nativecode/platform-identity
     target: identity
 
