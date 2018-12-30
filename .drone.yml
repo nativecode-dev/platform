@@ -45,6 +45,7 @@ pipeline:
       - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
       - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
       - pwd
+      - ls -lah .artifacts/published
     environment:
       CAKE_VERSION: "0.30.0"
 
