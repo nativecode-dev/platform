@@ -3,7 +3,6 @@ workspace:
   path: /
 
 dockerhub: &dockerhub
-  dockerfile: Dockerfile
   auto_tag: true
   image: plugins/docker
   secrets: [docker_username, docker_password]
@@ -40,35 +39,37 @@ pipeline:
     environment:
       CAKE_VERSION: "0.30.0"
 
-  identity:
-    <<: *dockerhub
+  publish-identity:
+    auto_tag: true
+    image: plugins/docker
+    secrets: [docker_username, docker_password]
     repo: nativecode/platform-identity
     target: identity
     when:
       branch: [develop, master]
 
-  node:
+  publish-node:
     <<: *dockerhub
     repo: nativecode/platform-node
     target: node
     when:
       branch: [develop, master]
 
-  node-delegate:
+  publish-delegate:
     <<: *dockerhub
     repo: nativecode/platform-node-delegate
     target: delegate
     when:
       branch: [develop, master]
 
-  node-processor:
+  publish-processor:
     <<: *dockerhub
     repo: nativecode/platform-node-processor
     target: processor
     when:
       branch: [develop, master]
 
-  node-watcher:
+  publish-watcher:
     <<: *dockerhub
     repo: nativecode/platform-node-watcher
     target: watcher
