@@ -2,6 +2,8 @@ namespace node
 {
     using System;
     using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
     using Filters;
     using Hangfire;
@@ -41,27 +43,26 @@ namespace node
 
         public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMediaServices(
-                    options =>
-                    {
-                        var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
-                        options.UseSqlServer(connectionString);
-                    })
+            services.AddMediaServices(options =>
+                {
+                    var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
+                    options.UseSqlServer(connectionString);
+                })
                 .AddMediaStorageMonitor(this.Configuration);
 
-            services.AddHangfire(x => x.UseRedisStorage("redis"));
+            var addresses = Dns.GetHostAddresses("redis");
+            services.AddHangfire(x => x.UseRedisStorage(addresses.First().ToString()));
 
-            services.AddAuthorization(
-                options =>
-                {
-                    options.AddPolicy(
-                        this.Options.ApiScope,
-                        configure =>
-                        {
-                            configure.RequireAuthenticatedUser();
-                            configure.RequireScope(this.Options.ApiScope);
-                        });
-                });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    this.Options.ApiScope,
+                    configure =>
+                    {
+                        configure.RequireAuthenticatedUser();
+                        configure.RequireScope(this.Options.ApiScope);
+                    });
+            });
 
             return base.ConfigureServices(services);
         }
