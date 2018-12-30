@@ -1,6 +1,6 @@
 workspace:
   base: /platform
-  path: /platform
+  path: /code
 
 dockerhub: &dockerhub
   dockerfile: Dockerfile
