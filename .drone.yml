@@ -27,41 +27,41 @@ pipeline:
     <<: *dockerhub
     repo: nativecode/platform-artifacts
     tags: ["artifacts-${DRONE_BRANCH}"]
-    target: ARTIFACTS
+    target: artifacts
 
   identity: &identity
     <<: *dockerhub
     repo: nativecode/platform-identity
     tags: ["latest", "${DRONE_BRANCH}"]
-    target: IDENTITY
+    target: identity
     when:
       branch: [develop, master]
   node: &node
     <<: *dockerhub
     repo: nativecode/platform-node
     tags: ["latest", "${DRONE_BRANCH}"]
-    target: NODE
+    target: node
     when:
       branch: [develop, master]
   node-delegate: &node-delegae
     <<: *dockerhub
     repo: nativecode/platform-node-delegate
     tags: ["latest", "${DRONE_BRANCH}"]
-    target: DELEGATE
+    target: delegate
     when:
       branch: [develop, master]
   node-processor: &node-processor
     <<: *dockerhub
     repo: nativecode/platform-node-processor
     tags: ["latest", "${DRONE_BRANCH}"]
-    target: PROCESSOR
+    target: processor
     when:
       branch: [develop, master]
   node-watcher: &node-watcher
     <<: *dockerhub
     repo: nativecode/platform-node-watcher
     tags: ["latest", "${DRONE_BRANCH}"]
-    target: WATCHER
+    target: watcher
     when:
       branch: [develop, master]
 
