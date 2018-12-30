@@ -1,4 +1,5 @@
 dockerhub: &dockerhub
+  dockerfile: Dockerfile
   image: plugins/docker
   secrets: [docker_username, docker_password]
 
@@ -22,46 +23,43 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
-  build: &build
   artifacts: &artifacts
     <<: *dockerhub
     repo: nativecode/platform-artifacts
     tags: ["artifacts-${DRONE_BRANCH}"]
     target: ARTIFACTS
-    when:
-      branch: [develop, master]
 
   identity: &identity
     <<: *dockerhub
-    repo: nativecode/identity
+    repo: nativecode/platform-identity
     tags: ["latest", "${DRONE_BRANCH}"]
     target: IDENTITY
     when:
       branch: [develop, master]
   node: &node
     <<: *dockerhub
-    repo: nativecode/node
+    repo: nativecode/platform-node
     tags: ["latest", "${DRONE_BRANCH}"]
     target: NODE
     when:
       branch: [develop, master]
   node-delegate: &node-delegae
     <<: *dockerhub
-    repo: nativecode/node-delegate
+    repo: nativecode/platform-node-delegate
     tags: ["latest", "${DRONE_BRANCH}"]
     target: DELEGATE
     when:
       branch: [develop, master]
   node-processor: &node-processor
     <<: *dockerhub
-    repo: nativecode/node-processor
+    repo: nativecode/platform-node-processor
     tags: ["latest", "${DRONE_BRANCH}"]
     target: PROCESSOR
     when:
       branch: [develop, master]
   node-watcher: &node-watcher
     <<: *dockerhub
-    repo: nativecode/node-watcher
+    repo: nativecode/platform-node-watcher
     tags: ["latest", "${DRONE_BRANCH}"]
     target: WATCHER
     when:
@@ -69,25 +67,25 @@ pipeline:
 
   release-identity: &release-identity
     <<: *rancher
-    docker_image: "nativecode/identity:${DRONE_BRANCH}"
+    docker_image: "nativecode/platform-identity:${DRONE_BRANCH}"
     service: "platform/identity"
     when:
       branch: master
   release-node: &release-node
     <<: *rancher
-    docker_image: "nativecode/node:${DRONE_BRANCH}"
+    docker_image: "nativecode/platform-node:${DRONE_BRANCH}"
     service: "platform/node"
     when:
       branch: master
   release-processor: &release-processor
     <<: *rancher
-    docker_image: "nativecode/node-processor:${DRONE_BRANCH}"
+    docker_image: "nativecode/platform-node-processor:${DRONE_BRANCH}"
     service: "platform/node-processor"
     when:
       branch: master
   release-watcher: &release-watcher
     <<: *rancher
-    docker_image: "nativecode/node-watcher:${DRONE_BRANCH}"
+    docker_image: "nativecode/platform-node-watcher:${DRONE_BRANCH}"
     service: "platform/node-watcher"
     when:
       branch: master
