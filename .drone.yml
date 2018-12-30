@@ -1,14 +1,8 @@
-hub: &hub
+dockerhub: &dockerhub
   image: plugins/docker
-  secrets: [ docker_username, docker_password ]
+  secrets: [docker_username, docker_password]
 
-prod: &prod
-  <<: *hub
-  tags: [ "latest", "1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}" ]
-  when:
-    branch: [ master ]
-
-deploy: &deploy
+rancher: &rancher
   image: peloton/drone-rancher
   confirm: true
   secrets:
@@ -28,50 +22,72 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
-  idp: &idp
-    <<: *prod
-    dockerfile: src/identity/Dockerfile
+  build: &build
+  artifacts: &artifacts
+    <<: *dockerhub
+    repo: nativecode/platform-artifacts
+    tags: ["artifacts-${DRONE_BRANCH}"]
+    target: ARTIFACTS
+    when:
+      branch: [develop, master]
+
+  identity: &identity
+    <<: *dockerhub
     repo: nativecode/identity
-
+    tags: ["latest", "${DRONE_BRANCH}"]
+    target: IDENTITY
+    when:
+      branch: [develop, master]
   node: &node
-    <<: *prod
-    dockerfile: src/node/Dockerfile
+    <<: *dockerhub
     repo: nativecode/node
-
-  processor: &processor
-    <<: *prod
-    dockerfile: src/node-processor/Dockerfile
+    tags: ["latest", "${DRONE_BRANCH}"]
+    target: NODE
+    when:
+      branch: [develop, master]
+  node-delegate: &node-delegae
+    <<: *dockerhub
+    repo: nativecode/node-delegate
+    tags: ["latest", "${DRONE_BRANCH}"]
+    target: DELEGATE
+    when:
+      branch: [develop, master]
+  node-processor: &node-processor
+    <<: *dockerhub
     repo: nativecode/node-processor
-
-  watcher: &watcher
-    <<: *prod
-    dockerfile: src/node-watcher/Dockerfile
+    tags: ["latest", "${DRONE_BRANCH}"]
+    target: PROCESSOR
+    when:
+      branch: [develop, master]
+  node-watcher: &node-watcher
+    <<: *dockerhub
     repo: nativecode/node-watcher
+    tags: ["latest", "${DRONE_BRANCH}"]
+    target: WATCHER
+    when:
+      branch: [develop, master]
 
-  release-idp: &release-idp
-    <<: *deploy
-    docker_image: "nativecode/identity:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+  release-identity: &release-identity
+    <<: *rancher
+    docker_image: "nativecode/identity:${DRONE_BRANCH}"
     service: "platform/identity"
     when:
       branch: master
-
   release-node: &release-node
-    <<: *deploy
-    docker_image: "nativecode/node:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    <<: *rancher
+    docker_image: "nativecode/node:${DRONE_BRANCH}"
     service: "platform/node"
     when:
       branch: master
-
   release-processor: &release-processor
-    <<: *deploy
-    docker_image: "nativecode/node-processor:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    <<: *rancher
+    docker_image: "nativecode/node-processor:${DRONE_BRANCH}"
     service: "platform/node-processor"
     when:
       branch: master
-
   release-watcher: &release-watcher
-    <<: *deploy
-    docker_image: "nativecode/node-watcher:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    <<: *rancher
+    docker_image: "nativecode/node-watcher:${DRONE_BRANCH}"
     service: "platform/node-watcher"
     when:
       branch: master
@@ -79,4 +95,4 @@ pipeline:
   notification: &notification
     <<: *slack
     when:
-      status: [ success, failure ]
+      status: [success, failure]

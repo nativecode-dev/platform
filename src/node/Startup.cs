@@ -19,7 +19,9 @@ namespace node
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using NativeCode.Core.Extensions;
     using NativeCode.Core.Mvc;
+    using NativeCode.Node.Core.Options;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Media;
     using NativeCode.Node.Media.Data;
@@ -43,6 +45,8 @@ namespace node
 
         public override IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddOption<RedisOptions>(this.Configuration, out var redis);
+
             services.AddMediaServices(options =>
                 {
                     var connectionString = this.Configuration.GetConnectionString(nameof(MediaDataContext));
@@ -50,7 +54,7 @@ namespace node
                 })
                 .AddMediaStorageMonitor(this.Configuration);
 
-            var addresses = Dns.GetHostAddresses("redis");
+            var addresses = Dns.GetHostAddresses(redis.Host);
             services.AddHangfire(x => x.UseRedisStorage(addresses.First().ToString()));
 
             services.AddAuthorization(options =>
