@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # STAGE: Runtime
 # -----------------------------------------------------------------------------
-FROM microsoft/dotnet:aspnetcore-runtime AS RUNTIME
+FROM microsoft/dotnet:aspnetcore-runtime AS runtime
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
@@ -32,50 +32,3 @@ RUN set -ex \
     && dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION \
     && dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release" \
     ;
-
-# -----------------------------------------------------------------------------
-# STAGE: Artifacts
-# -----------------------------------------------------------------------------
-FROM RUNTIME AS artifacts
-WORKDIR /app
-COPY --from=build /build/.artifacts/published /app
-
-# -----------------------------------------------------------------------------
-# STAGE: Identity
-# -----------------------------------------------------------------------------
-FROM RUNTIME AS identity
-WORKDIR /app
-COPY --from=build /build/.artifacts/published/identity /app
-ENTRYPOINT ["dotnet", "identity.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Node
-# -----------------------------------------------------------------------------
-FROM RUNTIME AS node
-WORKDIR /app
-COPY --from=build /build/.artifacts/published/node /app
-ENTRYPOINT ["dotnet", "node.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Delegate
-# -----------------------------------------------------------------------------
-FROM RUNTIME AS delegate
-WORKDIR /app
-COPY --from=build /build/.artifacts/published/node-delegate /app
-ENTRYPOINT ["dotnet", "node-delegate.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Processor
-# -----------------------------------------------------------------------------
-FROM RUNTIME AS processor
-WORKDIR /app
-COPY --from=build /build/.artifacts/published/node-processor /app
-ENTRYPOINT ["dotnet", "node-processor.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Watcher
-# -----------------------------------------------------------------------------
-FROM RUNTIME AS watcher
-WORKDIR /app
-COPY --from=build /build/.artifacts/published/node-watcher /app
-ENTRYPOINT ["dotnet", "node-watcher.dll"]

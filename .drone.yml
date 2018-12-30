@@ -26,42 +26,40 @@ pipeline:
   artifacts: &artifacts
     <<: *dockerhub
     repo: nativecode/platform-artifacts
-    tags: ["artifacts-${DRONE_BRANCH}"]
-    target: artifacts
+    tags: ["latest", "${DRONE_BUILD_NUMBER}"]
 
   identity: &identity
     <<: *dockerhub
     repo: nativecode/platform-identity
-    tags: ["latest", "${DRONE_BRANCH}"]
-    target: identity
+    tags: ["${DRONE_BRANCH}"]
     when:
       branch: [develop, master]
+
   node: &node
     <<: *dockerhub
     repo: nativecode/platform-node
-    tags: ["latest", "${DRONE_BRANCH}"]
-    target: node
+    tags: ["${DRONE_BRANCH}"]
     when:
       branch: [develop, master]
-  node-delegate: &node-delegae
+
+  node-delegate: &node-delegate
     <<: *dockerhub
     repo: nativecode/platform-node-delegate
-    tags: ["latest", "${DRONE_BRANCH}"]
-    target: delegate
+    tags: ["${DRONE_BRANCH}"]
     when:
       branch: [develop, master]
+
   node-processor: &node-processor
     <<: *dockerhub
     repo: nativecode/platform-node-processor
-    tags: ["latest", "${DRONE_BRANCH}"]
-    target: processor
+    tags: ["${DRONE_BRANCH}"]
     when:
       branch: [develop, master]
+
   node-watcher: &node-watcher
     <<: *dockerhub
     repo: nativecode/platform-node-watcher
-    tags: ["latest", "${DRONE_BRANCH}"]
-    target: watcher
+    tags: ["${DRONE_BRANCH}"]
     when:
       branch: [develop, master]
 
@@ -71,18 +69,21 @@ pipeline:
     service: "platform/identity"
     when:
       branch: master
+
   release-node: &release-node
     <<: *rancher
     docker_image: "nativecode/platform-node:${DRONE_BRANCH}"
     service: "platform/node"
     when:
       branch: master
+
   release-processor: &release-processor
     <<: *rancher
     docker_image: "nativecode/platform-node-processor:${DRONE_BRANCH}"
     service: "platform/node-processor"
     when:
       branch: master
+
   release-watcher: &release-watcher
     <<: *rancher
     docker_image: "nativecode/platform-node-watcher:${DRONE_BRANCH}"
