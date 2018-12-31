@@ -1,4 +1,4 @@
-namespace NativeCode.Core.Web
+namespace NativeCode.Core.Mvc
 {
     using System;
     using System.Linq;
@@ -24,9 +24,9 @@ namespace NativeCode.Core.Web
         /// until EFCore fixes their story for deploying migrations, we have to use the startup (or at least
         /// it's the least intrusive). The full "dotnet" tools are not available in a published add, ergo
         /// you cannot invoke "dotnet ef" because the EF tools are not deployed. - MP
-        /// <see cref="https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/migrations?view=aspnetcore-2.1&tabs=netcore-cli"/>
-        /// <see cref="https://github.com/aspnet/EntityFrameworkCore/issues/9033#issuecomment-317063370"/>
-        /// <see cref="https://github.com/dotnet/dotnet-docker-samples/issues/89"/>.
+        /// <see href="https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/migrations?view=aspnetcore-2.1&tabs=netcore-cli"/>
+        /// <see href="https://github.com/aspnet/EntityFrameworkCore/issues/9033#issuecomment-317063370"/>
+        /// <see href="https://github.com/dotnet/dotnet-docker-samples/issues/89"/>.
         /// </remarks>
         /// <typeparam name="T"></typeparam>
         /// <param name="host"></param>

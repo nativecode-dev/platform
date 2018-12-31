@@ -11,7 +11,7 @@ namespace identity
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using NativeCode.Core.Data;
-    using NativeCode.Core.Web;
+    using NativeCode.Core.Mvc;
     using NativeCode.Node.Core;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Identity;

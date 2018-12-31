@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src-libs\Core\NativeCode.Core.Mvc\NativeCode.Core.Mvc.csproj" />
-    <ProjectReference Include="..\..\src-libs\Core\NativeCode.Core.Web\NativeCode.Core.Web.csproj" />
     <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Core.WebHosting\NativeCode.Node.Core.WebHosting.csproj" />
     <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Media.Data\NativeCode.Node.Media.Data.csproj" />
     <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Media\NativeCode.Node.Media.csproj" />
