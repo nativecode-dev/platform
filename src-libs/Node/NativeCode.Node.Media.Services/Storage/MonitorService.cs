@@ -8,6 +8,7 @@ namespace NativeCode.Node.Media.Services.Storage
     using Data.Extensions;
     using Data.Services.Storage;
     using Microsoft.Extensions.Logging;
+    using NativeCode.Core.Extensions;
     using NativeCode.Core.Reliability;
     using Nito.AsyncEx;
 
@@ -50,7 +51,7 @@ namespace NativeCode.Node.Media.Services.Storage
             if (this.monitors.ContainsKey(mountPath.Id) && this.monitors.TryRemove(mountPath.MountId, out var proxy))
             {
                 await proxy.Stop()
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 proxy.Dispose();
             }

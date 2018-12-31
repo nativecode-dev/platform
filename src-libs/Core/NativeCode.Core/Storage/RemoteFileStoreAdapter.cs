@@ -4,6 +4,7 @@ namespace NativeCode.Core.Storage
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
+    using Extensions;
 
     public class RemoteFileStoreAdapter
     {
@@ -23,7 +24,7 @@ namespace NativeCode.Core.Storage
             context.FilePath = filepath;
 
             var stream = await this.Provider.RetrieveAsync(context, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             return stream;
         }
@@ -34,7 +35,7 @@ namespace NativeCode.Core.Storage
             context.FilePath = filepath;
 
             await this.Provider.StoreAsync(context, stream, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
         }
     }
 }

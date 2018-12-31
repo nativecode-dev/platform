@@ -3,6 +3,7 @@ namespace NativeCode.Core.Messaging
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Core.Extensions;
 
     public abstract class QueueConsumer<T>
         where T : IQueueMessage
@@ -28,7 +29,7 @@ namespace NativeCode.Core.Messaging
             this.Queue.AsObservable()
                 .Subscribe(
                     async value => await this.ProcessMessage(value)
-                        .ConfigureAwait(false),
+                        .NoCapture(),
                     this.ProcessCompleted,
                     cancellationToken);
 

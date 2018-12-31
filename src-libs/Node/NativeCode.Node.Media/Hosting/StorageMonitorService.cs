@@ -7,6 +7,7 @@ namespace NativeCode.Node.Media.Hosting
     using Data.Services.Storage;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using NativeCode.Core.Extensions;
     using NativeCode.Core.Services;
     using Nito.AsyncEx;
 
@@ -44,13 +45,13 @@ namespace NativeCode.Node.Media.Hosting
             foreach (var mount in this.Options.Mounts)
             {
                 var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken)
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 tasks.Add(this.Monitors.StartMonitor(path));
             }
 
             await Task.WhenAll(tasks)
-                .ConfigureAwait(false);
+                .NoCapture();
         }
 
         /// <inheritdoc />
@@ -66,12 +67,12 @@ namespace NativeCode.Node.Media.Hosting
             foreach (var mount in this.Options.Mounts)
             {
                 var path = await this.MountService.GetMountPath(Guid.Parse(mount.Key), mount.Value, cancellationToken)
-                    .ConfigureAwait(false);
+                    .NoCapture();
                 tasks.Add(this.Monitors.StopMonitor(path));
             }
 
             await Task.WhenAll(tasks)
-                .ConfigureAwait(false);
+                .NoCapture();
         }
 
         /// <inheritdoc />

@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src-libs\Integrations\NativeCode.Integrations.AmazonWebServices\NativeCode.Integrations.AmazonWebServices.csproj" />
     <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Core.WebHosting\NativeCode.Node.Core.WebHosting.csproj" />
     <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Core\NativeCode.Node.Core.csproj" />
     <ProjectReference Include="..\..\src-libs\Node\NativeCode.Node.Identity\NativeCode.Node.Identity.csproj" />

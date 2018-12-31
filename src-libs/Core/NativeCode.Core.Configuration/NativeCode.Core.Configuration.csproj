@@ -31,4 +31,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NativeCode.Core\NativeCode.Core.csproj" />
+  </ItemGroup>
+
 </Project>

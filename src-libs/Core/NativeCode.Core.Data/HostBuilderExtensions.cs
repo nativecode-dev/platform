@@ -2,6 +2,7 @@ namespace NativeCode.Core.Data
 {
     using System;
     using System.Threading.Tasks;
+    using Core.Extensions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -23,7 +24,7 @@ namespace NativeCode.Core.Data
                 var seeder = scope.ServiceProvider.GetRequiredService<IDataContextSeeder<T>>();
 
                 await seed(seeder)
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 return host;
             }

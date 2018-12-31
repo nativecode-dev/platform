@@ -11,6 +11,7 @@ namespace NativeCode.Node.Media.Services.Storage
     using Data.Services.Storage;
     using Microsoft.EntityFrameworkCore;
     using NativeCode.Core.Data.Exceptions;
+    using NativeCode.Core.Extensions;
 
     public class MountService : IMountService
     {
@@ -27,7 +28,7 @@ namespace NativeCode.Node.Media.Services.Storage
         public async Task<Mount> CreateMount(string name, MountType type, CancellationToken cancellationToken = default)
         {
             var mount = await this.Context.Mounts.SingleOrDefaultAsync(m => m.Name == name, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (mount != null)
             {
@@ -60,7 +61,7 @@ namespace NativeCode.Node.Media.Services.Storage
         {
             var mount = await this.Context.Mounts.Include(m => m.Paths)
                 .SingleAsync(m => m.Id == mountId, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (mount.Paths.Any(mp => mp.Path == filepath))
             {
@@ -75,7 +76,7 @@ namespace NativeCode.Node.Media.Services.Storage
             mount.Paths.Add(path);
 
             await this.Context.SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             return path;
         }
@@ -84,7 +85,7 @@ namespace NativeCode.Node.Media.Services.Storage
         public async Task DeleteMount(Guid mountId, CancellationToken cancellationToken = default)
         {
             var mount = await this.GetMount(mountId, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             this.Context.Mounts.Remove(mount);
         }
@@ -96,7 +97,7 @@ namespace NativeCode.Node.Media.Services.Storage
                 .Include(m => m.Paths)
                 .Where(m => m.Type == MountType.Local)
                 .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
         }
 
         /// <inheritdoc />
@@ -131,7 +132,7 @@ namespace NativeCode.Node.Media.Services.Storage
             return await this.Context.Mounts.Include(m => m.Credentials)
                 .Include(m => m.Paths)
                 .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
         }
 
         /// <inheritdoc />
@@ -141,7 +142,7 @@ namespace NativeCode.Node.Media.Services.Storage
                 .Include(m => m.Paths)
                 .Where(m => m.Type == MountType.Nfs)
                 .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
         }
 
         /// <inheritdoc />
@@ -151,7 +152,7 @@ namespace NativeCode.Node.Media.Services.Storage
                 .Include(m => m.Paths)
                 .Where(m => m.Type == MountType.Smb)
                 .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
         }
     }
 }

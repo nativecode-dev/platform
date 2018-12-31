@@ -12,8 +12,10 @@ namespace identity
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using NativeCode.Core;
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Mvc;
+    using NativeCode.Core.Storage;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Identity;
@@ -38,6 +40,16 @@ namespace identity
 
         protected override string AppVersion => "v1";
 
+        protected override AuthenticationBuilder ConfigueAuthentication(IServiceCollection services)
+        {
+            var authentication = services.AddAuthentication()
+                .AddCookie();
+
+            authentication.AddApplicationCookie();
+
+            return authentication;
+        }
+
         protected override IApplicationBuilder ConfigureApp(IApplicationBuilder app)
         {
             if (this.HostingEnvironment.IsProduction())
@@ -49,7 +61,8 @@ namespace identity
                 app.UseDeveloperExceptionPage();
             }
 
-            return app.UseAuthentication()
+            return app
+                .UseAuthentication()
                 .UseCors()
                 .UseForwardedHeaders()
                 .UseHealthChecks("/health")
@@ -57,32 +70,31 @@ namespace identity
                 .UseIdentityServer()
                 .UseMvcWithDefaultRoute()
                 .UseStaticFiles()
-                .UseSwaggerUi3()
-                .UseSwagger(settings => settings.DocumentName = Program.AppName);
+                .UseSwagger(settings => settings.DocumentName = Program.AppName)
+                .UseSwaggerUi3();
         }
 
         protected override IServiceCollection ConfigureAppServices(IServiceCollection services)
         {
-            services.AddOption<AppOptions>(this.Configuration);
-            services.AddOption<RedisOptions>(this.Configuration, out var redis);
-
-            services.AddHealthChecks()
-                .AddDbContextCheck<IdentityDataContext>();
-
-            services.AddIdentityConverters();
-
-            this.ConfigureAutoMapper(services);
-            this.ConfigureDbContext(services);
-            this.ConfigureIdentityServer(services, redis);
-            this.ConfigureAutoMapper(services);
-            this.ConfigureMvc(services.AddMvcCore());
-
-            services.AddSwaggerDocument(
-                options =>
+            services
+                .AddOption<AppOptions>(this.Configuration)
+                .AddOption<RedisOptions>(this.Configuration, out var redis)
+                .AddAws(this.Configuration)
+                .AddHealthChecks()
+                .AddDbContextCheck<IdentityDataContext>()
+                .Services
+                .AddIdentityConverters()
+                .AddRemoteFileStore()
+                .AddSwaggerDocument(options =>
                 {
                     options.DocumentName = this.AppName;
                     options.OperationProcessors.Add(new UnauthorizedOperationProcessor());
                 });
+
+            this.ConfigureAutoMapper(services);
+            this.ConfigureDbContext(services);
+            this.ConfigureIdentityServer(services, redis);
+            this.ConfigureMvc(services.AddMvcCore());
 
             return services;
         }
@@ -116,19 +128,9 @@ namespace identity
                     });
         }
 
-        protected override AuthenticationBuilder ConfigueAuthentication(IServiceCollection services)
+        private IServiceCollection ConfigureAutoMapper(IServiceCollection services)
         {
-            var authentication = services.AddAuthentication()
-                .AddCookie();
-
-            authentication.AddApplicationCookie();
-
-            return authentication;
-        }
-
-        private void ConfigureAutoMapper(IServiceCollection services)
-        {
-            services.AddAutoMapper(
+            return services.AddAutoMapper(
                 options =>
                 {
                     options.CreateMap<User, UserInfo>()
@@ -140,9 +142,9 @@ namespace identity
                 });
         }
 
-        private void ConfigureDbContext(IServiceCollection services)
+        private IServiceCollection ConfigureDbContext(IServiceCollection services)
         {
-            services.AddDbContext<IdentityDataContext>(
+            return services.AddDbContext<IdentityDataContext>(
                 options =>
                 {
                     var connectionString = this.Configuration.GetConnectionString(nameof(IdentityDataContext));
@@ -154,7 +156,7 @@ namespace identity
                 });
         }
 
-        private void ConfigureIdentityServer(IServiceCollection services, RedisOptions redis)
+        private IServiceCollection ConfigureIdentityServer(IServiceCollection services, RedisOptions redis)
         {
             services
                 .AddIdentity<User, Role>(options =>
@@ -205,7 +207,7 @@ namespace identity
                     this.Logger.LogTrace("{@options}", options);
                 });
 
-            services.AddAuthorization(options =>
+            return services.AddAuthorization(options =>
             {
                 options.AddPolicy(
                     this.Options.ApiScope,

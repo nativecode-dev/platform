@@ -10,6 +10,7 @@ namespace NativeCode.Node.Media.Controllers
     using Models.Data.Storage;
     using Models.Views.Mounts;
     using NativeCode.Core.Data.Exceptions;
+    using NativeCode.Core.Extensions;
 
     [ApiController]
     [Route("[controller]")]
@@ -34,7 +35,7 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 await this.MountService.DeleteMount(request.Id)
-                    .ConfigureAwait(true);
+                    .NoCapture();
 
                 return this.Ok();
             }
@@ -53,7 +54,7 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetMounts()
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
 
@@ -74,7 +75,7 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mount = await this.MountService.GetMount(id)
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 var model = this.Mapper.Map<MountInfo>(mount);
 
@@ -95,7 +96,7 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetLocalMounts()
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
 
@@ -116,7 +117,7 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetNfsMounts()
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
 
@@ -137,7 +138,7 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mounts = await this.MountService.GetSmbMounts()
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 var model = this.Mapper.Map<IEnumerable<MountInfo>>(mounts);
 
@@ -158,7 +159,7 @@ namespace NativeCode.Node.Media.Controllers
             try
             {
                 var mount = await this.MountService.CreateMount(request.Name, request.Type)
-                    .ConfigureAwait(true);
+                    .NoCapture();
 
                 var model = this.Mapper.Map<MountInfo>(mount);
 

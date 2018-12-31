@@ -69,18 +69,18 @@ namespace NativeCode.Core.Data
                 try
                 {
                     var existing = await projection(model, dbset)
-                        .ConfigureAwait(false);
+                        .NoCapture();
                     this.Logger.LogTrace("{@existing}", existing);
 
                     if (existing == null)
                     {
                         var entity = await converter.Invoke(model, dbset)
-                            .ConfigureAwait(false);
+                            .NoCapture();
 
                         if (callback != null)
                         {
                             await callback.Invoke(model, entity)
-                                .ConfigureAwait(false);
+                                .NoCapture();
                         }
 
                         dbset.Add(entity);

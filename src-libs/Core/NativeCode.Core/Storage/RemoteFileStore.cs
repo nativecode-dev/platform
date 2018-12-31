@@ -4,6 +4,7 @@ namespace NativeCode.Core.Storage
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Extensions;
 
     public class RemoteFileStore : IRemoteFileStore
     {
@@ -25,7 +26,7 @@ namespace NativeCode.Core.Storage
             }
 
             var connected = await adapter.CanConnect(location)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (connected == false)
             {

@@ -2,6 +2,7 @@ namespace NativeCode.Clients.Posteio
 {
     using System;
     using System.Threading.Tasks;
+    using Core.Extensions;
     using Core.Serialization;
     using Responses;
     using RestSharp;
@@ -22,10 +23,11 @@ namespace NativeCode.Clients.Posteio
                 JsonSerializer = new RestSerializer(new JsonObjectSerializer()), RequestFormat = DataFormat.Json,
             };
             request.AddHeader("Content-Type", "application/json");
-            request.AddBody(resource);
+            request.AddJsonBody(resource);
 
             var response = await this.client.ExecuteTaskAsync(request)
-                .ConfigureAwait(false);
+                .NoCapture();
+
             return response.IsSuccessful;
         }
 
@@ -35,10 +37,11 @@ namespace NativeCode.Clients.Posteio
             {
                 JsonSerializer = new RestSerializer(new JsonObjectSerializer()), RequestFormat = DataFormat.Json,
             };
+
             request.AddHeader("Content-Type", "application/json");
 
             var response = await this.client.ExecuteTaskAsync(request)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             return response.IsSuccessful;
         }
@@ -49,10 +52,11 @@ namespace NativeCode.Clients.Posteio
             {
                 JsonSerializer = new RestSerializer(new JsonObjectSerializer()), RequestFormat = DataFormat.Json,
             };
+
             request.AddHeader("Content-Type", "application/json");
 
             var response = await this.client.ExecuteTaskAsync<TResource>(request)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (response.IsSuccessful)
             {
@@ -68,10 +72,11 @@ namespace NativeCode.Clients.Posteio
             {
                 JsonSerializer = new RestSerializer(new JsonObjectSerializer()), RequestFormat = DataFormat.Json,
             };
+
             request.AddHeader("Content-Type", "application/json");
 
             var response = await this.client.ExecuteTaskAsync(request)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             return response.IsSuccessful;
         }
@@ -82,10 +87,11 @@ namespace NativeCode.Clients.Posteio
             {
                 JsonSerializer = new RestSerializer(new JsonObjectSerializer()), RequestFormat = DataFormat.Json,
             };
+
             request.AddHeader("Content-Type", "application/json");
 
             var response = await this.client.ExecuteTaskAsync<ResponsePage<TResource>>(request)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (response.IsSuccessful)
             {
@@ -101,10 +107,11 @@ namespace NativeCode.Clients.Posteio
             {
                 JsonSerializer = new RestSerializer(new JsonObjectSerializer()), RequestFormat = DataFormat.Json,
             };
+
             request.AddHeader("Content-Type", "application/json");
 
             var response = await this.client.ExecuteTaskAsync(request)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             return response.IsSuccessful;
         }
@@ -115,10 +122,11 @@ namespace NativeCode.Clients.Posteio
             {
                 JsonSerializer = new RestSerializer(new JsonObjectSerializer()), RequestFormat = DataFormat.Json,
             };
+
             request.AddHeader("Content-Type", "application/json");
 
             var response = await this.client.ExecuteTaskAsync<TResource>(request)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (response.IsSuccessful)
             {

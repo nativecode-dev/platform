@@ -8,6 +8,7 @@ namespace NativeCode.Integrations.AmazonWebServices.Storage
     using Amazon.S3;
     using Amazon.S3.Model;
     using Core.Credentials;
+    using Core.Extensions;
     using Core.Reliability;
     using Core.Storage;
 
@@ -53,7 +54,7 @@ namespace NativeCode.Integrations.AmazonWebServices.Storage
             };
 
             var response = await this.Client.GetObjectAsync(request, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (response.HttpStatusCode == HttpStatusCode.OK)
             {
@@ -76,7 +77,7 @@ namespace NativeCode.Integrations.AmazonWebServices.Storage
             };
 
             var response = await this.Client.PutObjectAsync(request, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             if (response.HttpStatusCode == HttpStatusCode.OK)
             {

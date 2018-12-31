@@ -2,6 +2,7 @@ namespace NativeCode.Core.Configuration
 {
     using System.Threading.Tasks;
     using dotnet_etcd;
+    using Extensions;
     using Microsoft.Extensions.Configuration;
     using Nito.AsyncEx;
     using Serilog;
@@ -26,7 +27,7 @@ namespace NativeCode.Core.Configuration
             {
                 var path = this.Options.HostUri.AbsolutePath;
                 var response = await client.GetRangeAsync(path)
-                    .ConfigureAwait(false);
+                    .NoCapture();
 
                 foreach (var kvp in response)
                 {

@@ -69,7 +69,7 @@ namespace NativeCode.Clients
             }
 
             var response = await this.Client.ExecuteTaskAsync(request, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
             var content = this.Serializer.Serialize(response.IsSuccessful);
 
             this.cache.AddOrUpdate(key, k => content, (k, v) => content);
@@ -129,7 +129,7 @@ namespace NativeCode.Clients
             }
 
             var response = await this.Client.ExecuteTaskAsync(request, cancellationToken)
-                .ConfigureAwait(false);
+                .NoCapture();
 
             this.cache.AddOrUpdate(key, k => response.Content, (k, v) => response.Content);
 
