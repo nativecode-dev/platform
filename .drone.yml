@@ -1,8 +1,6 @@
-#------------------------------------------------------------------------------
-# Templates
-#------------------------------------------------------------------------------
 dockerhub: &dockerhub
   auto_tag: true
+  group: platform
   image: plugins/docker
   secrets:
     - docker_username
@@ -31,9 +29,6 @@ slack: &slack
     - source: webhook_slack_builds
       target: plugin_webhook
 
-#------------------------------------------------------------------------------
-# Pipeline
-#------------------------------------------------------------------------------
 pipeline:
   build:
     image: microsoft/dotnet:sdk
@@ -49,41 +44,29 @@ pipeline:
       - CAKE_VERSION=0.30.0
 
   publish_identity:
-    auto_tag: true
-    image: plugins/docker
-    group: platform
-    secrets:
-      - docker_username
-      - docker_password
-    when:
-      branch:
-        - develop
-        - master
+    <<: *dockerhub
     repo: nativecode/platform-identity
+    target: identity
 
-#  publish_node:
-#    <<: *dockerhub
-#    group: platform
-#    repo: nativecode/platform-node
-#    target: node
+  publish_node:
+    <<: *dockerhub
+    repo: nativecode/platform-node
+    target: node
 
-#  publish_delegate:
-#    <<: *dockerhub
-#    group: platform
-#    repo: nativecode/platform-node-delegate
-#    target: delegate
+  publish_delegate:
+    <<: *dockerhub
+    repo: nativecode/platform-node-delegate
+    target: delegate
 
-#  publish_processor:
-#    <<: *dockerhub
-#    group: platform
-#    repo: nativecode/platform-node-processor
-#    target: processor
+  publish_processor:
+    <<: *dockerhub
+    repo: nativecode/platform-node-processor
+    target: processor
 
-#  publish_watcher:
-#    <<: *dockerhub
-#    group: platform
-#    repo: nativecode/platform-node-watcher
-#    target: watcher
+  publish_watcher:
+    <<: *dockerhub
+    repo: nativecode/platform-node-watcher
+    target: watcher
 
   release_identity:
     <<: *rancher
