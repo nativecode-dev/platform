@@ -46,11 +46,12 @@ pipeline:
       - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
       - cp -R .artifacts build-artifacts
     environment:
-      CAKE_VERSION: "0.30.0"
+      - CAKE_VERSION=0.30.0
 
   publish_identity:
     auto_tag: true
     image: plugins/docker
+    group: platform
     secrets:
       - docker_username
       - docker_password
@@ -62,21 +63,25 @@ pipeline:
 
 #  publish_node:
 #    <<: *dockerhub
+#    group: platform
 #    repo: nativecode/platform-node
 #    target: node
 
 #  publish_delegate:
 #    <<: *dockerhub
+#    group: platform
 #    repo: nativecode/platform-node-delegate
 #    target: delegate
 
 #  publish_processor:
 #    <<: *dockerhub
+#    group: platform
 #    repo: nativecode/platform-node-processor
 #    target: processor
 
 #  publish_watcher:
 #    <<: *dockerhub
+#    group: platform
 #    repo: nativecode/platform-node-watcher
 #    target: watcher
 
