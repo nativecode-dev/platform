@@ -1,6 +1,3 @@
-# -----------------------------------------------------------------------------
-# STAGE: Identity
-# -----------------------------------------------------------------------------
 FROM microsoft/dotnet:aspnetcore-runtime as identity
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
