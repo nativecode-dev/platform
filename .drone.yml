@@ -49,7 +49,15 @@ pipeline:
       CAKE_VERSION: "0.30.0"
 
   publish_identity:
-    <<: *dockerhub
+    auto_tag: true
+    image: plugins/docker
+    secrets:
+      - docker_username
+      - docker_password
+    when:
+      branch:
+        - develop
+        - master
     repo: nativecode/platform-identity
 
 #  publish_node:
