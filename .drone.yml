@@ -1,6 +1,6 @@
---- #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 # Templates
+#------------------------------------------------------------------------------
 dockerhub: &dockerhub
   auto_tag: true
   image: plugins/docker
@@ -44,33 +44,33 @@ pipeline:
       - cp templates/tools-csproj.template tools/tools.csproj
       - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
       - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
+      - cp -R .artifacts build-artifacts
     environment:
       CAKE_VERSION: "0.30.0"
 
   publish_identity:
     <<: *dockerhub
     repo: nativecode/platform-identity
-    target: identity
 
-  publish_node:
-    <<: *dockerhub
-    repo: nativecode/platform-node
-    target: node
+#  publish_node:
+#    <<: *dockerhub
+#    repo: nativecode/platform-node
+#    target: node
 
-  publish_delegate:
-    <<: *dockerhub
-    repo: nativecode/platform-node-delegate
-    target: delegate
+#  publish_delegate:
+#    <<: *dockerhub
+#    repo: nativecode/platform-node-delegate
+#    target: delegate
 
-  publish_processor:
-    <<: *dockerhub
-    repo: nativecode/platform-node-processor
-    target: processor
+#  publish_processor:
+#    <<: *dockerhub
+#    repo: nativecode/platform-node-processor
+#    target: processor
 
-  publish_watcher:
-    <<: *dockerhub
-    repo: nativecode/platform-node-watcher
-    target: watcher
+#  publish_watcher:
+#    <<: *dockerhub
+#    repo: nativecode/platform-node-watcher
+#    target: watcher
 
   release_identity:
     <<: *rancher
