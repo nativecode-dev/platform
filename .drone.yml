@@ -49,6 +49,8 @@ pipeline:
     <<: *dockerhub
     repo: nativecode/platform-identity
     target: identity
+    volumes:
+      - /drone:/drone
 
   publish_node:
     <<: *dockerhub
