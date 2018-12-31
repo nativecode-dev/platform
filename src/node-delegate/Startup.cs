@@ -103,7 +103,7 @@ namespace node_delegate
                     });
         }
 
-        protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
+        protected override AuthenticationBuilder ConfigueAuthentication(IServiceCollection services)
         {
             return services.AddAuthentication(
                 options =>

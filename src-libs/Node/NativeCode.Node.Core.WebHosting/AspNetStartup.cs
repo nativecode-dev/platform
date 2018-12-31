@@ -113,7 +113,7 @@ namespace NativeCode.Node.Core.WebHosting
 
             this.ConfigureMvc(mvc);
 
-            this.CreateAuthenticationBuilder(services)
+            this.ConfigueAuthentication(services)
                 .AddIdentityServerAuthentication(
                     options =>
                     {
@@ -157,6 +157,6 @@ namespace NativeCode.Node.Core.WebHosting
 
         protected abstract IMvcCoreBuilder ConfigureMvc(IMvcCoreBuilder builder);
 
-        protected abstract AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services);
+        protected abstract AuthenticationBuilder ConfigueAuthentication(IServiceCollection services);
     }
 }

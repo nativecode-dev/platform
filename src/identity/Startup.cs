@@ -116,7 +116,7 @@ namespace identity
                     });
         }
 
-        protected override AuthenticationBuilder CreateAuthenticationBuilder(IServiceCollection services)
+        protected override AuthenticationBuilder ConfigueAuthentication(IServiceCollection services)
         {
             var authentication = services.AddAuthentication()
                 .AddCookie();
