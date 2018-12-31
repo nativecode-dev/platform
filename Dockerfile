@@ -4,6 +4,7 @@
 FROM microsoft/dotnet:aspnetcore-runtime as identity
 ENV DEBIAN_FRONTEND=noninteractive
 RUN set -ex \
+    && pwd \
     && ls -lah \
     ;
 WORKDIR /app
