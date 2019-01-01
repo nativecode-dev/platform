@@ -1,7 +1,5 @@
 dockerhub: &dockerhub
   auto_tag: true
-  environment:
-    DOCKER_LAUNCH_DEBUG: "true"
   group: platform
   image: plugins/docker
   secrets:
@@ -41,9 +39,10 @@ pipeline:
       - cp templates/tools-csproj.template tools/tools.csproj
       - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
       - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
+    docker:
+      purge: false
     environment:
       CAKE_VERSION: "0.30.0"
-      DOCKER_LAUNCH_DEBUG: "true"
 
   publish_identity:
     <<: *dockerhub
