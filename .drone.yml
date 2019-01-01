@@ -43,39 +43,31 @@ pipeline:
 #      CAKE_VERSION: "0.30.0"
 
   compile:
-    image: docker
-    commands:
-      - docker build --rm -t platform .
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+    <<: *dockerhub
+    dockerfile: Dockerfile
 
   publish_identity:
     <<: *dockerhub
-    context: src/identity
     dockerfile: src/identity/Dockerfile
     repo: nativecode/platform-identity
 
   publish_node:
     <<: *dockerhub
-    context: src/node
     dockerfile: src/node/Dockerfile
     repo: nativecode/platform-node
 
   publish_delegate:
     <<: *dockerhub
-    context: src/node-delegate
     dockerfile: src/node-delegate/Dockerfile
     repo: nativecode/platform-node-delegate
 
   publish_processor:
     <<: *dockerhub
-    context: src/node-processor
     dockerfile: src/node-processor/Dockerfile
     repo: nativecode/platform-node-processor
 
   publish_watcher:
     <<: *dockerhub
-    context: src/node-watcher
     dockerfile: src/node-watcher/Dockerfile
     repo: nativecode/platform-node-watcher
 
