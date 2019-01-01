@@ -42,8 +42,8 @@ pipeline:
 #      CAKE_VERSION: "0.30.0"
 
   compile:
-    <<: *dockerhub
     dockerfile: Dockerfile
+    image: plugins/docker
 
   publish_identity:
     <<: *dockerhub
