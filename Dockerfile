@@ -1,7 +1,7 @@
 FROM microsoft/dotnet:aspnetcore-runtime as identity
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
-RUN ls -lahR /home
+RUN ls -lahR /root
 COPY /.artifacts/published/identity /app
 ENTRYPOINT ["dotnet", "identity.dll"]
 
