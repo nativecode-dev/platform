@@ -30,44 +30,52 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
-  build:
-    image: microsoft/dotnet:sdk
+#  build:
+#    image: microsoft/dotnet:sdk
+#    commands:
+#      - curl --silent --location https://deb.nodesource.com/setup_8.x | bash -
+#      - apt-get install nodejs -y
+#      - mkdir tools
+#      - cp templates/tools-csproj.template tools/tools.csproj
+#      - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
+#      - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
+#    environment:
+#      CAKE_VERSION: "0.30.0"
+
+  compile:
+    image: docker
     commands:
-      - curl --silent --location https://deb.nodesource.com/setup_8.x | bash -
-      - apt-get install nodejs -y
-      - mkdir tools
-      - cp templates/tools-csproj.template tools/tools.csproj
-      - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
-      - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
-    docker:
-      purge: false
-    environment:
-      CAKE_VERSION: "0.30.0"
+      - docker build --rm -t platform .
 
   publish_identity:
     <<: *dockerhub
+    context: src/identity
+    dockerfile: src/identity/Dockerfile
     repo: nativecode/platform-identity
-    target: identity
 
   publish_node:
     <<: *dockerhub
+    context: src/node
+    dockerfile: src/node/Dockerfile
     repo: nativecode/platform-node
-    target: node
 
   publish_delegate:
     <<: *dockerhub
+    context: src/node-delegate
+    dockerfile: src/node-delegate/Dockerfile
     repo: nativecode/platform-node-delegate
-    target: delegate
 
   publish_processor:
     <<: *dockerhub
+    context: src/node-processor
+    dockerfile: src/node-processor/Dockerfile
     repo: nativecode/platform-node-processor
-    target: processor
 
   publish_watcher:
     <<: *dockerhub
+    context: src/node-watcher
+    dockerfile: src/node-watcher/Dockerfile
     repo: nativecode/platform-node-watcher
-    target: watcher
 
   release_identity:
     <<: *rancher

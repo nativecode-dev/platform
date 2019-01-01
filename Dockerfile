@@ -1,42 +1,24 @@
-FROM microsoft/dotnet:aspnetcore-runtime as identity
+FROM microsoft/dotnet:sdk AS build
+# Build Arguments
+ENV CAKE_VERSION "0.30.0"
 ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /app
-RUN ls -lahR /root
-COPY /.artifacts/published/identity /app
-ENTRYPOINT ["dotnet", "identity.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Node
-# -----------------------------------------------------------------------------
-FROM microsoft/dotnet:aspnetcore-runtime as node
-ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /app
-COPY .artifacts/published/node /app
-ENTRYPOINT ["dotnet", "node.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Delegate
-# -----------------------------------------------------------------------------
-FROM microsoft/dotnet:aspnetcore-runtime as delegate
-ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /app
-COPY .artifacts/published/node-delegate /app
-ENTRYPOINT ["dotnet", "node-delegate.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Processor
-# -----------------------------------------------------------------------------
-FROM microsoft/dotnet:aspnetcore-runtime as processor
-ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /app
-COPY .artifacts/published/node-processor /app
-ENTRYPOINT ["dotnet", "node-processor.dll"]
-
-# -----------------------------------------------------------------------------
-# STAGE: Watcher
-# -----------------------------------------------------------------------------
-FROM microsoft/dotnet:aspnetcore-runtime as watcher
-ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /app
-COPY .artifacts/published/node-watcher /app
-ENTRYPOINT ["dotnet", "node-watcher.dll"]
+WORKDIR /build
+# Copy Files
+COPY .gitattributes /build
+COPY .gitignore /build
+COPY build.cake /build
+COPY build.ps1 /build
+COPY platform.sln /build
+# Copy Folders
+COPY templates/ /build/templates
+COPY src/ /build/src
+COPY src-libs/ /build/src-libs
+COPY src-tests/ /build/src-tests
+RUN set -ex \
+    && curl --silent --location https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install nodejs -y \
+    && mkdir tools \
+    && cp templates/tools-csproj.template tools/tools.csproj \
+    && dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION \
+    && dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release" \
+    ;

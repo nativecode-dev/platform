@@ -1,19 +1,7 @@
-# -----------------------------------------------------------------------------
-# STAGE: Runtime
-# -----------------------------------------------------------------------------
+FROM platform as artifacts
+
 FROM microsoft/dotnet:aspnetcore-runtime AS runtime
 ENV DEBIAN_FRONTEND=noninteractive
+COPY --from=artifacts /build/.artifacts/published/identity /app
 WORKDIR /app
-
-# -----------------------------------------------------------------------------
-# STAGE: Build
-# -----------------------------------------------------------------------------
-FROM nativecode/platform-artifacts as build
-
-# -----------------------------------------------------------------------------
-# STAGE: Final
-# -----------------------------------------------------------------------------
-FROM runtime
-WORKDIR /app
-COPY --from=build /build/.artifacts/published/identity /app
 ENTRYPOINT ["dotnet", "identity.dll"]

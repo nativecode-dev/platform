@@ -5,6 +5,7 @@
 .vs
 .vscode
 
+docker_cache
 tools
 
 docker-compose.yml
