@@ -16,6 +16,7 @@ namespace identity
     using NativeCode.Core.Extensions;
     using NativeCode.Core.Mvc;
     using NativeCode.Core.Storage;
+    using NativeCode.Integrations.AmazonWebServices.Storage;
     using NativeCode.Node.Core.Options;
     using NativeCode.Node.Core.WebHosting;
     using NativeCode.Node.Identity;
@@ -80,9 +81,6 @@ namespace identity
                 .AddOption<AppOptions>(this.Configuration)
                 .AddOption<RedisOptions>(this.Configuration, out var redis)
                 .AddAws(this.Configuration)
-                .AddHealthChecks()
-                .AddDbContextCheck<IdentityDataContext>()
-                .Services
                 .AddIdentityConverters()
                 .AddRemoteFileStore()
                 .AddSwaggerDocument(options =>
@@ -90,6 +88,14 @@ namespace identity
                     options.DocumentName = this.AppName;
                     options.OperationProcessors.Add(new UnauthorizedOperationProcessor());
                 });
+
+            services
+                .AddRemoteFileStore()
+                .AddTransient<IRemoteFileStoreProvider, SimpleStorageServiceProvider>();
+
+            services
+                .AddHealthChecks()
+                .AddDbContextCheck<IdentityDataContext>();
 
             this.ConfigureAutoMapper(services);
             this.ConfigureDbContext(services);

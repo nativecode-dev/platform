@@ -2,7 +2,7 @@ namespace NativeCode.Core.Mvc
 {
     using Microsoft.Extensions.DependencyInjection;
 
-    public static class BuilderExtensions
+    public static class MvcCoreBuilderExtensions
     {
         public static IMvcCoreBuilder AddModelValidator(this IMvcCoreBuilder builder)
         {

@@ -23,7 +23,7 @@ namespace NativeCode.Core.Mvc
         /// NOTE: I know adding the migrations to the startup is NOT the recommended practice. However,
         /// until EFCore fixes their story for deploying migrations, we have to use the startup (or at least
         /// it's the least intrusive). The full "dotnet" tools are not available in a published add, ergo
-        /// you cannot invoke "dotnet ef" because the EF tools are not deployed. - MP
+        /// you cannot invoke "dotnet ef" because the EF tools are not deployed.
         /// <see href="https://docs.microsoft.com/en-us/aspnet/core/data/ef-rp/migrations?view=aspnetcore-2.1&tabs=netcore-cli"/>
         /// <see href="https://github.com/aspnet/EntityFrameworkCore/issues/9033#issuecomment-317063370"/>
         /// <see href="https://github.com/dotnet/dotnet-docker-samples/issues/89"/>.
