@@ -1,6 +1,5 @@
 dockerhub: &dockerhub
   auto_tag: true
-  group: platform
   image: plugins/docker
   secrets:
     - docker_username
