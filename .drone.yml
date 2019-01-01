@@ -46,6 +46,8 @@ pipeline:
     image: docker
     commands:
       - docker build --rm -t platform .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   publish_identity:
     <<: *dockerhub
