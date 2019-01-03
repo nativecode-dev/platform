@@ -28,7 +28,7 @@ namespace NativeCode.Node.Services.Watchers
 
         protected override Task<bool> PushRelease(SeriesRelease message)
         {
-            return this.Client.Movie.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
+            return this.Client.Series.PushRelease(this.Mapper.Map<SeriesReleaseInfo>(message));
         }
     }
 }
