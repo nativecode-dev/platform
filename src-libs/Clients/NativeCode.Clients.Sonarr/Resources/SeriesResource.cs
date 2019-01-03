@@ -8,9 +8,9 @@ namespace NativeCode.Clients.Sonarr.Resources
     using Responses;
     using RestSharp;
 
-    public class MovieResource : ResourceBase, IResourceLookup<int, Series>
+    public class SeriesResource : ResourceBase, IResourceLookup<int, Series>
     {
-        public MovieResource(IRestClient client, IObjectSerializer serializer)
+        public SeriesResource(IRestClient client, IObjectSerializer serializer)
             : base(client, serializer)
         {
         }

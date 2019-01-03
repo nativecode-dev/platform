@@ -10,10 +10,10 @@ namespace NativeCode.Clients.Sonarr
         public SonarrClient(IObjectSerializer serializer, Uri baseAddress)
             : base(serializer, ValidateUri(baseAddress))
         {
-            this.Movie = new MovieResource(this.Client, this.Serializer);
+            this.Series = new SeriesResource(this.Client, this.Serializer);
         }
 
-        public MovieResource Movie { get; }
+        public SeriesResource Series { get; }
 
         public void SetApiKey(string apikey)
         {
