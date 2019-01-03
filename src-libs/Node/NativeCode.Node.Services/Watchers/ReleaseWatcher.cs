@@ -66,7 +66,7 @@ namespace NativeCode.Node.Services.Watchers
 
                 var success = await this.PushRelease(message);
 
-                if (success || string.IsNullOrWhiteSpace(message.Name) == false)
+                if (success && string.IsNullOrWhiteSpace(message.Name) == false)
                 {
                     this.Queue.Acknowledge(message.DeliveryTag);
                     message.TargetMachine = Environment.MachineName;
