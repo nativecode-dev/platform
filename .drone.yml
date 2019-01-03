@@ -29,21 +29,17 @@ slack: &slack
       target: plugin_webhook
 
 pipeline:
-#  build:
-#    image: microsoft/dotnet:sdk
-#    commands:
-#      - curl --silent --location https://deb.nodesource.com/setup_8.x | bash -
-#      - apt-get install nodejs -y
-#      - mkdir tools
-#      - cp templates/tools-csproj.template tools/tools.csproj
-#      - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
-#      - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
-#    environment:
-#      CAKE_VERSION: "0.30.0"
-
-  compile:
-    dockerfile: Dockerfile
-    image: plugins/docker
+  build:
+    image: microsoft/dotnet:sdk
+    commands:
+      - curl --silent --location https://deb.nodesource.com/setup_8.x | bash -
+      - apt-get install nodejs -y
+      - mkdir tools
+      - cp templates/tools-csproj.template tools/tools.csproj
+      - dotnet add tools/tools.csproj package Cake.CoreCLR -v $CAKE_VERSION --package-directory tools/Cake.CoreCLR.$CAKE_VERSION
+      - dotnet tools/Cake.CoreCLR.$CAKE_VERSION/cake.coreclr/$CAKE_VERSION/Cake.dll build.cake -target="Default" -configuration="Release"
+    environment:
+      CAKE_VERSION: "0.30.0"
 
   publish_identity:
     <<: *dockerhub
