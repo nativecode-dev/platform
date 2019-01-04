@@ -29,7 +29,7 @@ rancher-internal: &rancher-internal
     - source: rancher_internal_secret_key
       target: plugin_secret_key
   timeout: 120
-  url: https://in.nativecode.com:8080
+  url: http://in.nativecode.com:8080
 
 slack: &slack
   image: plugins/slack
