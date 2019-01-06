@@ -17,7 +17,7 @@ deploy: &deploy
     - source: rancher_secret_key
       target: plugin_secret_key
   timeout: 120
-  url: https://master.nativecode.com
+  url: https://rancher.nativecode.net
 
 deploy-internal: &deploy-internal
   image: peloton/drone-rancher
