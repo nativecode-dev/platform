@@ -47,43 +47,43 @@ pipeline:
   node: &node
     <<: *prod
     dockerfile: src/node/Dockerfile
-    repo: nativecode/node
+    repo: nativecode/media
 
   processor: &processor
     <<: *prod
     dockerfile: src/node-processor/Dockerfile
-    repo: nativecode/node-processor
+    repo: nativecode/media-processor
 
   watcher: &watcher
     <<: *prod
     dockerfile: src/node-watcher/Dockerfile
-    repo: nativecode/node-watcher
+    repo: nativecode/media-watcher
 
   release-idp: &release-idp
     <<: *deploy
     docker_image: "nativecode/identity:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
-    service: "platform/identity"
+    service: "prod-identity/api"
     when:
       branch: master
 
   release-node: &release-node
     <<: *deploy
-    docker_image: "nativecode/node:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
-    service: "platform/node"
+    docker_image: "nativecode/media:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "prod-media/api"
     when:
       branch: master
 
   release-processor: &release-processor
     <<: *deploy-internal
-    docker_image: "nativecode/node-processor:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
-    service: "platform/node-processor"
+    docker_image: "nativecode/media-processor:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "platform/processor"
     when:
       branch: master
 
   release-watcher: &release-watcher
     <<: *deploy
-    docker_image: "nativecode/node-watcher:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
-    service: "platform/node-watcher"
+    docker_image: "nativecode/media-watcher:1.0-${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}"
+    service: "prod-media/watcher"
     when:
       branch: master
 

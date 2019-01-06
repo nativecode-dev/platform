@@ -14,7 +14,7 @@
     "ClientName": "NativeCode MVC",
     "ClientSecrets": ["[AppSecrets:CLIENT_NATIVECODE_SECRET]"],
     "RequireConsent": true,
-    "RedirectUris": ["https://idp.nativecode.com/signin-oidc"],
-    "PostLogoutRedirectUris": ["https://idp.nativecode.com/signout-callback-oidc"]
+    "RedirectUris": ["https://idp.nativecode.net/signin-oidc"],
+    "PostLogoutRedirectUris": ["https://idp.nativecode.net/signout-callback-oidc"]
   }
 ]
