@@ -6,6 +6,6 @@ namespace NativeCode.Node.Media.Hosting
     {
         public bool Enabled { get; set; }
 
-        public IDictionary<string, string> Mounts { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string> Mounts { get; } = new Dictionary<string, string>();
     }
 }

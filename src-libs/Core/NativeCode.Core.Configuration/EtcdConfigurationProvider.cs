@@ -1,8 +1,10 @@
 namespace NativeCode.Core.Configuration
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using dotnet_etcd;
     using Extensions;
+    using Google.Protobuf;
     using Microsoft.Extensions.Configuration;
     using Nito.AsyncEx;
     using Serilog;
@@ -29,20 +31,20 @@ namespace NativeCode.Core.Configuration
                 var response = await client.GetRangeAsync(path)
                     .NoCapture();
 
-                foreach (var kvp in response)
+                foreach (var kvp in response.Kvs)
                 {
-                    if (kvp.Key == path)
+                    if (kvp.Key == ByteString.CopyFromUtf8(path))
                     {
                         continue;
                     }
 
-                    var key = kvp.Key.Substring(path.Length + 1)
+                    var key = kvp.Key.ToStringUtf8().Substring(path.Length + 1)
                         .Replace("/", ":");
 
-                    this.Data.Add(key, kvp.Value);
+                    this.Data.Add(key, kvp.Value.ToStringUtf8());
                 }
 
-                Log.Logger.Verbose($"Path: {path}, Keys: {response.Keys.Count}");
+                Log.Logger.Verbose($"Path: {path}, Keys: {response.Kvs.Count()}");
             }
         }
 

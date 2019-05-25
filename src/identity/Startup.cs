@@ -1,5 +1,6 @@
 namespace identity
 {
+    using System;
     using AutoMapper;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
@@ -145,7 +146,7 @@ namespace identity
                         .ForSourceMember(src => src.Id, expr => expr.DoNotValidate())
                         .ForSourceMember(src => src.UserName, expr => expr.DoNotValidate())
                         .ReverseMap();
-                });
+                }, AppDomain.CurrentDomain.GetAssemblies());
         }
 
         private IServiceCollection ConfigureDbContext(IServiceCollection services)

@@ -44,7 +44,7 @@ namespace node_watcher
                                 RabbitHost = rabbit.Host,
                                 RabbitUser = rabbit.User,
                                 IrcHost = irc.Host,
-                                IrcUser = irc.UserName,
+                                IrcUser = irc.UserName
                             });
 
                         services.AddDistributedRedisCache(
@@ -57,7 +57,7 @@ namespace node_watcher
                 .ConfigureServices(
                     (context, services) =>
                     {
-                        services.AddAutoMapper();
+                        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
                         services.AddRabbitServices(context.Configuration);
                         services.AddIrcWatch(context.Configuration);
                     })

@@ -2,6 +2,7 @@ namespace NativeCode.Core.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
@@ -52,6 +53,7 @@ namespace NativeCode.Core.Data
             return this.SeedAsync(Assembly.GetEntryAssembly(), name, projection, converter, callback);
         }
 
+        [SuppressMessage("ReSharper", "CA1031", Justification = "Reviewed. Is OK here.")]
         public async Task<bool> SeedAsync<TModel, TEntity>(
             Assembly assembly,
             string name,

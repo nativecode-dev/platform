@@ -1,6 +1,7 @@
 namespace NativeCode.Core.Messaging
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reactive.Subjects;
     using System.Threading.Tasks;
     using Envelopes;
@@ -93,6 +94,7 @@ namespace NativeCode.Core.Messaging
         ///     finished work (which has its own consumer).
         /// </summary>
         /// <returns></returns>
+        [SuppressMessage("ReSharper", "CA1031", Justification = "Reviewed. Is OK here.")]
         private IObservable<T> CreateObservable()
         {
             // TODO: Need to create a separate class that derives or uses a Subject. When

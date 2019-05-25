@@ -2,6 +2,7 @@ namespace NativeCode.Node.Media.Services.Storage
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Threading.Tasks;
     using Data.Data.Storage;
@@ -12,6 +13,7 @@ namespace NativeCode.Node.Media.Services.Storage
     using NativeCode.Core.Reliability;
     using Nito.AsyncEx;
 
+    [SuppressMessage("ReSharper", "CA1031", Justification = "Reviewed. Is OK here.")]
     public class MonitorService : IMonitorService
     {
         private readonly ConcurrentDictionary<Guid, FileSystemWatcherProxy> monitors =
@@ -69,7 +71,7 @@ namespace NativeCode.Node.Media.Services.Storage
 
                 this.Monitor = new FileSystemWatcher
                 {
-                    IncludeSubdirectories = true, Path = uri.LocalPath,
+                    IncludeSubdirectories = true, Path = uri.LocalPath
                 };
 
                 this.Monitor.Changed += this.MonitorOnChanged;

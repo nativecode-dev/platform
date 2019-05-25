@@ -48,7 +48,7 @@ namespace node_processor
                                 RabbitHost = rabbit.Host,
                                 RabbitUser = rabbit.User,
                                 MoviesEndpoint = movies.Endpoint,
-                                SeriesEndpoint = series.Endpoint,
+                                SeriesEndpoint = series.Endpoint
                             });
 
                         services.AddDistributedRedisCache(
@@ -61,7 +61,8 @@ namespace node_processor
                 .ConfigureServices(
                     (context, services) =>
                     {
-                        services.AddAutoMapper(config => config.AddProfile<DefaultMapperProfile>());
+                        services.AddAutoMapper(config => config.AddProfile<DefaultMapperProfile>(),
+                            AppDomain.CurrentDomain.GetAssemblies());
                         services.AddRabbitServices(context.Configuration);
                         services.AddObjectSerializer();
 

@@ -1,10 +1,12 @@
 namespace NativeCode.Core.Messaging
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using Exceptions;
     using Newtonsoft.Json;
 
+    [SuppressMessage("ReSharper", "CA1031", Justification = "Reviewed. Is OK here.")]
     public class QueueSerializer : IQueueSerializer
     {
         public T Deserialize<T>(byte[] data)
